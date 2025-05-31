@@ -1,11 +1,12 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface Section {
   id: string;
   label: string;
+  icon: string;
 }
 
 interface VerticalTimelineProps {
@@ -17,46 +18,72 @@ export default function VerticalTimeline({ sections }: VerticalTimelineProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [hoveredSection, setHoveredSection] = useState<string | null>(null);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY + window.innerHeight / 2;
-      const totalHeight = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = (window.scrollY / totalHeight) * 100;
-      setScrollProgress(progress);
+  const calculateScrollProgress = useCallback(() => {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight;
+    const winHeight = window.innerHeight;
+    const scrollPercent = (scrollTop / (docHeight - winHeight)) * 100;
+    return Math.min(100, Math.max(0, scrollPercent));
+  }, []);
 
-      for (const section of sections) {
-        const element = document.getElementById(section.id);
-        if (element) {
-          const { top, bottom } = element.getBoundingClientRect();
-          const offsetTop = top + window.scrollY;
-          const offsetBottom = bottom + window.scrollY;
+  const findActiveSection = useCallback(() => {
+    const viewportMiddle = window.scrollY + (window.innerHeight / 2);
+    let closestSection = sections[0];
+    let minDistance = Infinity;
 
-          if (scrollPosition >= offsetTop && scrollPosition <= offsetBottom) {
-            setActiveSection(section.id);
-            break;
-          }
+    sections.forEach(section => {
+      const element = document.getElementById(section.id);
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        const sectionMiddle = rect.top + (rect.height / 2) + window.scrollY;
+        const distance = Math.abs(viewportMiddle - sectionMiddle);
+
+        if (distance < minDistance) {
+          minDistance = distance;
+          closestSection = section;
         }
       }
+    });
+
+    return closestSection.id;
+  }, [sections]);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const progress = calculateScrollProgress();
+      setScrollProgress(progress);
+      setActiveSection(findActiveSection());
     };
 
     window.addEventListener('scroll', handleScroll);
     handleScroll(); // Initial check
 
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [sections]);
+  }, [calculateScrollProgress, findActiveSection]);
 
-  const heightProgress = activeSection !== "hero" ? scrollProgress + 25 : scrollProgress;
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (!element) return;
 
+    const header = document.querySelector('header');
+    const headerHeight = header?.offsetHeight || 0;
+    const elementTop = element.getBoundingClientRect().top + window.scrollY;
+    
+    window.scrollTo({
+      top: elementTop - headerHeight,
+      behavior: 'smooth'
+    });
+  };
 
   return (
     <div className="fixed right-8 top-1/2 -translate-y-1/2 z-50 hidden lg:block">
       <div className="relative">
         {/* Progress bar */}
-        <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-200 -translate-x-1/2 overflow-hidden">
+        <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-200/50 -translate-x-1/2 overflow-hidden">
           <motion.div
-            className="w-full bg-secondary"
+            className="w-full bg-[#F97316]"
             initial={{ height: 0 }}
-            animate={{ height: `${heightProgress}%` }}
+            animate={{ height: `${scrollProgress}%` }}
             transition={{ type: "spring", stiffness: 100 }}
           />
         </div>
@@ -67,13 +94,7 @@ export default function VerticalTimeline({ sections }: VerticalTimelineProps) {
             <motion.div
               key={section.id}
               className="relative cursor-pointer group"
-              onClick={() => {
-                const element = document.getElementById(section.id);
-                element?.scrollIntoView({ 
-                  behavior: 'smooth',
-                  block: 'center'
-                });
-              }}
+              onClick={() => scrollToSection(section.id)}
               onMouseEnter={() => setHoveredSection(section.id)}
               onMouseLeave={() => setHoveredSection(null)}
               whileHover={{ scale: 1.1 }}
@@ -84,13 +105,13 @@ export default function VerticalTimeline({ sections }: VerticalTimelineProps) {
                 <div
                   className={`w-4 h-4 rounded-full transition-all duration-300 ${
                     activeSection === section.id
-                      ? 'bg-blue-500 scale-125'
+                      ? 'bg-[#F97316] scale-125'
                       : 'bg-gray-300 group-hover:bg-gray-400'
                   }`}
                 />
                 {activeSection === section.id && (
                   <motion.div
-                    className="absolute inset-0 rounded-full bg-blue-500/30"
+                    className="absolute inset-0 rounded-full bg-[#F97316]/30"
                     initial={{ scale: 1 }}
                     animate={{ scale: 1.5, opacity: 0 }}
                     transition={{ duration: 1.5, repeat: Infinity }}
@@ -107,11 +128,14 @@ export default function VerticalTimeline({ sections }: VerticalTimelineProps) {
                     exit={{ opacity: 0, x: 20 }}
                     className={`absolute right-8 top-1/2 -translate-y-1/2 whitespace-nowrap text-sm ${
                       activeSection === section.id
-                        ? 'text-blue-500 font-medium'
+                        ? 'text-[#F97316] font-medium'
                         : 'text-gray-500'
                     }`}
                   >
-                    {section.label}
+                    <span className="flex items-center gap-2">
+                      <span>{section.icon}</span>
+                      <span>{section.label}</span>
+                    </span>
                   </motion.div>
                 )}
               </AnimatePresence>

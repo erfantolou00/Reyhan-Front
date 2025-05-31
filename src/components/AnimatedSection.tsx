@@ -7,14 +7,12 @@ interface AnimatedSectionProps {
   children: ReactNode
   delay?: number
   className?: string
-  direction?: 'up' | 'down' | 'left' | 'right'
 }
 
 export default function AnimatedSection({ 
   children, 
   delay = 0, 
-  className = '',
-  direction = 'up'
+  className = ''
 }: AnimatedSectionProps) {
   const ref = useRef(null)
   const { scrollYProgress } = useScroll({
@@ -22,18 +20,7 @@ export default function AnimatedSection({
     offset: ["start end", "end start"]
   })
 
-  const getInitialPosition = () => {
-    switch (direction) {
-      case 'up': return { y: 60 }
-      case 'down': return { y: -60 }
-      case 'left': return { x: 60 }
-      case 'right': return { x: -60 }
-      default: return { y: 60 }
-    }
-  }
-
-  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0, 1, 1, 0])
-  const y = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [30, 0, 0, -30])
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.8, 1], [0.3, 1, 1, 0.3])
   
   // Color transitions based on scroll
   const backgroundColor = useTransform(
@@ -52,15 +39,8 @@ export default function AnimatedSection({
     <motion.div
       ref={ref}
       className={className}
-      initial={{ 
-        opacity: 0,
-        ...getInitialPosition()
-      }}
-      whileInView={{ 
-        opacity: 1,
-        x: 0,
-        y: 0
-      }}
+      initial={{ opacity: 0.3 }}
+      whileInView={{ opacity: 1 }}
       viewport={{ once: true, margin: "-100px" }}
       style={{ 
         opacity, 

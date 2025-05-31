@@ -3,18 +3,18 @@
 @tailwind utilities;
 
 :root {
-  --primary-rgb: 59, 130, 246;
-  --secondary-rgb: 99, 102, 241;
+  --primary: #F97316;
+  --primary-dark: #EA580C;
+  --secondary: #2563EB;
+  --secondary-dark: #1D4ED8;
+  --dark: #111827;
+  --light: #F3F4F6;
 }
 
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-  }
-
   body {
-    @apply bg-white text-gray-900;
+    @apply bg-white text-[#111827];
+    font-feature-settings: "rlig" 1, "calt" 1;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -58,11 +58,65 @@
   }
 }
 
-@keyframes shine {
+
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* Custom Animations */
+@keyframes float {
   0% {
-    transform: translateX(-100%) rotate(45deg);
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-20px);
   }
   100% {
-    transform: translateX(100%) rotate(45deg);
+    transform: translateY(0px);
   }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--primary-dark);
+}
+
+/* Gradient Text */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-[#F97316] to-[#2563EB];
+}
+
+/* Glass Effect */
+.glass {
+  @apply bg-white/80 backdrop-blur-lg border border-white/20;
+}
+
+/* Hover Effects */
+.hover-lift {
+  @apply transition-transform duration-300 hover:-translate-y-1;
 }
