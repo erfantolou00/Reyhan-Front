@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: 'Iran Sans';
+  src: url('/font/iransansdn.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Iran Sans';
+  src: url('/font/iransansdnbold.ttf') format('truetype');
+  font-weight: bold;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Iran Sans Dastnevis';
+  src: url('/font/Dastnevis IRSANS.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --primary: #F97316;
   --primary-dark: #EA580C;
@@ -57,8 +81,6 @@
     -webkit-font-smoothing: subpixel-antialiased;
   }
 }
-
-
 
 @layer utilities {
   .text-balance {

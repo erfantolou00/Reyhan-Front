@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useState } from 'react';
 import { FiMail, FiPhone, FiMapPin, FiLinkedin, FiInstagram, FiTwitter } from 'react-icons/fi';
 
@@ -105,8 +106,8 @@ const CTASection = () => {
               
               <div className="relative">
                 <div className="flex items-center gap-4 mb-8">
-                  <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#F97316] to-[#EA580C] flex items-center justify-center text-white text-2xl font-bold">
-                    ر
+                  <div className="w-20 h-20 rounded-full flex items-center justify-center text-white text-2xl font-bold">
+                    <Image src="/logo.png" alt="Logo" width={84} height={84} />
                   </div>
                   <div>
                     <h3 className="text-2xl font-bold text-gray-900">راهکارهای هوشمند</h3>
@@ -116,32 +117,34 @@ const CTASection = () => {
 
                 <div className="space-y-4">
                   <div className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/50 transition-colors">
-                    <div className="w-10 h-10 rounded-full bg-[#F97316]/10 flex items-center justify-center">
-                      <FiMail className="w-5 h-5 text-[#F97316]" />
-                    </div>
-                    <a href="mailto:info@company.com" className=" gap-2 hover:text-[#F97316] transition-colors">
-                      <p className="text-sm text-gray-500">ایمیل</p>
-                      <p className="font-medium">info@example.com</p>
-                    </a>
-                  </div>
-
-                  <div className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/50 transition-colors">
                     <div className="w-10 h-10 rounded-full bg-[#2563EB]/10 flex items-center justify-center">
                       <FiPhone className="w-5 h-5 text-[#2563EB]" />
                     </div>
-                    <a href="tel:02112345678" className=" gap-2 hover:text-[#F97316] transition-colors">
-                      <p className="text-sm text-gray-500">تلفن</p>
-                      <p className="font-medium">۰۲۱-۱۲۳۴۵۶۷۸</p>
+                    <a href="tel:02333605000" className=" gap-2 hover:text-[#F97316] transition-colors">
+                      <p className="font-medium">۰۲۳-۳۳۶۰۵۰۰۰
+
+</p>
                     </a>
                   </div>
+
+
+                  <div className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/50 transition-colors">
+                    <div className="w-10 h-10 rounded-full bg-[#F97316]/10 flex items-center justify-center">
+                      <FiMail className="w-5 h-5 text-[#F97316]" />
+                    </div>
+                    <a href="mailto:saeed@komeylian.com" className=" gap-2 hover:text-[#F97316] transition-colors">
+                      <p className="font-medium">saeed@komeylian.com</p>
+                    </a>
+                  </div>
+
+                  
 
                   <div className="flex items-center gap-4 p-3 rounded-lg hover:bg-white/50 transition-colors">
                     <div className="w-10 h-10 rounded-full bg-[#F97316]/10 flex items-center justify-center">
                       <FiMapPin className="w-5 h-5 text-[#F97316]" />
                     </div>
                     <a href="https://maps.app.goo.gl/V4oJJXW8rTVu2WDv5" target="_blank" rel="noopener noreferrer" className=" gap-2 hover:text-[#F97316] transition-colors">
-                    <p className="text-sm text-gray-500">آدرس</p>
-                      <p className="font-medium">تهران، خیابان ولیعصر</p>
+                      <p className="font-medium">پارک علم و فناوری دانشگاه سمنان</p>
                     </a>
                   </div>
                 </div>

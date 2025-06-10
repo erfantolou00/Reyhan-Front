@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fa" dir="rtl" className={vazirmatn.variable}>
+    <html lang="fa" dir="rtl" >
       <head>
         <link
           rel="preload"
@@ -37,7 +37,7 @@ export default function RootLayout({
           crossOrigin="anonymous"
         />
       </head>
-      <body className="antialiased">
+      <body className="antialiased font-iran-sans">
         <ErrorBoundary>
           <Providers>
             <Header />

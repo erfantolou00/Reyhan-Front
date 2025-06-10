@@ -8,50 +8,60 @@ import ParticleBackground from '@/components/ParticleBackground';
 const blogPosts = [
   {
     id: 1,
-    title: 'هوش مصنوعی در مدیریت سازمانی',
-    subtitle: 'چگونه هوش مصنوعی می‌تواند بهره‌وری سازمان را تا ۴۰٪ افزایش دهد؟',
-    image: "/images/blog/1.png",
+    title: 'آموزش ERP و مفاهیم آن',
+    subtitle: 'راهنمای جامع برای درک مفاهیم پایه و پیشرفته سیستم‌های ERP',
+    image: "/images/blog/1.webp",
     date: '۱۴۰۲/۱۲/۱۵',
     author: 'دکتر کمیلیان',
-    slug: 'ai-in-enterprise-management',
-    category: 'هوش مصنوعی'
+    slug: 'erp-concepts-and-training',
+    category: 'آموزش'
   },
   {
     id: 2,
-    title: 'یکپارچگی سیستم‌های سازمانی',
-    subtitle: 'راهنمای جامع برای ایجاد یکپارچگی کامل بین ماژول‌های مختلف نرم‌افزار',
-    image: "/images/blog/1.png",
+    title: 'راهکارهای سازمانی و کاهش هزینه',
+    subtitle: 'استراتژی‌های کاربردی برای بهینه‌سازی هزینه‌ها و افزایش کارایی سازمان',
+    image: "/images/blog/2.jpg",
     date: '۱۴۰۲/۱۲/۱۰',
     author: 'مهندس عابدینی',
-    slug: 'enterprise-system-integration',
-    category: 'یکپارچگی'
+    slug: 'organizational-solutions-cost-reduction',
+    category: 'مدیریت هزینه'
   },
   {
     id: 3,
-    title: 'امنیت پیشرفته در نرم‌افزارهای سازمانی',
-    subtitle: 'بررسی لایه‌های امنیتی و روش‌های رمزنگاری پیشرفته برای محافظت از داده‌ها',
-    image: "/images/blog/1.png",
+    title: 'تجربه مشتریان با ریحان',
+    subtitle: 'داستان موفقیت مشتریان ما در پیاده‌سازی و استفاده از سیستم ریحان',
+    image: "/images/blog/3.webp",
     date: '۱۴۰۲/۱۲/۰۵',
     author: 'دکتر کمیلیان',
-    slug: 'advanced-enterprise-security',
-    category: 'امنیت'
+    slug: 'reyhan-customer-experiences',
+    category: 'تجربیات مشتریان'
   },
   {
     id: 4,
-    title: 'پشتیبانی ۲۴/۷ در نرم‌افزارهای سازمانی',
-    subtitle: 'چگونه یک سیستم پشتیبانی حرفه‌ای می‌تواند به موفقیت سازمان کمک کند؟',
-    image: "/images/blog/1.png",
+    title: 'مقایسه و انتخاب سیستم‌های ERP',
+    subtitle: 'معیارهای کلیدی برای انتخاب بهترین سیستم ERP متناسب با نیازهای سازمان شما',
+    image: "/images/blog/4.webp",
     date: '۱۴۰۲/۱۲/۰۱',
     author: 'مهندس طلوع',
-    slug: '24-7-enterprise-support',
-    category: 'پشتیبانی'
+    slug: 'erp-comparison-selection',
+    category: 'مقایسه سیستم‌ها'
+  },
+  {
+    id: 5,
+    title: 'چالش‌ها و ترندهای مدیریت سازمانی',
+    subtitle: 'بررسی چالش‌های نوین و روندهای آینده در مدیریت سازمانی',
+    image: "/images/blog/5.jpg",
+    date: '۱۴۰۲/۱۱/۲۵',
+    author: 'دکتر کمیلیان',
+    slug: 'organizational-management-trends',
+    category: 'مدیریت'
   }
 ];
 
 export default function BlogPage() {
   return (
     <>
-    <div className="min-h-screen bg-gradient-to-b from-primary/30 to-white py-24 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-b from-primary/10 to-white py-32 px-4 sm:px-6 lg:px-8">
         <ParticleBackground />
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">

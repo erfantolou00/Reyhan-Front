@@ -7,12 +7,10 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 const navigation = [
   { name: 'خانه', href: '/', icon: '🏠' },
-  { name: 'درباره ما', href: '/about', icon: 'ℹ️' },
-  { name: 'خدمات', href: '/services', icon: '🛠️' },
-  { name: 'محصولات', href: '/products', icon: '📦' },
-  { name: 'تماس با ما', href: '/contact', icon: '📞' },
   { name: 'وبلاگ', href: '/blog', icon: '📝' },
   { name: 'نمونه کارها', href: '/portfolio', icon: '🎯' },
+  { name: 'درباره ما', href: '/about', icon: 'ℹ️' },
+  { name: 'تماس با ما', href: '/contact', icon: '📞' },
 ]
 
 export default function Header() {

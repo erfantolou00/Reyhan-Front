@@ -8,7 +8,7 @@ export default function Footer() {
           <div>
             <h3 className="text-xl font-bold mb-4">ریحان</h3>
             <p className="text-gray-400">
-              یک رایحه تازه در مدیریت سازمانی
+              یک رایحه جدید در مدیریت سازمانی
             </p>
           </div>
           <div>
@@ -34,9 +34,11 @@ export default function Footer() {
           <div>
             <h4 className="text-lg font-semibold mb-4">تماس با ما</h4>
             <ul className="space-y-2 text-gray-400">
-              <li>تهران، خیابان فرشته</li>
-              <li>کنار رستوران ریواس</li>
-              <li>تلفن: ۰۲۱-XXXXXXXX</li>
+              <li> پارک علم و فناوری دانشگاه سمنان 
+              </li>
+              <li>تلفن: <span className='text-white ' dir='ltr'>۰۲۳-۳۳۶۰۵۰۰۰</span> 
+
+</li>
             </ul>
           </div>
           <div>

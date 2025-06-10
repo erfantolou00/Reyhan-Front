@@ -21,6 +21,8 @@ module.exports = {
       },
       fontFamily: {
         sans: ['var(--font-vazirmatn)', 'sans-serif'],
+        'iran-sans': ['Iran Sans', 'sans-serif'],
+        'iran-sans-dastnevis': ['Iran Sans Dastnevis', 'sans-serif'],
       },
     },
   },

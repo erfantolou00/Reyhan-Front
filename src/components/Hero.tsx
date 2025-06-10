@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import Typewriter from './Typewriter';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -97,10 +98,18 @@ const Hero = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="mb-6 text-5xl font-bold leading-tight text-[#111827] md:text-7xl"
+            className="mb-6 h-20 text-4xl font-bold leading-tight text-[#111827] md:text-6xl"
           >
-            یک رایحه تازه در{' '}
-            <span className="text-[#F97316]">مدیریت سازمانی</span>
+                <Typewriter
+                  texts={[
+                    "راهکار یکپارچه مدیریت سازمان",
+                    "سفارشی‌سازی‌شده برای نیازهای شما",
+                    "سریع، دقیق، قابل اعتماد",
+                    "ریحان سامانه هوشمند"
+                  ]}
+                  
+                />
+              
           </motion.h1>
 
           <motion.p
@@ -109,8 +118,7 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
             className="mb-8 text-lg text-gray-600 md:text-xl"
           >
-            کسب و کار خود را با راهکارهای پیشرفته طراحی شده برای سازمان‌های مدرن متحول کنید
-          </motion.p>
+ریحان، تمام فرایندهای سازمانی‌تان را با سرعت، دقت و انعطاف‌پذیری بالا یکپارچه می‌کند.          </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}

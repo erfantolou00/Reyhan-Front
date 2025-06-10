@@ -101,7 +101,7 @@ export default function Contact() {
     <>
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-primary/10 to-white py-20">
+        <section className="bg-gradient-to-b from-primary/10 to-white py-32">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -120,7 +120,7 @@ export default function Contact() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
               {/* Contact Form */}
               <div>
-                <h2 className="text-2xl font-bold mb-6">فرم تماس</h2>
+                <h2 className="text-2xl font-bold mb-6">☎️ فرم تماس </h2>
                 <form onSubmit={handleSendForm} className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
@@ -186,24 +186,23 @@ export default function Contact() {
 
               {/* Contact Info */}
               <div>
-                <h2 className="text-2xl font-bold mb-6">اطلاعات تماس</h2>
+                <h2 className="text-2xl font-bold mb-6">📞 اطلاعات تماس</h2>
                 <div className="space-y-6">
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">آدرس</h3>
+                    <h3 className="text-lg font-semibold mb-2">🏠 آدرس</h3>
                     <p className="text-gray-600">
-                      تهران، خیابان فرشته، کنار رستوران ریواس
-                    </p>
+                    پارک علم و فناوری دانشگاه سمنان                    </p>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">تلفن</h3>
-                    <p className="text-gray-600">۰۲۱-XXXXXXXX</p>
+                    <h3 className="text-lg font-semibold mb-2">📞 تلفن</h3>
+                    <p className="text-gray-600">۰۲۳-۳۳۶۰۵۰۰۰</p>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">ایمیل</h3>
-                    <p className="text-gray-600">info@reyhan.ir</p>
+                    <h3 className="text-lg font-semibold mb-2">📧 ایمیل</h3>
+                    <p className="text-gray-600">saeed@komeylian.com</p>
                   </div>
                   <div>
-                    <h3 className="text-lg font-semibold mb-2">ساعات کاری</h3>
+                    <h3 className="text-lg font-semibold mb-2">🕒 ساعات کاری</h3>
                     <p className="text-gray-600">
                       شنبه تا چهارشنبه: ۹ صبح تا ۵ عصر
                       <br />

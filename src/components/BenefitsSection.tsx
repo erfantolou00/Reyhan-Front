@@ -107,7 +107,7 @@ const BenefitsSection = () => {
           transition={{ duration: 0.8 }}
           className="mb-16 text-center"
         >
-          <h2 className="mb-4 text-4xl font-bold gradient-text">
+          <h2 className="mb-4 text-4xl font-extrabold gradient-text">
             <span className="text-primary-light">ریحان،</span> فراتر از ERP
           </h2>
           <p className="mx-auto max-w-3xl text-xl italic text-gray-600">
@@ -159,7 +159,7 @@ const BenefitsSection = () => {
             className="fixed  z-[9999] pointer-events-none bg-black/10 backdrop-blur-lg rounded-lg p-2"
             style={{
               left: mousePosition.x,
-              top: mousePosition.y - 320,
+              top: mousePosition.y - 420,
               transform: "translateX(-50%)",
             }}
           >
