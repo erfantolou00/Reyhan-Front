@@ -2,10 +2,10 @@
 const nextConfig = {
     images: {
       unoptimized: true,
-      domains: ['localhost', 'sadodin.ir'],
+      domains: ['localhost', 'reyhansmart.ir'],
     },
-    output: 'standalone', // اگر برای استقرار تنظیم کردی
-    assetPrefix: process.env.NODE_ENV === 'production' ? 'https://sadodin.ir' : '',
+    output: 'standalone', 
+    assetPrefix: process.env.NODE_ENV === 'production' ? 'https://reyhansmart.ir' : '',
     async headers() {
       return [
         {
@@ -30,5 +30,4 @@ const nextConfig = {
     },
   };
   
-  module.exports = nextConfig;
-  
+  export default nextConfig  

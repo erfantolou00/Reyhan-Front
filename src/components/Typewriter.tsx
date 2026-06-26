@@ -17,8 +17,16 @@ const Typewriter = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Ensure the first client render matches the server by delaying dynamic typing until mount
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   useEffect(() => {
+    if (!isMounted) return; // Avoid SSR/CSR mismatch by not typing before mount
+
     let timeout: NodeJS.Timeout;
 
     if (!isPaused) {
@@ -40,7 +48,8 @@ const Typewriter = ({
           setCurrentText((prev) => currentWord.slice(0, prev.length + 1));
           if (currentText === currentWord) {
             setIsPaused(true);
-            const currentDelay = currentIndex === texts.length - 1 ? lastTextDelay : delay;
+            const currentDelay =
+              currentIndex === texts.length - 1 ? lastTextDelay : delay;
             setTimeout(() => {
               setIsPaused(false);
               setIsDeleting(true);
@@ -61,11 +70,15 @@ const Typewriter = ({
     deletingSpeed,
     delay,
     lastTextDelay,
+    isMounted,
   ]);
 
   return (
-    <span className={`${currentIndex === texts.length - 1 ? 'text-primary' : ''}`}>
-      {currentText}
+    <span
+      suppressHydrationWarning
+      className={`${currentIndex === texts.length - 1 ? "text-primary" : ""}`}
+    >
+      {isMounted ? currentText : ""}
     </span>
   );
 };

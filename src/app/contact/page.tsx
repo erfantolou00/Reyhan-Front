@@ -55,38 +55,38 @@ export default function Contact() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSendForm = async (e: FormEvent) => {
-    e.preventDefault();
+  // const handleSendForm = async (e: FormEvent) => {
+  //   e.preventDefault();
     
-    if (!validateForm()) {
-      return;
-    }
+  //   if (!validateForm()) {
+  //     return;
+  //   }
 
-    setIsLoading(true);
+  //   setIsLoading(true);
     
-    try {
-      const res = await fetch('/api/contactForm', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+  //   try {
+  //     const res = await fetch('/api/contactForm', {
+  //       method: 'POST',
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //       },
+  //       body: JSON.stringify(formData),
+  //     });
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message || 'خطا در ارسال پیام');
-      }
+  //     if (!res.ok) {
+  //       throw new Error(data.message || 'خطا در ارسال پیام');
+  //     }
 
-      toast.success('پیام شما با موفقیت ارسال شد');
-      setFormData({ name: '', email: '', message: '', number: '' });
-    } catch (error) {
-      toast.error(error instanceof Error ? error.message : 'خطا در ارسال پیام');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  //     toast.success('پیام شما با موفقیت ارسال شد');
+  //     setFormData({ name: '', email: '', message: '', number: '' });
+  //   } catch (error) {
+  //     toast.error(error instanceof Error ? error.message : 'خطا در ارسال پیام');
+  //   } finally {
+  //     setIsLoading(false);
+  //   }
+  // };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -121,7 +121,7 @@ export default function Contact() {
               {/* Contact Form */}
               <div>
                 <h2 className="text-2xl font-bold mb-6">☎️ فرم تماس </h2>
-                <form onSubmit={handleSendForm} className="space-y-6">
+                <form  className="space-y-6">
                   <div>
                     <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
                       نام و نام خانوادگی

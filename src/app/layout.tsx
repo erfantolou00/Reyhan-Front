@@ -1,20 +1,18 @@
 import type { Metadata } from 'next'
-import { Vazirmatn } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import { ErrorBoundary } from '@/components/ErrorBoundary'
 import { Providers } from '@/components/Providers'
-
-const vazirmatn = Vazirmatn({
-  subsets: ['arabic'],
-  display: 'swap',
-  variable: '--font-vazirmatn',
-  preload: true,
-  fallback: ['system-ui', 'arial'],
-  adjustFontFallback: true,
-})
+// const vazirmatn = Vazirmatn({
+//   subsets: ['arabic'],
+//   display: 'swap',
+//   variable: '--font-vazirmatn',
+//   preload: true,
+//   fallback: ['system-ui', 'arial'],
+//   adjustFontFallback: true,
+// })
 
 export const metadata: Metadata = {
   title: 'راهکارهای نرم‌افزاری سازمانی',

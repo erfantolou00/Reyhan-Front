@@ -6,6 +6,7 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Typewriter from './Typewriter';
+import SiganalR from './SiganalR';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -50,6 +51,8 @@ const Hero = () => {
 
   return (
     <section ref={heroRef} className="relative h-screen w-full overflow-hidden bg-gradient-to-b from-[#F3F4F6] to-white">
+
+{/* <SiganalR /> */}
       {/* Background Image/Video */}
       <motion.div 
         className="absolute inset-0 z-0 hero-bg"
@@ -163,7 +166,7 @@ const Hero = () => {
       </motion.div>
 
       {/* Decorative Elements */}
-      <motion.div 
+        <motion.div 
         className="absolute right-0 top-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 transform rounded-full bg-[#2563EB] opacity-10 blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
