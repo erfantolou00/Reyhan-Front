@@ -6,7 +6,6 @@ import { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Typewriter from './Typewriter';
-import SiganalR from './SiganalR';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -52,9 +51,9 @@ const Hero = () => {
   return (
     <section ref={heroRef} className="relative h-screen w-full overflow-hidden bg-gradient-to-b from-[#F3F4F6] to-white">
 
-{/* <SiganalR /> */}
+      {/* <SiganalR /> */}
       {/* Background Image/Video */}
-      <motion.div 
+      <motion.div
         className="absolute inset-0 z-0 hero-bg"
         style={{ y, opacity }}
       >
@@ -103,16 +102,16 @@ const Hero = () => {
             transition={{ duration: 0.8, ease: 'easeOut' }}
             className="mb-6 h-20 text-4xl font-bold leading-tight text-[#111827] md:text-6xl"
           >
-                <Typewriter
-                  texts={[
-                    "راهکار یکپارچه مدیریت سازمان",
-                    "سفارشی‌سازی‌شده برای نیازهای شما",
-                    "سریع، دقیق، قابل اعتماد",
-                    "ریحان سامانه هوشمند"
-                  ]}
-                  
-                />
-              
+            <Typewriter
+              texts={[
+                "راهکار یکپارچه مدیریت سازمان",
+                "سفارشی‌سازی‌شده برای نیازهای شما",
+                "سریع، دقیق، قابل اعتماد",
+                "ریحان سامانه هوشمند"
+              ]}
+
+            />
+
           </motion.h1>
 
           <motion.p
@@ -121,7 +120,7 @@ const Hero = () => {
             transition={{ duration: 0.8, delay: 0.2, ease: 'easeOut' }}
             className="mb-8 text-lg text-gray-600 md:text-xl"
           >
-ریحان، تمام فرایندهای سازمانی‌تان را با سرعت، دقت و انعطاف‌پذیری بالا یکپارچه می‌کند.          </motion.p>
+            ریحان، تمام فرایندهای سازمانی‌تان را با سرعت، دقت و انعطاف‌پذیری بالا یکپارچه می‌کند.          </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -166,7 +165,7 @@ const Hero = () => {
       </motion.div>
 
       {/* Decorative Elements */}
-        <motion.div 
+      <motion.div
         className="absolute right-0 top-0 h-64 w-64 -translate-y-1/2 translate-x-1/2 transform rounded-full bg-[#2563EB] opacity-10 blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
@@ -178,7 +177,7 @@ const Hero = () => {
           ease: "easeInOut",
         }}
       />
-      <motion.div 
+      <motion.div
         className="absolute bottom-0 left-0 h-64 w-64 translate-y-1/2 -translate-x-1/2 transform rounded-full bg-[#F97316] opacity-10 blur-3xl"
         animate={{
           scale: [1, 1.2, 1],
@@ -191,7 +190,7 @@ const Hero = () => {
           delay: 1,
         }}
       />
-      
+
     </section>
   );
 };
