@@ -1,177 +1,91 @@
 "use client";
 
-import { motion, useScroll, useTransform, useSpring } from "framer-motion";
-import { useState, useRef } from "react";
+import { motion } from "framer-motion";
 import { FiTrendingUp, FiShield, FiZap, FiBarChart2 } from "react-icons/fi";
-import Image from "next/image";
 
 type Benefit = {
   icon: any;
   title: string;
   description: string;
   color: string;
-  image: string;
 };
 
 const benefits: Benefit[] = [
   {
     icon: FiTrendingUp,
     title: "سفارشی‌سازی ۱۰۰٪",
-    description:
-      "نرم‌افزار ما از صفر، بر اساس ساختار، نیاز و دغدغه‌های خاص سازمان شما طراحی می‌شود؛ نه یک نسخه عمومی برای همه.",
+    description: "از صفر تا اجرا، بر اساس فرآیندهای واقعی سازمان شما طراحی می‌شود؛ نه نسخه‌ای عمومی و آماده.",
     color: "#F97316",
-    image: "/images/benefits/1.png",
   },
   {
     icon: FiShield,
     title: "سرعت واقعی در عمل",
-    description:
-      "از بارگذاری صفحات تا پردازش داده‌ها، ریحان برای عملکرد سریع در سازمان‌های پرحجم و پرتراکنش بهینه شده است.",
+    description: "از ورود داده تا گزارش‌گیری، همه چیز با سرعت و دقت بالا در محیطی روان اجرا می‌شود.",
     color: "#2563EB",
-    image: "/images/benefits/2.png",
   },
   {
     icon: FiZap,
     title: "طراحی مدرن و کاربرمحور",
-    description:
-      "رابط کاربری ساده، زیبا و هوشمند به شما کمک می‌کند بدون پیچیدگی‌های فنی، با نرم‌افزار احساس راحتی کنید.",
+    description: "رابط کاربری ساده، شفاف و خوش‌ساخت به شما کمک می‌کند بدون سردرگمی کار کنید.",
     color: "#F97316",
-    image: "/images/benefits/3.png",
   },
   {
     icon: FiBarChart2,
     title: "پشتیبانی تا پیاده‌سازی کامل",
-    description:
-      "از نصب تا آموزش، همراه شماییم تا نرم‌افزار دقیقاً آن‌طور که باید، اجرا شود.",
+    description: "از مرحله نصب تا آموزش و بهرهبرداری، همراه شما هستیم تا نتیجه‌ای پایدار و حرفه‌ای داشته باشید.",
     color: "#2563EB",
-    image: "/images/benefits/4.png",
   },
 ];
 
-const cardVariants = {
-  hidden: {
-    opacity: 0,
-    y: 50,
-    scale: 0.9,
-    rotateX: -15,
-  },
-  visible: (i: number) => ({
-    opacity: 1,
-    y: 0,
-    scale: 1,
-    rotateX: 0,
-    transition: {
-      delay: i * 0.15,
-      duration: 0.8,
-      type: "spring",
-      stiffness: 100,
-      damping: 15,
-    },
-  }),
-  hover: {
-    scale: 1.05,
-    y: -10,
-    transition: {
-      duration: 0.3,
-      type: "spring",
-      stiffness: 400,
-      damping: 10,
-    },
-  },
-};
-
 const BenefitsSection = () => {
-  const [hoveredBenefit, setHoveredBenefit] = useState<Benefit | null>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const sectionRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    setMousePosition({ x: e.clientX, y: e.clientY });
-  };
-
   return (
-    <section
-      ref={sectionRef}
-      className="relative bg-primary/10 py-24 min-h-screen flex items-center"
-      onMouseMove={handleMouseMove}
-    >
-      <div className="container mx-auto px-4">
+    <section className="relative overflow-hidden bg-white py-24 sm:py-28">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(249,115,22,0.08),transparent_45%)]" />
+
+      <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="mb-16 text-center"
+          transition={{ duration: 0.6 }}
+          className="mx-auto mb-14 max-w-3xl text-center"
         >
-          <h2 className="mb-4 text-4xl font-extrabold gradient-text">
-            <span className="text-primary-light">ریحان،</span> فراتر از ERP
+          <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+            چرا ریحان؟
+          </span>
+          <h2 className="mt-4 text-3xl font-black text-slate-900 sm:text-4xl">
+            ساده‌تر فکر کنید، سریع‌تر تصمیم بگیرید
           </h2>
-          <p className="mx-auto max-w-3xl text-xl italic text-gray-600">
-            "ریحان تنها یک ERP نیست؛ راهکاری چابک، سفارشی و کارآمد برای ارتقای
-            عملکرد سازمان شماست."
+          <p className="mt-4 text-lg leading-8 text-slate-600">
+            ریحان فقط یک نرم‌افزار نیست؛ یک تجربه منظم و مطمئن برای مدیریت حرفه‌ای سازمان شماست.
           </p>
         </motion.div>
 
-        <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-          {benefits.map((benefit, index) => (
-            <motion.div
-              key={benefit.title}
-              custom={index}
-              variants={cardVariants}
-              initial="hidden"
-              whileInView="visible"
-              whileHover="hover"
-              viewport={{
-                once: false,
-                margin: "0px 0px -100px 0px",
-                amount: 0.3,
-              }}
-              onHoverStart={() => setHoveredBenefit(benefit)}
-              onHoverEnd={() => setHoveredBenefit(null)}
-              className="group relative overflow-visible rounded-2xl bg-white p-8 shadow-lg transition-all hover:shadow-xl"
-            >
-              <div
-                className="absolute inset-0 opacity-5 transition-opacity group-hover:opacity-10"
-                style={{ backgroundColor: benefit.color }}
-              />
-              <div
-                className="mb-6 inline-block rounded-xl p-3"
-                style={{ backgroundColor: `${benefit.color}20` }}
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+          {benefits.map((benefit, index) => {
+            const Icon = benefit.icon;
+            return (
+              <motion.article
+                key={benefit.title}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.2 }}
+                transition={{ duration: 0.45, delay: index * 0.08 }}
+                whileHover={{ y: -6, scale: 1.01 }}
+                className="group rounded-[28px] border border-slate-200/80 bg-white/80 p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.25)] backdrop-blur transition"
               >
-                <benefit.icon
-                  className="h-8 w-8"
-                  style={{ color: benefit.color }}
-                />
-              </div>
-              <h3 className="mb-3 text-xl font-semibold text-[#111827]">
-                {benefit.title}
-              </h3>
-              <p className="text-gray-600">{benefit.description}</p>
-            </motion.div>
-          ))}
+                <div className="flex items-center justify-between">
+                  <div className="rounded-2xl p-3 shadow-sm" style={{ backgroundColor: `${benefit.color}16`, color: benefit.color }}>
+                    <Icon className="h-7 w-7" />
+                  </div>
+                  <span className="text-sm font-semibold text-slate-400">0{index + 1}</span>
+                </div>
+                <h3 className="mt-6 text-xl font-semibold text-slate-900">{benefit.title}</h3>
+                <p className="mt-3 text-base leading-7 text-slate-600">{benefit.description}</p>
+              </motion.article>
+            );
+          })}
         </div>
-        {hoveredBenefit && hoveredBenefit.image && (
-          <div
-            className="fixed  z-[9999] pointer-events-none bg-black/10 backdrop-blur-lg rounded-lg p-2"
-            style={{
-              left: mousePosition.x,
-              top: mousePosition.y - 420,
-              transform: "translateX(-50%)",
-            }}
-          >
-            <Image
-              src={hoveredBenefit.image}
-              alt={hoveredBenefit.title}
-              width={500}
-              height={500}
-              className="rounded-lg shadow-xl"
-            />
-          </div>
-        )}
       </div>
     </section>
   );

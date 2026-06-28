@@ -1,199 +1,113 @@
 'use client';
 
-import { motion, useScroll, useSpring } from 'framer-motion';
-import { useEffect, useState, useCallback } from 'react';
-import { useInView } from 'react-intersection-observer';
+import { motion } from 'framer-motion';
+import { useState } from 'react';
+import type { Section } from '@/lib/sections';
+import { useSectionTracker } from '@/lib/useSectionTracker';
 
-interface Section {
-  id: string;
-  label: string;
-  icon: string;
+interface FloatingNavbarProps {
+  sections: Section[];
 }
 
-const sections: Section[] = [
-  { id: 'hero', label: 'صفحه اصلی', icon: '🏠' },
-  { id: 'benefits', label: 'مزایا', icon: '✨' },
-  { id: 'features', label: 'ویژگی‌ها', icon: '🚀' },
-  { id: 'testimonials', label: 'نظرات', icon: '💬' },
-  { id: 'contact', label: 'تماس', icon: '📞' },
-];
-
-const FloatingNavbar = () => {
-  const [activeSection, setActiveSection] = useState<string>('hero');
-  const [isScrolled, setIsScrolled] = useState(false);
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
-
-  const { ref: navbarRef, inView } = useInView({
-    threshold: 0,
-    triggerOnce: false,
-  });
-
-  const handleScroll = useCallback(() => {
-    const scrollPosition = window.scrollY;
-    setIsScrolled(scrollPosition > 50);
-
-    for (const section of sections) {
-      const element = document.getElementById(section.id);
-      if (element) {
-        const { top, bottom } = element.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        
-        if (top <= viewportHeight / 2 && bottom >= viewportHeight / 2) {
-          setActiveSection(section.id);
-          break;
-        }
-      }
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [handleScroll]);
-
-  const handleSectionClick = useCallback((sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      const offset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - offset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
-  }, []);
+const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
+  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { activeSection, scrollProgress, isScrolled, scrollToSection } = useSectionTracker(sections, 96);
 
   return (
     <>
-      {/* Progress Bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-[#F97316] origin-left z-50"
-        style={{ scaleX }}
+        className="fixed top-0 left-0 right-0 h-1 bg-primary origin-left z-50"
+        initial={{ scaleX: 0 }}
+        animate={{ scaleX: scrollProgress / 100 }}
+        transition={{ type: 'spring', stiffness: 120, damping: 20 }}
       />
 
-      {/* Floating Navbar */}
       <motion.nav
-        ref={navbarRef}
-        initial={{ y: -100 }}
-        animate={{ 
-          y: isScrolled ? 0 : -100,
-          opacity: isScrolled ? 1 : 0
-        }}
-        transition={{ duration: 0.3 }}
         className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled ? 'bg-white/80 backdrop-blur-lg shadow-lg' : ''
+          isScrolled ? 'bg-white/90 backdrop-blur-xl shadow-xl' : 'bg-transparent'
         }`}
+        initial={{ y: -120 }}
+        animate={{ y: isScrolled ? 0 : -120, opacity: isScrolled ? 1 : 0 }}
+        transition={{ duration: 0.25 }}
         dir="rtl"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            {/* Logo */}
-            <div className="flex-shrink-0">
-              <img
-                className="h-8 w-auto"
-                src="/logo.png"
-                alt="لوگوی شرکت"
-              />
-            </div>
-
-            {/* Navigation Links */}
-            <div className="hidden md:block">
-              <div className="flex items-center space-x-4 space-x-reverse">
-                {sections.map((section) => {
-                  const isActive = activeSection === section.id;
-                  return (
-                    <motion.button
-                      key={section.id}
-                      onClick={() => handleSectionClick(section.id)}
-                      className={`relative px-4 py-2 text-sm font-medium rounded-md transition-colors duration-200 ${
-                        isActive
-                          ? 'text-[#F97316]'
-                          : 'text-gray-600 hover:text-[#F97316]'
-                      }`}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                    >
-                      <span className="flex items-center gap-2">
-                        <span>{section.icon}</span>
-                        <span>{section.label}</span>
-                      </span>
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeSection"
-                          className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#F97316]"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          exit={{ opacity: 0 }}
-                        />
-                      )}
-                    </motion.button>
-                  );
-                })}
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex h-16 items-center justify-between gap-4">
+            <div className="flex items-center gap-3">
+              <img className="h-9 w-9 rounded-2xl shadow-md" src="/logo.png" alt="لوگو ریحان" />
+              <div>
+                <p className="text-sm font-semibold text-gray-700">ریحان</p>
+                <p className="text-xs text-gray-400">سیستم مدیریت سازمانی</p>
               </div>
             </div>
 
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <button
-                type="button"
-                className="inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-[#F97316] hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-[#F97316]"
-                aria-controls="mobile-menu"
-                aria-expanded="false"
-              >
-                <span className="sr-only">باز کردن منو</span>
-                <svg
-                  className="h-6 w-6"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M4 6h16M4 12h16M4 18h16"
-                  />
-                </svg>
-              </button>
+            <div className="hidden md:flex items-center gap-4">
+              {sections.map((section) => {
+                const isActive = activeSection === section.id;
+                return (
+                  <button
+                    key={section.id}
+                    type="button"
+                    onClick={() => scrollToSection(section.id)}
+                    className={`relative rounded-full px-3 py-2 text-sm font-medium transition ${
+                      isActive ? 'text-primary shadow-sm' : 'text-gray-600 hover:text-primary'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>{section.icon}</span>
+                      <span>{section.label}</span>
+                    </span>
+                    {isActive && <span className="absolute inset-x-0 bottom-0 h-0.5 rounded-full bg-primary" />}
+                  </button>
+                );
+              })}
             </div>
+
+            <button
+              type="button"
+              className="md:hidden inline-flex items-center justify-center rounded-full border border-gray-200 bg-white p-2 text-gray-600 shadow-sm transition hover:border-primary hover:text-primary"
+              aria-expanded={isMobileOpen}
+              aria-label="باز کردن منوی ناوبری"
+              onClick={() => setIsMobileOpen((current) => !current)}
+            >
+              <svg className="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d={isMobileOpen ? 'M6 18L18 6M6 6l12 12' : 'M4 6h16M4 12h16M4 18h16'} />
+              </svg>
+            </button>
           </div>
         </div>
 
-        {/* Mobile Menu */}
-        <div className="md:hidden hidden" id="mobile-menu">
-          <div className="px-2 pt-2 pb-3 space-y-1 space-y-reverse">
-            {sections.map((section) => {
-              const isActive = activeSection === section.id;
-              return (
-                <button
-                  key={section.id}
-                  onClick={() => handleSectionClick(section.id)}
-                  className={`block w-full text-right px-3 py-2 rounded-md text-base font-medium ${
-                    isActive
-                      ? 'bg-[#F97316] text-white'
-                      : 'text-gray-600 hover:bg-gray-50 hover:text-[#F97316]'
-                  }`}
-                >
-                  <span className="flex items-center gap-2">
-                    <span>{section.icon}</span>
-                    <span>{section.label}</span>
-                  </span>
-                </button>
-              );
-            })}
+        {isMobileOpen && (
+          <div className="md:hidden border-t border-gray-200 bg-white/95 backdrop-blur-xl shadow-sm">
+            <div className="space-y-2 px-4 py-4">
+              {sections.map((section) => {
+                const isActive = activeSection === section.id;
+                return (
+                  <button
+                    key={section.id}
+                    type="button"
+                    onClick={() => {
+                      scrollToSection(section.id);
+                      setIsMobileOpen(false);
+                    }}
+                    className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-right text-sm font-medium transition ${
+                      isActive ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-50'
+                    }`}
+                  >
+                    <span className="flex items-center gap-2">
+                      <span>{section.icon}</span>
+                      <span>{section.label}</span>
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        </div>
+        )}
       </motion.nav>
     </>
   );
 };
 
-export default FloatingNavbar; 
+export default FloatingNavbar;
+ 

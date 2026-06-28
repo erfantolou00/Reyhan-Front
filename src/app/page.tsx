@@ -8,40 +8,41 @@ import TestimonialsSection from '@/components/TestimonialsSection';
 import CTASection from '@/components/CTASection';
 import FloatingNavbar from '@/components/FloatingNavbar';
 import VerticalTimeline from '@/components/VerticalTimeline';
-
-const sections = [
-  { id: 'hero', label: 'صفحه اصلی', icon: '🏠' },
-  { id: 'benefits', label: 'مزایا', icon: '✨' },
-  { id: 'features', label: 'ویژگی‌ها', icon: '🚀' },
-  { id: 'testimonials', label: 'نظرات', icon: '💬' },
-  { id: 'contact', label: 'تماس', icon: '📞' },
-];
+import { pageSections } from '@/lib/sections';
 
 export default function Home() {
   return (
-    <main className="relative">
-      <FloatingNavbar />
-      <VerticalTimeline sections={sections} />
+    <main className="relative bg-white text-gray-900">
+      <FloatingNavbar sections={pageSections} />
+      <VerticalTimeline sections={pageSections} />
+
       <section id="hero">
         <Hero />
       </section>
+
       <SectionDivider />
+
       <section id="benefits">
         <BenefitsSection />
       </section>
+
       <SectionDivider />
+
       <section id="features">
         <ProductShowcase />
       </section>
+
       <SectionDivider />
+
       <section id="testimonials">
         <TestimonialsSection />
       </section>
+
       <SectionDivider />
+
       <section id="contact">
         <CTASection />
       </section>
-      {/* Additional sections will be added here */}
     </main>
   );
 }
