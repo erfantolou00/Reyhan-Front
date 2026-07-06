@@ -1,8 +1,13 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
-import { FaCalendarAlt, FaUser, FaArrowLeft } from 'react-icons/fa';
+import { FaCalendarAlt, FaUser, FaArrowLeft, FaTimesCircle, FaClock } from 'react-icons/fa';
 
 import ParticleBackground from '@/components/ParticleBackground';
+import { createClient } from '@/lib/supabase/server';
+import { useEffect, useState } from 'react';
+import { Category, Post } from '@/types';
 
 // Sample blog data
 const blogPosts = [
@@ -58,47 +63,87 @@ const blogPosts = [
   }
 ];
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchPosts = async () => {
+      try {
+          const res = await fetch('/api/blog');
+          const data = await res.json();
+          setPosts(data);
+      } catch (error) {
+          console.error('خطا در دریافت پست‌ها:', error);
+      } finally {
+          setLoading(false);
+      }
+  };
+  const fetchCategories = async () => {
+      try {
+          const res = await fetch('/api/categories');
+          const data = await res.json();
+          setCategories(data);
+      } catch (error) {
+          console.error('خطا در دریافت پست‌ها:', error);
+      } finally {
+          setLoading(false);
+      }
+  };
+
+  useEffect(() => {
+      fetchPosts();
+      fetchCategories();
+  }, []);
+
   return (
-    <>
-    <div className="min-h-screen bg-gradient-to-b from-primary/10 to-white py-32 px-4 sm:px-6 lg:px-8">
-        <ParticleBackground />
+    <div className="min-h-screen bg-gradient-to-b from-primary/20 to-white py-32 px-4 sm:px-6 lg:px-8">
+      <ParticleBackground />
       <div className="max-w-7xl mx-auto">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-gray-900 mb-6 relative">
             <span className="relative z-10">بلاگ</span>
             <span className="absolute -bottom-2 left-1/2 transform -translate-x-1/2 w-24 h-1 bg-primary"></span>
           </h1>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">آخرین مقالات و آموزش‌های ما را در اینجا دنبال کنید</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {blogPosts.map((post) => (
-            <Link href={`/blog/${post.slug}`} key={post.id}>
-              <div className="group bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1">
-                <div className="relative h-64 w-full overflow-hidden">
+        {/* استفاده از grid با ابعاد ثابت برای کارت‌ها */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {posts.map((post: any) => (
+            <Link href={`/blog/${post.id}`} key={post.id} className="group h-full">
+              <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full">
+                
+                {/* بخش تصویر: ارتفاع ثابت */}
+                <div className="relative h-56 w-full overflow-hidden shrink-0">
                   <Image
-                    src={post.image}
+                    src={post.image_url || '/placeholder.jpg'}
                     alt={post.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute top-4 right-4 bg-primary/90 text-white px-4 py-1 rounded-full text-sm">
-                    {post.category}
+                  <div className="absolute top-4 right-4 bg-primary/90 text-white px-4 py-1 rounded-full text-xs font-medium">
+                    {categories?.find((c: any) => c.id === post.category_id)?.name || 'بدون دسته'}
                   </div>
                 </div>
-                <div className="p-6">
-                  <h2 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors duration-300">{post.title}</h2>
-                  <p className="text-gray-600 mb-4 line-clamp-2 text-lg">{post.subtitle}</p>
-                  <div className="flex items-center justify-between text-sm text-gray-500 pt-4 border-t border-gray-100">
-                    <div className="flex items-center">
-                      <FaCalendarAlt className="ml-2 text-primary" />
-                      <span>{post.date}</span>
+
+                {/* بخش متن: flex-grow برای پر کردن فضای خالی */}
+                <div className="p-6 flex flex-col flex-grow">
+                  <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
+                    {post.title}
+                  </h2>
+                  <p className="text-gray-600 mb-4 line-clamp-3 text-sm flex-grow">
+                    {post.subtitle}
+                  </p>
+                  
+                  {/* فوتر کارت: همیشه پایین قرار می‌گیرد */}
+                  <div className="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100 mt-auto">
+                    <div className="flex items-center gap-1">
+                      <FaCalendarAlt className="text-primary" />
+                      <span>{new Date(post.published_at).toLocaleDateString('fa-IR')}</span>
                     </div>
-                    <div className="flex items-center">
-                      <FaUser className="ml-2 text-secondary" />
-                      <span>{post.author}</span>
+                    <div className="flex items-center gap-1">
+                      <FaClock className="text-primary" />
+                      <span>{post.reading_time} دقیقه</span>
                     </div>
                   </div>
                 </div>
@@ -108,6 +153,5 @@ export default function BlogPage() {
         </div>
       </div>
     </div>
-    </>
   );
 }

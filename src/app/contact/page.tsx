@@ -1,28 +1,29 @@
 "use client";
 
+import Image from 'next/image';
 import { useState, FormEvent } from 'react';
 import { toast } from 'react-hot-toast';
 
 interface FormData {
-  name: string;
+  full_name: string;
   email: string;
+  phone: string;
   message: string;
-  number: string;
 }
 
 interface FormErrors {
-  name?: string;
+  full_name?: string;
   email?: string;
+  phone?: string;
   message?: string;
-  number?: string;
 }
 
-export default function Contact() {
+export default function ContactPage() {
   const [formData, setFormData] = useState<FormData>({
-    name: '',
+    full_name: '',
     email: '',
-    message: '',
-    number: ''
+    phone: '',
+    message: ''
   });
 
   const [errors, setErrors] = useState<FormErrors>({});
@@ -30,168 +31,149 @@ export default function Contact() {
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
-    
-    if (!formData.name.trim()) {
-      newErrors.name = 'نام و نام خانوادگی الزامی است';
+
+    if (!formData.full_name.trim()) newErrors.full_name = 'نام و نام خانوادگی الزامی است';
+    if (!formData.email.trim()) newErrors.email = 'ایمیل الزامی است';
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) newErrors.email = 'ایمیل نامعتبر است';
+
+    if (!formData.phone.trim()) newErrors.phone = 'شماره تماس الزامی است';
+    else if (!/^[0-9]{11}$/.test(formData.phone.replace(/\D/g, ''))) {
+      newErrors.phone = 'شماره تماس باید ۱۱ رقم باشد';
     }
-    
-    if (!formData.email.trim()) {
-      newErrors.email = 'ایمیل الزامی است';
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      newErrors.email = 'ایمیل نامعتبر است';
-    }
-    
-    if (!formData.number.trim()) {
-      newErrors.number = 'شماره تماس الزامی است';
-    } else if (!/^[0-9]{11}$/.test(formData.number.replace(/\D/g, ''))) {
-      newErrors.number = 'شماره تماس باید ۱۱ رقم باشد';
-    }
-    
-    if (!formData.message.trim()) {
-      newErrors.message = 'پیام الزامی است';
-    }
+
+    if (!formData.message.trim()) newErrors.message = 'پیام الزامی است';
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
-  // const handleSendForm = async (e: FormEvent) => {
-  //   e.preventDefault();
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    setIsLoading(true);
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.error || 'خطا در ارسال پیام');
+
+      toast.success(data.message || 'پیام شما با موفقیت ارسال شد');
+      
+      // پاک کردن فرم
+      setFormData({ full_name: '', email: '', phone: '', message: '' });
+      setErrors({});
+
+    } catch (error: any) {
+      toast.error(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({ ...prev, [name]: value }));
     
-  //   if (!validateForm()) {
-  //     return;
-  //   }
-
-  //   setIsLoading(true);
-    
-  //   try {
-  //     const res = await fetch('/api/contactForm', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(formData),
-  //     });
-
-  //     const data = await res.json();
-
-  //     if (!res.ok) {
-  //       throw new Error(data.message || 'خطا در ارسال پیام');
-  //     }
-
-  //     toast.success('پیام شما با موفقیت ارسال شد');
-  //     setFormData({ name: '', email: '', message: '', number: '' });
-  //   } catch (error) {
-  //     toast.error(error instanceof Error ? error.message : 'خطا در ارسال پیام');
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { id, value } = e.target;
-    setFormData(prev => ({ ...prev, [id]: value }));
-    // Clear error when user starts typing
-    if (errors[id as keyof FormErrors]) {
-      setErrors(prev => ({ ...prev, [id]: undefined }));
+    if (errors[name as keyof FormErrors]) {
+      setErrors(prev => ({ ...prev, [name]: undefined }));
     }
   };
 
   return (
-    <>
-      <main>
-        {/* Hero Section */}
-        <section className="bg-gradient-to-b from-primary/10 to-white py-32">
-          <div className="container mx-auto px-4">
-            <div className="max-w-3xl mx-auto text-center">
-              <h1 className="text-4xl md:text-5xl font-bold mb-6">
-                تماس با ما
-              </h1>
-              <p className="text-xl text-gray-600">
-                برای دریافت مشاوره و اطلاعات بیشتر با ما در تماس باشید
-              </p>
-            </div>
+    <main>
+      {/* Hero Section */}
+      <section className="bg-gradient-to-b from-primary/10 to-white pt-32 pb-10">
+        <div className="container mx-auto px-4">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl md:text-5xl font-bold mb-6">تماس با ما</h1>
+            <p className="text-xl text-gray-600">برای دریافت مشاوره و اطلاعات بیشتر با ما در تماس باشید</p>
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* Contact Section */}
-        <section className="py-20">
-          <div className="container mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-              {/* Contact Form */}
-              <div>
-                <h2 className="text-2xl font-bold mb-6">☎️ فرم تماس </h2>
-                <form  className="space-y-6">
-                  <div>
-                    <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
-                      نام و نام خانوادگی
-                    </label>
-                    <input
-                      type="text"
-                      id="name"
-                      value={formData.name}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border ${errors.name ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-primary`}
-                    />
-                    {errors.name && <p className="mt-1 text-sm text-red-500">{errors.name}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                      ایمیل
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      value={formData.email}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border ${errors.email ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-primary`}
-                    />
-                    {errors.email && <p className="mt-1 text-sm text-red-500">{errors.email}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="number" className="block text-sm font-medium text-gray-700 mb-1">
-                      شماره تماس
-                    </label>
-                    <input
-                      type="tel"
-                      id="number"
-                      value={formData.number}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border ${errors.number ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-primary`}
-                    />
-                    {errors.number && <p className="mt-1 text-sm text-red-500">{errors.number}</p>}
-                  </div>
-                  <div>
-                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
-                      پیام
-                    </label>
-                    <textarea
-                      id="message"
-                      rows={4}
-                      value={formData.message}
-                      onChange={handleInputChange}
-                      className={`w-full px-4 py-2 border ${errors.message ? 'border-red-500' : 'border-gray-300'} rounded-lg focus:ring-2 focus:ring-primary focus:border-primary`}
-                    ></textarea>
-                    {errors.message && <p className="mt-1 text-sm text-red-500">{errors.message}</p>}
-                  </div>
-                  <button
-                    type="submit"
-                    disabled={isLoading}
-                    className={`btn btn-primary w-full ${isLoading ? 'opacity-70 cursor-not-allowed' : ''}`}
-                  >
-                    {isLoading ? 'در حال ارسال...' : 'ارسال پیام'}
-                  </button>
-                </form>
-              </div>
+      {/* Contact Form Section */}
+      <section className="py-16">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {/* فرم تماس */}
+            <div>
+              <h2 className="text-3xl font-bold mb-8">ارسال پیام</h2>
+              
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-sm font-medium mb-2">نام و نام خانوادگی</label>
+                  <input
+                    type="text"
+                    name="full_name"
+                    value={formData.full_name}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary ${errors.full_name ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.full_name && <p className="text-red-500 text-sm mt-1">{errors.full_name}</p>}
+                </div>
 
-              {/* Contact Info */}
-              <div>
+                <div>
+                  <label className="block text-sm font-medium mb-2">ایمیل</label>
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">شماره تماس</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2">پیام شما</label>
+                  <textarea
+                    name="message"
+                    rows={6}
+                    value={formData.message}
+                    onChange={handleChange}
+                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-primary ${errors.message ? 'border-red-500' : 'border-gray-300'}`}
+                  />
+                  {errors.message && <p className="text-red-500 text-sm mt-1">{errors.message}</p>}
+                </div>
+
+                <button
+                  type="submit"
+                  disabled={isLoading}
+                  className="btn btn-primary w-full py-4 text-lg font-medium disabled:opacity-70"
+                >
+                  {isLoading ? 'در حال ارسال...' : 'ارسال پیام'}
+                </button>
+              </form>
+            </div>
+
+            {/* اطلاعات تماس */}
+            <div>
                 <h2 className="text-2xl font-bold mb-6">📞 اطلاعات تماس</h2>
                 <div className="space-y-6">
                   <div>
                     <h3 className="text-lg font-semibold mb-2">🏠 آدرس</h3>
                     <p className="text-gray-600">
-                    پارک علم و فناوری دانشگاه سمنان                    </p>
+                      پارک علم و فناوری دانشگاه سمنان                    </p>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold mb-2">📞 تلفن</h3>
@@ -199,7 +181,7 @@ export default function Contact() {
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold mb-2">📧 ایمیل</h3>
-                    <p className="text-gray-600">saeed@komeylian.com</p>
+                    <p className="text-gray-600">sdkomeylian@gmail.com</p>
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold mb-2">🕒 ساعات کاری</h3>
@@ -212,14 +194,18 @@ export default function Contact() {
                 </div>
 
                 {/* Map Placeholder */}
-                <div className="mt-8 bg-gray-200 rounded-lg h-64 flex items-center justify-center">
-                  <p className="text-gray-600">نقشه گوگل اینجا قرار خواهد گرفت</p>
+                <div className="relative mt-8 bg-gray-200 rounded-lg h-64 overflow-hidden">
+                  <Image
+                    src="/images/contact/1.png"
+                    alt="map"
+                    className='w-full h-full object-cover'
+                    fill
+                  />
                 </div>
               </div>
-            </div>
           </div>
-        </section>
-      </main>
-    </>
-  )
-} 
+        </div>
+      </section>
+    </main>
+  );
+}

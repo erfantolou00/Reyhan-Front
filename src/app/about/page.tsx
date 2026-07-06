@@ -7,7 +7,7 @@ export default function About() {
     <>
       <main>
         {/* Hero Section */}
-        <section className="bg-gradient-to-b from-primary/40 to-white py-32">
+        <section className="bg-gradient-to-b from-primary/40 to-white pt-32">
           <div className="container mx-auto px-4">
             <div className="max-w-3xl mx-auto text-center">
               <h1 className="text-4xl md:text-5xl font-bold mb-6">
@@ -21,7 +21,7 @@ export default function About() {
         </section>
 
         {/* Company Info Section */}
-        <section className="py-20">
+        <section className="pt-20 pb-10">
           <div className="container mx-auto px-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <div>

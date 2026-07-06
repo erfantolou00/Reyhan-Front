@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Typewriter from './Typewriter';
 import Link from 'next/link';
+import { useState } from 'react';
 
 const transformationStats = [
   {
@@ -49,11 +50,27 @@ const features = [
   }
 ];
 
+
 const TransformationSection = () => {
+  const [bool ,setbool] = useState(false)
+  
+  const handleclick = ()=> {
+    setbool(true)
+  }
   return (
     <section className="relative py-32 overflow-hidden bg-gradient-to-b from-primary/10 to-white">
-      <div className="absolute  bg-grid-pattern opacity-5"></div>
+      {bool && (
+        <video 
+        src="/33.mp4" 
+        autoPlay 
+        loop 
+        muted 
+        playsInline 
+        className="h-full w-full object-cover absolute z-50"
+      />
       
+      )}
+      <div className="absolute  bg-grid-pattern opacity-5"></div>
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -145,6 +162,7 @@ const TransformationSection = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="bg-primary text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow"
+            onClick={()=> setbool(true)}
           >
             شروع کنید
           </motion.button>

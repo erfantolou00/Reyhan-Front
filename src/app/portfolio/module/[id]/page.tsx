@@ -4,6 +4,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { FaUsers, FaMoneyBillWave, FaFileContract, FaWarehouse, FaCheckCircle, FaChartLine, FaCog, FaLightbulb } from "react-icons/fa";
 import Link from "next/link";
+import { FiFile, FiLayers, FiLock, FiSearch } from "react-icons/fi";
 
 const moduleDetails = {
   1: {
@@ -168,7 +169,48 @@ const moduleDetails = {
     ],
     screenshot: "/images/portfolio/warehouse-module.png",
     gradient: "from-orange-500 to-amber-400"
+  },
+  5: {
+    title: "ماژول فایل و مدیریت اسناد",
+    mainImage: '/images/modules/main/5.png',
+    description: "سیستم مدیریت و آرشیو دیجیتال اسناد، مکاتبات و فایل‌های سازمانی با قابلیت‌های امنیتی پیشرفته",
+    longDescription: "ماژول فایل و مدیریت اسناد ریحان، راهکاری جامع برای سازماندهی، ذخیره‌سازی امن و مدیریت دسترسی به تمام اسناد و فایل‌های سازمان شماست. این ماژول با فراهم کردن یک پلتفرم متمرکز، فرآیند جستجو، بازیابی و اشتراک‌گذاری اسناد را تسهیل کرده و به افزایش بهره‌وری و امنیت اطلاعات کمک شایانی می‌کند.",
+    features: [
+      {
+        title: "آرشیو دیجیتال",
+        description: "امکان بارگذاری، دسته‌بندی و سازماندهی انواع فایل‌ها و اسناد الکترونیکی با ساختار درختی",
+        icon: <FiFile className="w-6 h-6" />,
+        image: "/images/modules/file/1.png"
+      },
+      {
+        title: "مدیریت دسترسی",
+        description: "تعیین سطوح دسترسی دقیق و نقش‌محور برای کاربران و گروه‌ها به منظور حفظ امنیت اطلاعات",
+        icon: <FiLock className="w-6 h-6" />,
+        image: "/images/modules/file/2.png"
+      },
+      {
+        title: "جستجو و بازیابی",
+        description: "قابلیت جستجوی پیشرفته بر اساس نام فایل، برچسب‌ها، تاریخ ایجاد و محتوای متنی اسناد",
+        icon: <FiSearch className="w-6 h-6" />,
+        image: "/images/modules/file/3.png"
+      },
+      {
+        title: "نسخه‌گذاری (Versioning)",
+        description: "نگهداری تاریخچه ویرایش اسناد، ردیابی تغییرات کاربران و امکان بازگشت به نسخه‌های قبلی",
+        icon: <FiLayers className="w-6 h-6" />,
+        image: "/images/modules/file/4.png"
+      }
+    ],
+    benefits: [
+      "کاهش 60% زمان جستجو و بازیابی اسناد",
+      "افزایش 45% امنیت اطلاعات و اسناد حساس",
+      "کاهش 30% فضای فیزیکی مورد نیاز برای بایگانی",
+      "بهبود 55% در سرعت گردش و اشتراک‌گذاری اسناد"
+    ],
+    screenshot: "/images/portfolio/file-module.webp",
+    gradient: "from-orange-500 to-amber-400"
   }
+
 };
 
 export default function ModuleDetail() {
