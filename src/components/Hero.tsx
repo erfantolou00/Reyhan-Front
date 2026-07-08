@@ -14,7 +14,7 @@ const stats = [
 
 const Hero = () => {
   const handleDemo = () => {
-    window.open('https://demo.sadodin.ir', '_blank');
+    window.open('http://demo.reyhanehsoft.ir', '_blank');
   };
 
   return (

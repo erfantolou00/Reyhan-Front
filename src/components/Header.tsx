@@ -11,6 +11,12 @@ const navigation = [
   { name: 'نمونه کارها', href: '/portfolio', icon: '🎯' },
   { name: 'درباره ما', href: '/about', icon: 'ℹ️' },
   { name: 'تماس با ما', href: '/contact', icon: '📞' },
+  { 
+    name: 'کاتالوگ', 
+    href: '/reyhan-catalog.pdf', 
+    icon: '📩',
+    isDownload: true         
+  },
 ]
 
 export default function Header() {
@@ -25,6 +31,21 @@ export default function Header() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // تابع دانلود
+  const handleDownload = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    // اگر لینک دانلود باشه، جلوی navigation رو بگیریم
+    if (href.endsWith('.pdf')) {
+      e.preventDefault();
+      
+      const link = document.createElement('a');
+      link.href = href;
+      link.download = 'کاتالوگ-ریحان.pdf';   // نام دلخواه برای فایل دانلود شده
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  };
 
   return (
     <motion.header
@@ -75,8 +96,10 @@ export default function Header() {
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
                   <Link
-                    href={item.href}
-                    className="relative text-gray-700 hover:text-primary px-3 py-2 text-lg font-medium group flex items-center gap-2"
+                   href={item.href}
+                   onClick={(e) => handleDownload(e, item.href)}
+                   className="relative text-gray-700 hover:text-primary px-3 py-2 text-lg font-medium group flex items-center gap-2"
+                   {...(item.isDownload && { download: true })} // attribute دانلود
                   >
                     <motion.span
                       initial={{ scale: 0 }}
@@ -164,8 +187,11 @@ export default function Header() {
                   >
                     <Link
                       href={item.href}
+                      onClick={(e) => {
+                        handleDownload(e, item.href);
+                        setIsMobileMenuOpen(false);
+                      }}
                       className="flex items-center gap-2 px-3 py-2 text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors duration-200 group"
-                      onClick={() => setIsMobileMenuOpen(false)}
                     >
                       <span className="text-xl transform group-hover:scale-110 transition-transform duration-200">
                         {item.icon}
