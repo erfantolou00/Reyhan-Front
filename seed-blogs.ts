@@ -1,8 +1,8 @@
 // seed-blogs.ts
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = 'https://ykracdlkkwtlcnazhulw.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlrcmFjZGxra3d0bGNuYXpodWx3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODMwNTgzNjgsImV4cCI6MjA5ODYzNDM2OH0.onLql1XwgEZV9MT8a2IPSQZ7PWVtUAAjWvVW4wMlaT4'; // مهم: Service Role Key استفاده کن
+const supabaseUrl = '';
+const supabaseKey = ""; // مهم: Service Role Key استفاده کن
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
