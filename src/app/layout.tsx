@@ -5,6 +5,7 @@ import { Providers } from '@/components/Providers'
 import Header from '@/components/Header'
 import { Toaster } from 'react-hot-toast'
 import Footer from '@/components/Footer'
+import { Analytics } from '@vercel/analytics/next'
 // import { Vazirmatn } from 'next/font/google' // یا next/font/local
 
 // const vazirmatn = Vazirmatn({
@@ -37,6 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Footer />
           </Providers>
         </ErrorBoundary>
+        <Analytics />
       </body>
     </html>
   )
