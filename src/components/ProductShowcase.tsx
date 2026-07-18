@@ -75,6 +75,7 @@ const ProductShowcase = () => {
       fill
       className="object-cover"
       sizes="(max-width: 768px) 100vw, 50vw"
+      priority
     />
 
     <div className="absolute inset-0 bg-gradient-to-t from-slate-950/75 via-slate-900/25 to-transparent" />

@@ -9,13 +9,14 @@ const navigation = [
   { name: 'خانه', href: '/', icon: '🏠' },
   { name: 'وبلاگ', href: '/blog', icon: '📝' },
   { name: 'نمونه کارها', href: '/portfolio', icon: '🎯' },
+  { name: 'گالری تصاویر', href: '/products', icon: '🖼️' },
   { name: 'درباره ما', href: '/about', icon: 'ℹ️' },
   { name: 'تماس با ما', href: '/contact', icon: '📞' },
-  { 
-    name: 'کاتالوگ', 
-    href: '/reyhan-catalog.pdf', 
+  {
+    name: 'کاتالوگ',
+    href: '/reyhan-catalog.pdf',
     icon: '📩',
-    isDownload: true         
+    isDownload: true
   },
 ]
 
@@ -37,7 +38,7 @@ export default function Header() {
     // اگر لینک دانلود باشه، جلوی navigation رو بگیریم
     if (href.endsWith('.pdf')) {
       e.preventDefault();
-      
+
       const link = document.createElement('a');
       link.href = href;
       link.download = 'کاتالوگ-ریحان.pdf';   // نام دلخواه برای فایل دانلود شده
@@ -49,11 +50,10 @@ export default function Header() {
 
   return (
     <motion.header
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled 
-          ? 'bg-white/80 backdrop-blur-lg shadow-lg' 
+      className={`fixed w-full z-50 transition-all duration-300 ${isScrolled
+          ? 'bg-white/80 backdrop-blur-lg shadow-lg'
           : 'bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10'
-      }`}
+        }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: "spring", stiffness: 100, damping: 20 }}
@@ -61,7 +61,7 @@ export default function Header() {
       <nav className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 justify-between items-center">
           {/* Logo with 3D effect */}
-          <motion.div 
+          <motion.div
             className="flex-shrink-0 flex items-center gap-3"
             whileHover={{ scale: 1.05, rotateY: 5 }}
             transition={{ type: "spring", stiffness: 400, damping: 10 }}
@@ -72,7 +72,8 @@ export default function Header() {
               transition={{ duration: 0.6 }}
               style={{ perspective: 1000 }}
             >
-              <Image src="/logo.png" alt="Reyhan Logo" width={60} height={60} className="rounded-xl shadow-lg" />
+              <Image src="/logo.webp" alt="Reyhan Logo" 
+                width={60} height={60} className="rounded-xl shadow-lg" priority />
             </motion.div>
             <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent relative group">
               ریحان
@@ -96,10 +97,10 @@ export default function Header() {
                   transition={{ type: "spring", stiffness: 400, damping: 10 }}
                 >
                   <Link
-                   href={item.href}
-                   onClick={(e) => handleDownload(e, item.href)}
-                   className="relative text-gray-700 hover:text-primary px-3 py-2 text-lg font-medium group flex items-center gap-2"
-                   {...(item.isDownload && { download: true })} // attribute دانلود
+                    href={item.href}
+                    onClick={(e) => handleDownload(e, item.href)}
+                    className="relative text-gray-700 hover:text-primary px-3 py-2 text-lg font-medium group flex items-center gap-2"
+                    {...(item.isDownload && { download: true })} // attribute دانلود
                   >
                     <motion.span
                       initial={{ scale: 0 }}

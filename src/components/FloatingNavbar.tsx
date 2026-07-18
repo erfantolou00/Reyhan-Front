@@ -34,7 +34,7 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between gap-4">
             <div className="flex items-center gap-3">
-              <img className="h-9 w-9 rounded-2xl shadow-md" src="/logo.png" alt="لوگو ریحان" />
+              <img className="h-9 w-9 rounded-2xl shadow-md" src="/logo.webp" loading='lazy' alt="لوگو ریحان" />
               <div>
                 <p className="text-sm font-semibold text-gray-700">ریحان</p>
                 <p className="text-xs text-gray-400">سیستم مدیریت سازمانی</p>

@@ -89,7 +89,7 @@ export default function About() {
                   className="bg-white p-6 rounded-lg shadow-lg text-center"
                 >
                   <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4">
-                    <Image src={member.image} alt="Team Member" width={400} height={400} />
+                    <Image priority src={member.image} alt="Team Member" width={400} height={400} />
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{member.role}</h3>
                   <p className="text-gray-600">{member.description}</p>

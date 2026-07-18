@@ -25,21 +25,35 @@ export default function Products() {
         {
             id: 2,
             image: "/images/products/2.png",
-            title: 'محصول دوم',
+            title: 'گفتگو',
             description: 'توضیحات محصول دوم',
             detailLink: '/products/v1'
         },
         {
             id: 3,
             image: "/images/products/3.png",
-            title: 'محصول سوم',
+            title: 'مدیریت فایل',
+            description: 'توضیحات محصول سوم',
+            detailLink: '/products/v1'
+        },
+        {
+            id: 4,
+            image: "/images/products/4.png",
+            title: 'مدیریت اعلانات',
+            description: 'توضیحات محصول سوم',
+            detailLink: '/products/v1'
+        },
+        {
+            id: 5,
+            image: "/images/products/5.png",
+            title: 'مدیریت میانبر',
             description: 'توضیحات محصول سوم',
             detailLink: '/products/v1'
         },
     ];
 
     return (
-        <div className="fixed inset-0 w-full h-full bg-black">
+        <div className=" w-full h-screen  pt-20">
             <Swiper
                 modules={[Navigation, Pagination, Autoplay, EffectFade]}
                 spaceBetween={0}
@@ -52,11 +66,11 @@ export default function Products() {
                 }}
                 effect="fade"
                 fadeEffect={{ crossFade: true }}
-                className="w-full h-full"
+                className="w-full h-full fixed inset-0 bg-black"
             >
                 {products.map((product) => (
                     <SwiperSlide key={product.id} className="relative">
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
@@ -67,18 +81,18 @@ export default function Products() {
                                 src={product.image}
                                 alt={product.title}
                                 fill
-                                className="object-cover"
+                                className="md:object-cover xl:object-contain object-scale-down"
                                 priority
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-                            
-                            <motion.div 
+
+                            <motion.div
                                 initial={{ y: 50, opacity: 0 }}
                                 animate={{ y: 0, opacity: 1 }}
                                 transition={{ delay: 0.3, duration: 0.8 }}
                                 className="absolute bottom-0 left-0 right-0 p-12"
                             >
-                                <motion.h2 
+                                <motion.h2
                                     initial={{ y: 20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.5, duration: 0.8 }}
@@ -86,7 +100,7 @@ export default function Products() {
                                 >
                                     {product.title}
                                 </motion.h2>
-                                <motion.p 
+                                <motion.p
                                     initial={{ y: 20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.7, duration: 0.8 }}
@@ -94,22 +108,22 @@ export default function Products() {
                                 >
                                     {product.description}
                                 </motion.p>
-                                
-                                <motion.div 
+
+                                <motion.div
                                     initial={{ y: 20, opacity: 0 }}
                                     animate={{ y: 0, opacity: 1 }}
                                     transition={{ delay: 0.9, duration: 0.8 }}
                                     className="mt-8 flex gap-4"
                                 >
-                                    <Link href="/products/v1" >
+                                    {/* <Link href="/products/v1" >
                                     <motion.button 
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         className="px-8 py-3 bg-secondary-dark text-white rounded-full hover:bg-gray-200 transition-colors"
                                     >
                                         مشاهده جزئیات
-                                    </motion.button></Link>
-                                    <motion.button 
+                                    </motion.button></Link> */}
+                                    <motion.button
                                         whileHover={{ scale: 1.05 }}
                                         whileTap={{ scale: 0.95 }}
                                         className="px-8 py-3 border-2 bg-white/60 border-secondary-dark text-secondary-dark rounded-full hover:bg-white/10 transition-colors"
@@ -122,7 +136,7 @@ export default function Products() {
                     </SwiperSlide>
                 ))}
             </Swiper>
-
+            {/* 
             <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20">
                 <div className="flex gap-4">
                     {products.map((_, index) => (
@@ -134,7 +148,7 @@ export default function Products() {
                         />
                     ))}
                 </div>
-            </div>
+            </div> */}
         </div>
     );
 }

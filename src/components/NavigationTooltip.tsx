@@ -156,7 +156,7 @@ const NavigationTooltip = () => {
         {/* Company Logo */}
         <div className="mb-8 relative">
           <Image
-            src="/logo.png"
+            src="/logo.webp"
             alt="لوگوی شرکت"
             width={80}
             height={80}
@@ -239,7 +239,7 @@ const NavigationTooltip = () => {
                         alt={`پیش‌نمایش ${section.label}`}
                         fill
                         className="object-cover"
-                        loading="lazy"
+                        priority
                       />
                     </div>
                     <div className="p-3">

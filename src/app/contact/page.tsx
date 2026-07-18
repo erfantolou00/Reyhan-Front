@@ -200,6 +200,7 @@ export default function ContactPage() {
                     alt="map"
                     className='w-full h-full object-cover'
                     fill
+                    priority
                   />
                 </div>
               </div>

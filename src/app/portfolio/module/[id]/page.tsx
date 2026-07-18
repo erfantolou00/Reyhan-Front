@@ -261,6 +261,7 @@ export default function ModuleDetail() {
                   alt={module.title}
                   fill
                   className="object-cover"
+                  priority
                 />
               </div>
             </motion.div>

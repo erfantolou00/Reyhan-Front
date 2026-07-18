@@ -1,13 +1,11 @@
-'use client';
-
-import { motion } from 'framer-motion';
+// components/Hero.tsx
 import Image from 'next/image';
-import Typewriter from './Typewriter';
+import Typewriter from './Typewriter'; // اگر خیلی سنگین هست، بعداً optimize کن
 
 const highlights = ['اتوماسیون فرآیندها', 'داشبورد تحلیلی', 'پشتیبانی تخصصی'];
 
 const stats = [
-  { value: '۵۰۰+', label: 'سازمان فعال' },
+  { value: '۵+', label: 'سازمان فعال' },
   { value: '۲۴/۷', label: 'پشتیبانی' },
   { value: '۹۸٪', label: 'رضایت مشتری' },
 ];
@@ -18,24 +16,30 @@ const Hero = () => {
   };
 
   return (
-    <section className="relative isolate overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-        style={{
-          backgroundImage: `url(https://png.pngtree.com/background/20250108/original/pngtree-abstract-secure-technology-background-with-lock-and-circuit-image-picture-image_15492692.jpg)`,
-        }}
-      />
-      <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.23)_0%,rgba(255,255,255,0.92)_50%,rgba(255,255,255,0.25)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(37,99,235,0.16),transparent_30%)]" />
+    <section className="relative isolate min-h-screen overflow-hidden">
+      {/* Background Image بهینه‌شده با next/image */}
+      <div className="absolute inset-0 -z-10">
+        <Image
+          src="/bgHero.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          quality={85}
+          className="object-cover"
+          style={{ objectPosition: 'center' }}
+        />
+      </div>
+
+      {/* Overlays (سبک‌تر) */}
+      <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.88)_50%,rgba(255,255,255,0.22)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(37,99,235,0.12),transparent_40%)]" />
 
       <div className="container relative mx-auto flex min-h-screen items-center px-4 py-24 sm:px-6 lg:px-8">
         <div className="grid w-full items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-          <motion.div
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7 }}
-            className="max-w-3xl text-right"
-          >
+          
+          {/* Left Content - بدون motion سنگین */}
+          <div className="max-w-3xl text-right">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/80 px-4 py-2 text-sm font-medium text-primary shadow-sm backdrop-blur">
               <span className="h-2.5 w-2.5 rounded-full bg-primary" />
               راهکار دیجیتال سازمانی
@@ -81,26 +85,30 @@ const Hero = () => {
                 </span>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 24 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.75, delay: 0.1 }}
-            className="glass-card rounded-[32px] p-4 sm:p-6"
-          >
-            <div className="overflow-hidden rounded-[24px] border border-white/70 bg-white/85 p-5 shadow-xl">
+          {/* Right Card - ساده‌تر */}
+          <div className="glass-card rounded-[32px] p-4 sm:p-6">
+            <div className="overflow-hidden rounded-[24px] shadow-xl">
               <div className="rounded-[22px] bg-gradient-to-br from-primary/15 via-white to-secondary/10 p-6">
+                {/* محتوای کارت */}
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-sm font-medium text-slate-500">پلتفرم سازمانی مدرن</p>
                     <h2 className="mt-1 text-2xl font-semibold text-slate-800">عملکردی شفاف و سریع</h2>
                   </div>
                   <div className="rounded-2xl bg-white p-3 shadow-sm">
-                    <Image src="/logo.png" alt="لوگوی ریحان" width={44} height={44} className="rounded-xl" />
+                    <Image 
+                      src="/logo.webp" 
+                      alt="لوگوی ریحان" 
+                      width={44} 
+                      height={44} 
+                      className="rounded-xl" 
+                    />
                   </div>
                 </div>
 
+                {/* stats و بقیه محتوا */}
                 <div className="mt-6 grid gap-3 sm:grid-cols-3">
                   {stats.map((item) => (
                     <div key={item.label} className="rounded-2xl border border-white/70 bg-white/80 p-3 text-center shadow-sm">
@@ -110,31 +118,18 @@ const Hero = () => {
                   ))}
                 </div>
 
+                {/* بخش عملکرد */}
                 <div className="mt-6 rounded-[20px] border border-slate-200/80 bg-slate-900 p-5 text-right text-white shadow-lg">
                   <p className="text-sm text-slate-300">عملکرد لحظه‌ای</p>
                   <p className="mt-2 text-xl font-semibold">یکپارچه، مطمئن و آماده برای رشد</p>
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
-
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.8 }}
-        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
-      >
-        <div className="flex flex-col items-center">
-          <span className="mb-2 text-sm text-slate-500">اسکرول کنید</span>
-          <svg className="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-          </svg>
-        </div>
-      </motion.div>
     </section>
   );
 };
 
-export default Hero; 
+export default Hero;

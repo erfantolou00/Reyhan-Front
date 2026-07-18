@@ -151,7 +151,7 @@ const CTASection = () => {
               {/* بخش لوگو و عنوان شرکت */}
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gray-50 flex items-center justify-center p-2 shadow-sm border border-gray-100 shrink-0">
-                  <Image src="/logo.png" alt="Logo" width={56} height={56} className="object-contain" />
+                  <Image src="/logo.webp"  alt="Logo" width={56} height={56} className="object-contain" priority />
                 </div>
                 <div>
                   <h3 className="text-xl font-extrabold text-gray-900">راهکارهای هوشمند ریحان</h3>

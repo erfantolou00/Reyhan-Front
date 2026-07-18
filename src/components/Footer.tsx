@@ -1,16 +1,20 @@
+import Image from 'next/image';
 import Link from 'next/link';
 
 const quickLinks = [
   { label: 'درباره ما', href: '/about' },
   { label: 'خدمات', href: '/products' },
+  { label: 'بلاگ', href: '/blog' },
   { label: 'نمونه‌کارها', href: '/portfolio' },
+  { label: 'تماس با ما ', href: '/contact' },
 ];
 
 export default function Footer() {
   return (
     <footer className="bg-slate-950 text-white">
       <div className="container mx-auto px-4 py-16 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-[1.1fr_0.7fr_0.8fr]">
+        <div className="grid gap-20 lg:grid-cols-4">
+            <Image src={"/logo2.webp"} alt='logo2' width={320} height={320} className='' priority />
           <div>
             <h3 className="text-2xl font-black text-white">ریحان</h3>
             <p className="mt-4 max-w-md text-base leading-8 text-slate-400">
@@ -35,7 +39,7 @@ export default function Footer() {
             <h4 className="text-lg font-semibold text-white">تماس با ما</h4>
             <ul className="mt-4 space-y-3 text-sm leading-7 text-slate-400">
               <li>پارک علم و فناوری دانشگاه سمنان</li>
-              <li dir="ltr">۰۲۳-۳۳۶۰۵۰۰۰</li>
+              <li>۰۲۳-۳۳۶۰۵۰۰۰</li>
             </ul>
           </div>
         </div>

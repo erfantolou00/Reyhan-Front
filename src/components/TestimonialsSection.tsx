@@ -11,19 +11,19 @@ const transformationStats = [
     title: 'بهینه‌سازی فرآیندها',
     description: 'کاهش ۶۰ درصدی زمان انجام فرآیندهای سازمانی',
     icon: '⚡',
-    color: 'from-blue-100 to-blue-400'
+    color: 'from-blue-50 to-blue-100'
   },
   {
     title: 'تصمیم‌گیری هوشمند',
     description: 'دسترسی به تحلیل‌های پیشرفته در لحظه',
     icon: '📊',
-    color: 'from-orange-100 to-orange-400'
+    color: 'from-orange-50 to-orange-100'
   },
   {
     title: 'مدیریت یکپارچه',
     description: 'ادغام تمام بخش‌های سازمان در یک پلتفرم',
     icon: '🔄',
-    color: 'from-pink-100 to-pink-400'
+    color: 'from-pink-50 to-pink-100'
   }
 ];
 
@@ -52,24 +52,8 @@ const features = [
 
 
 const TransformationSection = () => {
-  const [bool ,setbool] = useState(false)
-  
-  const handleclick = ()=> {
-    setbool(true)
-  }
   return (
     <section className="relative py-32 overflow-hidden bg-gradient-to-b from-primary/10 to-white">
-      {bool && (
-        <video 
-        src="/33.mp4" 
-        autoPlay 
-        loop 
-        muted 
-        playsInline 
-        className="h-full w-full object-cover absolute z-50"
-      />
-      
-      )}
       <div className="absolute  bg-grid-pattern opacity-5"></div>
       <div className="container mx-auto px-4">
         <motion.div
@@ -122,6 +106,7 @@ const TransformationSection = () => {
                   alt="Dashboard Preview"
                   fill
                   className="object-cover"
+                  priority
                 />
               </div>
             </div>
@@ -138,7 +123,7 @@ const TransformationSection = () => {
                 transition={{ delay: index * 0.2 }}
                 className=" rounded-2xl shadow-xl p-2 cursor-pointer hover:bg-white"
               >
-              <Link href="/blog"                 className="flex items-center gap-2 "
+              <Link href="/blog" className="flex items-center gap-2 "
               >
                 <div className="text-3xl">{feature.icon}</div>
                 <div>
@@ -162,9 +147,11 @@ const TransformationSection = () => {
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             className="bg-primary text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg hover:shadow-xl transition-shadow"
-            onClick={()=> setbool(true)}
           >
+            <Link href={"/contact"}>
+            
             شروع کنید
+            </Link>
           </motion.button>
         </motion.div>
       </div>
