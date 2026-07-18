@@ -70,7 +70,7 @@ const ProductShowcase = () => {
 >
   <div className="relative aspect-[16/10] overflow-hidden rounded-[24px] border border-slate-200">
     <Image
-      src="/homeGif.gif"
+      src="/homeGif.webp"
       alt="نمایش ماژول‌های ریحان"
       fill
       className="object-cover"
