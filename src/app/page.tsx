@@ -1,5 +1,5 @@
 "use client";
-
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import Hero from '@/components/Hero';
 import BenefitsSection from '@/components/BenefitsSection';
 import SectionDivider from '@/components/SectionDivider';
@@ -43,6 +43,7 @@ export default function Home() {
       <section id="contact">
         <CTASection />
       </section>
+      <SpeedInsights />
     </main>
   );
 }

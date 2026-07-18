@@ -17,7 +17,7 @@ import Footer from '@/components/Footer'
 // })
 
 export const metadata: Metadata = {
-  title: 'راهکارهای نرم‌افزاری سازمانی',
+  title: 'ریحان سامانه هوشمند',
   description: '...',
   // icons و openGraph هم اضافه کن
 }
