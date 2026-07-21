@@ -1,6 +1,8 @@
 // components/Hero.tsx
 import Image from 'next/image';
 import Typewriter from './Typewriter'; // اگر خیلی سنگین هست، بعداً optimize کن
+import InteractiveCard from './InteractiveCard';
+import HeroCardStack from './InteractiveCard';
 
 const highlights = ['اتوماسیون فرآیندها', 'داشبورد تحلیلی', 'پشتیبانی تخصصی'];
 
@@ -32,12 +34,12 @@ const Hero = () => {
       </div>
 
       {/* Overlays (سبک‌تر) */}
-      <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.88)_50%,rgba(255,255,255,0.22)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.48)_40%,rgba(122,255,255,0.32)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(37,99,235,0.12),transparent_40%)]" />
 
       <div className="container relative mx-auto flex min-h-screen items-center px-4 py-24 sm:px-6 lg:px-8">
         <div className="grid w-full items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
-          
+
           {/* Left Content - بدون motion سنگین */}
           <div className="max-w-3xl text-right">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/80 px-4 py-2 text-sm font-medium text-primary shadow-sm backdrop-blur">
@@ -47,12 +49,12 @@ const Hero = () => {
 
             <h1 className="text-4xl font-black leading-[1.15] text-slate-900 sm:text-5xl lg:text-6xl">
               <span className="block">مدیریت هوشمند،</span>
-              <span className="mt-3 pb-3 block bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              <span className="mt-3 pb-3 block bg-gradient-to-r from-primary to-slate-900 bg-clip-text text-transparent">
                 برای رشد سریع‌تر
               </span>
             </h1>
 
-            <div className="mt-6 min-h-[3.5rem] text-2xl font-semibold text-slate-700 sm:text-3xl">
+            <div className="mt-6 min-h-[3.5rem] text-2xl font-semibold text-slate-800 sm:text-3xl">
               <Typewriter
                 texts={[
                   'راهکار یکپارچه مدیریت سازمان',
@@ -62,7 +64,7 @@ const Hero = () => {
               />
             </div>
 
-            <p className="mt-6 max-w-2xl text-lg leading-8 text-slate-600 sm:text-xl">
+            <p className="mt-6 max-w-xl text-lg leading-8 text-slate-800 sm:text-xl">
               ریحان، تمام فرایندهای سازمانی شما را در یک تجربه روان، شفاف و حرفه‌ای یکپارچه می‌کند.
             </p>
 
@@ -88,44 +90,7 @@ const Hero = () => {
           </div>
 
           {/* Right Card - ساده‌تر */}
-          <div className="glass-card rounded-[32px] p-4 sm:p-6">
-            <div className="overflow-hidden rounded-[24px] shadow-xl">
-              <div className="rounded-[22px] bg-gradient-to-br from-primary/15 via-white to-secondary/10 p-6">
-                {/* محتوای کارت */}
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm font-medium text-slate-500">پلتفرم سازمانی مدرن</p>
-                    <h2 className="mt-1 text-2xl font-semibold text-slate-800">عملکردی شفاف و سریع</h2>
-                  </div>
-                  <div className="rounded-2xl bg-white p-3 shadow-sm">
-                    <Image 
-                      src="/logo.webp" 
-                      alt="لوگوی ریحان" 
-                      width={44} 
-                      height={44} 
-                      className="rounded-xl" 
-                    />
-                  </div>
-                </div>
-
-                {/* stats و بقیه محتوا */}
-                <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                  {stats.map((item) => (
-                    <div key={item.label} className="rounded-2xl border border-white/70 bg-white/80 p-3 text-center shadow-sm">
-                      <p className="text-xl font-bold text-slate-900">{item.value}</p>
-                      <p className="mt-1 text-sm text-slate-500">{item.label}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* بخش عملکرد */}
-                <div className="mt-6 rounded-[20px] border border-slate-200/80 bg-slate-900 p-5 text-right text-white shadow-lg">
-                  <p className="text-sm text-slate-300">عملکرد لحظه‌ای</p>
-                  <p className="mt-2 text-xl font-semibold">یکپارچه، مطمئن و آماده برای رشد</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <HeroCardStack />
         </div>
       </div>
     </section>
