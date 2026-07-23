@@ -34,7 +34,7 @@ const Hero = () => {
       </div>
 
       {/* Overlays (سبک‌تر) */}
-      <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.18)_0%,rgba(255,255,255,0.48)_40%,rgba(122,255,255,0.32)_100%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.48)_50%,rgba(0,0,0,0.42)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(37,99,235,0.12),transparent_40%)]" />
 
       <div className="container relative mx-auto flex min-h-screen items-center px-4 py-24 sm:px-6 lg:px-8">

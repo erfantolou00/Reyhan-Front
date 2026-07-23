@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import { FaCog, FaChartLine, FaLightbulb, FaCheckCircle, FaUsers, FaFileContract, FaMoneyBillWave, FaWarehouse } from "react-icons/fa";
+import { FaCog, FaChartLine, FaLightbulb, FaCheckCircle, FaUsers, FaFileContract, FaMoneyBillWave, FaWarehouse, FaTruckMoving } from "react-icons/fa";
 import { motion } from "framer-motion";
 import { FiFile } from "react-icons/fi";
 
@@ -18,7 +18,7 @@ interface ModuleFeature {
 const modules: ModuleFeature[] = [
   {
     id: 1,
-    title: "ماژول منابع انسانی",
+    title: "سامانه منابع انسانی",
     description: "سیستم جامع مدیریت منابع انسانی با قابلیت‌های پیشرفته مدیریت پرسنل، حقوق و دستمزد، و مدیریت عملکرد",
     benefits: [
       "مدیریت خودکار محاسبات حقوق و دستمزد",
@@ -28,11 +28,11 @@ const modules: ModuleFeature[] = [
     ],
     screenshot: "/images/portfolio/5.jpg",
     icon: <FaUsers className="w-8 h-8" />,
-    gradient: "from-blue-500 to-cyan-400"
+    gradient: "from-purple-400 to-indigo-400"
   },
   {
     id: 2,
-    title: "ماژول مالی",
+    title: "سامانه مالی",
     description: "سیستم جامع مدیریت مالی با قابلیت‌های پیشرفته حسابداری، خزانه‌داری و مدیریت بودجه",
     benefits: [
       "مدیریت خودکار عملیات مالی",
@@ -42,11 +42,11 @@ const modules: ModuleFeature[] = [
     ],
     screenshot: "/images/portfolio/6.webp",
     icon: <FaMoneyBillWave className="w-8 h-8" />,
-    gradient: "from-green-500 to-emerald-400"
+    gradient: "from-purple-500 to-indigo-400"
   },
   {
     id: 3,
-    title: "ماژول قرارداد",
+    title: "سامانه قرارداد",
     description: "سیستم مدیریت قراردادها با قابلیت‌های پیشرفته ثبت، پیگیری و مدیریت چرخه حیات قراردادها",
     benefits: [
       "مدیریت هوشمند چرخه حیات قراردادها",
@@ -56,11 +56,11 @@ const modules: ModuleFeature[] = [
     ],
     screenshot: "/images/portfolio/7.jpg",
     icon: <FaFileContract className="w-8 h-8" />,
-    gradient: "from-purple-500 to-indigo-400"
+    gradient: "from-sky-800 to-blue-300"
   },
   {
     id: 4,
-    title: "ماژول انبار",
+    title: "سامانه انبار",
     description: "سیستم مدیریت انبار با قابلیت‌های پیشرفته کنترل موجودی، مدیریت کالا و عملیات انبارداری",
     benefits: [
       "مدیریت هوشمند موجودی کالا",
@@ -70,11 +70,11 @@ const modules: ModuleFeature[] = [
     ],
     screenshot: "/images/portfolio/4.jpg",
     icon: <FaWarehouse className="w-8 h-8" />,
-    gradient: "from-orange-500 to-amber-400"
+    gradient: "from-slate-700 to-amber-500"
   },
   {
     id: 5,
-    title: "ماژول فایل و مدیریت اسناد",
+    title: "سامانه فایل و مدیریت اسناد",
     description: "سیستم یکپارچه آرشیو دیجیتال، ذخیره‌سازی امن و مدیریت دسترسی فایل‌ها و مکاتبات سازمانی",
     benefits: [
       "آرشیو دیجیتال و دسته‌بندی هوشمند اسناد",
@@ -84,14 +84,28 @@ const modules: ModuleFeature[] = [
     ],
     screenshot: "/images/portfolio/8.webp",
     icon: <FiFile className="w-8 h-8" />,
-    gradient: "from-orange-500 to-amber-400"
+    gradient: "from-blue-400 to-yellow-400"
+  },
+  {
+    id: 6,
+    title: "سامانه زنجیره تامین",
+    description: "سیستم مدیریت و آرشیو دیجیتال اسناد، مکاتبات و فایل‌های سازمانی با قابلیت‌های امنیتی پیشرفته",
+    benefits: [
+      "کاهش 60% زمان جستجو و بازیابی اسناد",
+      "افزایش 45% امنیت اطلاعات و اسناد حساس",
+      "کاهش 30% فضای فیزیکی مورد نیاز برای بایگانی",
+      "بهبود 55% در سرعت گردش و اشتراک‌گذاری اسناد"
+    ],
+    screenshot: "/images/portfolio/9.jpg",
+    icon: <FaTruckMoving className="w-8 h-8" />,
+    gradient: "from-orange-200 to-amber-400/60"
   },
 
 ];
 
 export default function Portfolio() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 to-gray-100 py-32 px-4 sm:px-6 lg:px-8" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-primary/10 to-gray-100 py-32 px-4 sm:px-6 lg:px-8 bg-" dir="rtl">
       <div className="max-w-7xl mx-auto">
         {/* هدر صفحه */}
         <motion.div 
@@ -101,10 +115,10 @@ export default function Portfolio() {
           className="text-center mb-16"
         >
           <h1 className="text-4xl font-bold text-gray-900 mb-4 gradient-text">
-            ماژول‌های سیستم ریحان
+            سامانه‌های سیستم ریحان
           </h1>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            سیستم یکپارچه مدیریتی با ماژول‌های تخصصی برای مدیریت هوشمند کسب و کار
+            سیستم یکپارچه مدیریتی با سامانه‌های تخصصی برای مدیریت هوشمند کسب و کار
           </p>
         </motion.div>
   
@@ -140,7 +154,7 @@ export default function Portfolio() {
               {/* بدنه کارت - استفاده از flex-grow برای یکدستی کامل */}
               <div className="p-6 flex flex-col flex-grow">
                 
-                {/* عنوان و آیکون ماژول */}
+                {/* عنوان و آیکون سامانه */}
                 <div className="flex items-center mb-5">
                   <div className={`p-3 rounded-xl bg-gradient-to-r ${module.gradient} text-white transform group-hover:rotate-6 transition-transform duration-300 shadow-md shrink-0`}>
                     {module.icon}

@@ -1,357 +1,397 @@
 "use client";
-import { useParams } from "next/navigation";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { FaUsers, FaMoneyBillWave, FaFileContract, FaWarehouse, FaCheckCircle, FaChartLine, FaCog, FaLightbulb } from "react-icons/fa";
-import Link from "next/link";
-import { FiFile, FiLayers, FiLock, FiSearch } from "react-icons/fi";
 
-const moduleDetails = {
-  1: {
-    title: "ماژول منابع انسانی",
-    mainImage: '/images/modules/main/1.jpg',
-    description: "سیستم جامع مدیریت منابع انسانی با قابلیت‌های پیشرفته مدیریت پرسنل، حقوق و دستمزد، و مدیریت عملکرد",
-    longDescription: "ماژول منابع انسانی ریحان یک راه‌حل جامع برای مدیریت تمامی جنبه‌های منابع انسانی سازمان شماست. این ماژول با استفاده از هوش مصنوعی و اتوماسیون، فرآیندهای HR را بهینه‌سازی می‌کند و به شما کمک می‌کند تا نیروی انسانی خود را به بهترین شکل مدیریت کنید.",
-    features: [
-      {
-        title: "مدیریت پرسنل",
-        description: "ثبت و مدیریت اطلاعات کامل پرسنل، سوابق کاری، مدارک و مهارت‌ها",
-        icon: <FaUsers className="w-6 h-6" />,
-        image: "/images/portfolio/hr/1.png"
-      },
-      {
-        title: "مدیریت حقوق و دستمزد",
-        description: "محاسبه خودکار حقوق، کسورات، اضافه کاری و مزایا با قابلیت شخصی‌سازی",
-        icon: <FaMoneyBillWave className="w-6 h-6" />,
-        image: "/images/portfolio/hr/2.png"
-      },
-      {
-        title: "حضور و غیاب",
-        description: "سیستم هوشمند ثبت تردد با پشتیبانی از دستگاه‌های مختلف",
-        icon: <FaChartLine className="w-6 h-6" />,
-        image: "/images/portfolio/hr/3.png"
-      },
-      {
-        title: "مدیریت مرخصی",
-        description: "ثبت و پیگیری مرخصی‌ها، شیفت‌ها و درخواست‌های پرسنل",
-        icon: <FaCog className="w-6 h-6" />,
-        image: "/images/portfolio/hr/4.png"
-      }
-    ],
-    benefits: [
-      "کاهش 60% زمان پردازش اطلاعات پرسنلی",
-      "کاهش 40% خطاهای محاسباتی حقوق و دستمزد",
-      "بهبود 50% در مدیریت زمان و منابع انسانی",
-      "گزارش‌گیری پیشرفته و آنی از وضعیت پرسنل"
-    ],
-    screenshot: "/images/portfolio/1.png",
-    gradient: "from-blue-500 to-cyan-400"
-  },
-  2: {
-    title: "ماژول مالی",
-    mainImage: '/images/modules/main/2.jpg',
+import React, { useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
 
-    description: "سیستم جامع مدیریت مالی با قابلیت‌های پیشرفته حسابداری، خزانه‌داری و مدیریت بودجه",
-    longDescription: "ماژول مالی ریحان یک راه‌حل یکپارچه برای مدیریت تمامی جنبه‌های مالی سازمان شماست. این ماژول با استفاده از تکنولوژی‌های پیشرفته، فرآیندهای مالی را بهینه‌سازی می‌کند و به شما کمک می‌کند تا منابع مالی خود را به بهترین شکل مدیریت کنید.",
-    features: [
-      {
-        title: "حسابداری جامع",
-        description: "مدیریت حساب‌ها، اسناد مالی، دفاتر قانونی و گزارش‌های مالی",
-        icon: <FaMoneyBillWave className="w-6 h-6" />,
-        image: "/images/portfolio/finance/1.png"
-      },
-      {
-        title: "خزانه‌داری",
-        description: "مدیریت نقدینگی، چک‌ها، بانک‌ها و عملیات خزانه",
-        icon: <FaWarehouse className="w-6 h-6" />,
-        image: "/images/portfolio/finance/2.png"
-      },
-      {
-        title: "بودجه‌ریزی",
-        description: "طراحی و پیگیری بودجه، کنترل هزینه‌ها و تحلیل انحرافات",
-        icon: <FaChartLine className="w-6 h-6" />,
-        image: "/images/portfolio/finance/3.png"
-      },
-      {
-        title: "گزارش‌گیری",
-        description: "گزارش‌های مالی پیشرفته، داشبوردهای مدیریتی و تحلیل‌های مالی",
-        icon: <FaCog className="w-6 h-6" />,
-        image: "/images/portfolio/finance/4.png"
-      }
-    ],
-    benefits: [
-      "کاهش 45% زمان پردازش عملیات مالی",
-      "کاهش 35% خطاهای محاسباتی",
-      "بهبود 55% در مدیریت نقدینگی",
-      "گزارش‌گیری لحظه‌ای از وضعیت مالی"
-    ],
-    screenshot: "/images/portfolio/finance-module.png",
-    gradient: "from-green-500 to-emerald-400"
-  },
-  3: {
-    title: "ماژول قرارداد",
-    mainImage: '/images/modules/main/4.webp',
+// ۱. ایمپورت کردن مستقیم فایل JSON
+import modulesData from '@/app/portfolio/module.json';
 
-    description: "سیستم مدیریت قراردادها با قابلیت‌های پیشرفته ثبت، پیگیری و مدیریت چرخه حیات قراردادها",
-    longDescription: "ماژول قرارداد ریحان یک راه‌حل جامع برای مدیریت چرخه حیات قراردادهای سازمان شماست. این ماژول با استفاده از هوش مصنوعی و اتوماسیون، فرآیندهای مدیریت قرارداد را بهینه‌سازی می‌کند و به شما کمک می‌کند تا ریسک‌های قراردادی را به حداقل برسانید.",
-    features: [
-      {
-        title: "مدیریت چرخه حیات",
-        description: "ثبت، پیگیری و مدیریت تمام مراحل چرخه حیات قراردادها",
-        icon: <FaFileContract className="w-6 h-6" />,
-        image: "/images/portfolio/contract/lifecycle.png"
-      },
-      {
-        title: "هشدارهای هوشمند",
-        description: "سیستم هشدار خودکار برای تمدید، انقضا و تعهدات قراردادی",
-        icon: <FaLightbulb className="w-6 h-6" />,
-        image: "/images/portfolio/contract/alerts.png"
-      },
-      {
-        title: "مدیریت اسناد",
-        description: "ذخیره‌سازی و مدیریت اسناد و پیوست‌های قرارداد",
-        icon: <FaCog className="w-6 h-6" />,
-        image: "/images/portfolio/contract/documents.png"
-      },
-      {
-        title: "گزارش‌گیری",
-        description: "گزارش‌های پیشرفته از وضعیت و عملکرد قراردادها",
-        icon: <FaChartLine className="w-6 h-6" />,
-        image: "/images/portfolio/contract/reporting.png"
-      }
-    ],
-    benefits: [
-      "کاهش 50% زمان مدیریت قراردادها",
-      "کاهش 40% ریسک‌های قراردادی",
-      "بهبود 45% در پیگیری تعهدات",
-      "گزارش‌گیری پیشرفته از وضعیت قراردادها"
-    ],
-    screenshot: "/images/portfolio/contract-module.png",
-    gradient: "from-purple-500 to-indigo-400"
-  },
-  4: {
-    title: "ماژول انبار",
-    mainImage: '/images/modules/main/3.jpg',
+// ۲. ایمپورت کردن آیکون‌های مورد نیاز
+import { 
+  FaUsers, 
+  FaMoneyBillWave, 
+  FaChartLine, 
+  FaCog, 
+  FaWarehouse, 
+  FaFileContract, 
+  FaLightbulb, 
+  FaArrowLeft,
+  FaSignInAlt,
+  FaSignOutAlt,
+  FaUserShield,
+  FaCheckCircle,
+  FaFilePdf
+} from "react-icons/fa";
+import { FiFile, FiLock, FiSearch, FiLayers } from "react-icons/fi";
 
-    description: "سیستم مدیریت انبار با قابلیت‌های پیشرفته کنترل موجودی، مدیریت کالا و عملیات انبارداری",
-    longDescription: "ماژول انبار ریحان یک راه‌حل جامع برای مدیریت تمامی جنبه‌های انبارداری سازمان شماست. این ماژول با استفاده از تکنولوژی‌های پیشرفته، فرآیندهای انبارداری را بهینه‌سازی می‌کند و به شما کمک می‌کند تا موجودی‌های خود را به بهترین شکل مدیریت کنید.",
-    features: [
-      {
-        title: "مدیریت موجودی",
-        description: "کنترل دقیق موجودی کالا، حداقل و حداکثر موجودی و نقطه سفارش",
-        icon: <FaWarehouse className="w-6 h-6" />,
-        image: "/images/modules/warehouse/1.png"
-      },
-      {
-        title: "بارکدینگ",
-        description: "سیستم بارکدینگ و کدگذاری کالا برای مدیریت سریع و دقیق",
-        icon: <FaCog className="w-6 h-6" />,
-        image: "/images/modules/warehouse/2.png"
-      },
-      {
-        title: "عملیات انبار",
-        description: "مدیریت ورود و خروج کالا، جابجایی و شمارش موجودی",
-        icon: <FaChartLine className="w-6 h-6" />,
-        image: "/images/modules/warehouse/3.png"
-      },
-      {
-        title: "گزارش‌گیری",
-        description: "گزارش‌های پیشرفته از موجودی‌ها و عملیات انبار",
-        icon: <FaChartLine className="w-6 h-6" />,
-        image: "/images/modules/warehouse/4.png"
-      }
-    ],
-    benefits: [
-      "کاهش 40% هزینه‌های انبارداری",
-      "کاهش 35% خطاهای موجودی",
-      "بهبود 50% در سرعت عملیات انبار",
-      "گزارش‌گیری پیشرفته از موجودی‌ها"
-    ],
-    screenshot: "/images/portfolio/warehouse-module.png",
-    gradient: "from-orange-500 to-amber-400"
-  },
-  5: {
-    title: "ماژول فایل و مدیریت اسناد",
-    mainImage: '/images/modules/main/5.png',
-    description: "سیستم مدیریت و آرشیو دیجیتال اسناد، مکاتبات و فایل‌های سازمانی با قابلیت‌های امنیتی پیشرفته",
-    longDescription: "ماژول فایل و مدیریت اسناد ریحان، راهکاری جامع برای سازماندهی، ذخیره‌سازی امن و مدیریت دسترسی به تمام اسناد و فایل‌های سازمان شماست. این ماژول با فراهم کردن یک پلتفرم متمرکز، فرآیند جستجو، بازیابی و اشتراک‌گذاری اسناد را تسهیل کرده و به افزایش بهره‌وری و امنیت اطلاعات کمک شایانی می‌کند.",
-    features: [
-      {
-        title: "آرشیو دیجیتال",
-        description: "امکان بارگذاری، دسته‌بندی و سازماندهی انواع فایل‌ها و اسناد الکترونیکی با ساختار درختی",
-        icon: <FiFile className="w-6 h-6" />,
-        image: "/images/modules/file/1.png"
-      },
-      {
-        title: "مدیریت دسترسی",
-        description: "تعیین سطوح دسترسی دقیق و نقش‌محور برای کاربران و گروه‌ها به منظور حفظ امنیت اطلاعات",
-        icon: <FiLock className="w-6 h-6" />,
-        image: "/images/modules/file/2.png"
-      },
-      {
-        title: "جستجو و بازیابی",
-        description: "قابلیت جستجوی پیشرفته بر اساس نام فایل، برچسب‌ها، تاریخ ایجاد و محتوای متنی اسناد",
-        icon: <FiSearch className="w-6 h-6" />,
-        image: "/images/modules/file/3.png"
-      },
-      {
-        title: "نسخه‌گذاری (Versioning)",
-        description: "نگهداری تاریخچه ویرایش اسناد، ردیابی تغییرات کاربران و امکان بازگشت به نسخه‌های قبلی",
-        icon: <FiLayers className="w-6 h-6" />,
-        image: "/images/modules/file/4.png"
-      }
-    ],
-    benefits: [
-      "کاهش 60% زمان جستجو و بازیابی اسناد",
-      "افزایش 45% امنیت اطلاعات و اسناد حساس",
-      "کاهش 30% فضای فیزیکی مورد نیاز برای بایگانی",
-      "بهبود 55% در سرعت گردش و اشتراک‌گذاری اسناد"
-    ],
-    screenshot: "/images/portfolio/file-module.webp",
-    gradient: "from-orange-500 to-amber-400"
-  }
+// ۳. تعریف ساختار تایپ‌ها (TypeScript) برای امنیت کد
+interface Feature {
+  title: string;
+  description: string;
+  iconKey: string;
+  image: string;
+}
 
+interface Module {
+  title: string;
+  mainImage: string;
+  description: string;
+  longDescription: string;
+  features: Feature[];
+  benefits: string[];
+  screenshot: string;
+  gradient: string;
+  pdfUrl?: string;
+  tabs?: {
+    id: string;
+    label: string;
+    color: string;
+    tabColor: string;
+    tabBadge: string;
+    image: string;
+    content: {
+      title: string;
+      subtitle: string;
+      goal: string;
+      steps: { num: string; title: string; desc: string }[];
+      inputs: string[];
+      outputs: string[];
+      roles: { name: string; duty: string }[];
+    };
+  }[];
+}
+
+// ۴. ایجاد دیکشنری آیکون‌ها برای تبدیل رشته به کامپوننت
+const iconComponents: Record<string, React.ComponentType<{ className?: string }>> = {
+  FaUsers,
+  FaMoneyBillWave,
+  FaChartLine,
+  FaCog,
+  FaWarehouse,
+  FaFileContract,
+  FaLightbulb,
+  FiFile,
+  FiLock,
+  FiSearch,
+  FiLayers,
 };
 
-export default function ModuleDetail() {
-  const params = useParams();
-  if (!params?.id) {
+// تابع کمکی رندر آیکون
+const renderIcon = (iconKey: string, className = "w-6 h-6 text-white") => {
+  const IconComponent = iconComponents[iconKey];
+  if (!IconComponent) return <FaCog className={className} />; // آیکون پیش‌فرض در صورت نبود کلید
+  return <IconComponent className={className} />;
+};
+
+// ۵. کامپوننت اصلی صفحه جزئیات ماژول
+export default function ModuleDetailPage({ params }: { params: { id: string } }) {
+  const { id } = params;
+
+  // استخراج داده‌های ماژول از فایل JSON بر اساس شناسه مسیر (ID)
+  const typedModulesData = modulesData as Record<string, Module>;
+  const module = typedModulesData[id];
+
+  // مدیریت استیت تب فعال
+  const [activeTabId, setActiveTabId] = useState("mr");
+
+  // بررسی صحت وجود پارامتر و داده ماژول
+  if (!id || !module) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50" dir="rtl">
+        <div className="text-center p-8 bg-white rounded-2xl shadow-md border border-gray-100">
           <h1 className="text-2xl font-bold text-gray-900">ماژول مورد نظر یافت نشد</h1>
-          <Link href="/portfolio" className="mt-4 text-blue-600 hover:text-blue-800">
+          <Link href="/portfolio" className="mt-4 inline-block text-blue-600 hover:text-blue-800 font-medium">
             بازگشت به لیست ماژول‌ها
           </Link>
         </div>
       </div>
     );
   }
-  const moduleId = Number(params.id);
-  const module = moduleDetails[moduleId as keyof typeof moduleDetails];
+
+  const currentTab = module.tabs?.find((t) => t.id === activeTabId) || module.tabs?.[0];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary/10 to-gray-100 py-32 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-gray-100 to-gray-200 py-32 px-4 sm:px-6 lg:px-8" dir="rtl">
       <div className="max-w-7xl mx-auto">
-        <Link href="/portfolio" className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-4">
-          <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-          </svg>
+        <Link href="/portfolio" className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-6 font-medium group">
+          <FaArrowLeft className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform rotate-180" />
           بازگشت به لیست ماژول‌ها
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Right Column - Fixed */}
-          <div className="lg:sticky lg:top-32 lg:h-[calc(100vh-12rem)]">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+
+          {/* ستون راست - اطلاعات ثابت و تب‌های زونکنی */}
+          <div className="lg:col-span-5 lg:sticky lg:top-32 space-y-6">
             <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6 }}
-              className="space-y-8"
+              className="space-y-4"
             >
-              <h1 className="text-4xl font-bold text-gray-900 mb-4 gradient-text">
-                {module.title}{' '}<span className="text-primary-light">ریحان</span>
+              <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold bg-gradient-to-r ${module.gradient} text-white`}>
+                سازوکار فرآیندها
+              </span>
+              <h1 className="text-4xl font-extrabold text-gray-900 leading-tight">
+                {module.title}
               </h1>
-              <p className="text-xl text-gray-600">
+              <p className="text-base text-gray-600 leading-relaxed">
                 {module.description}
               </p>
-              <div className="relative h-[400px] rounded-2xl overflow-hidden shadow-xl">
-                <Image
-                  src={module.mainImage}
-                  alt={module.title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </div>
             </motion.div>
+
+            {/* کادر تصویر و تب‌های پوشه */}
+            <div className="relative bg-white rounded-3xl p-4 shadow-xl border border-gray-200/80">
+              <div className="relative h-[280px] md:h-[360px] rounded-2xl overflow-hidden shadow-inner bg-gray-100">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={module.tabs ? currentTab?.id : 'static'}
+                    initial={{ opacity: 0, scale: 1.05 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="absolute inset-0"
+                  >
+                    <Image
+                      src={module.tabs && currentTab ? currentTab.image : module.mainImage}
+                      alt={module.title}
+                      fill
+                      className="object-cover"
+                      priority
+                    />
+                  </motion.div>
+                </AnimatePresence>
+              </div>
+
+              {module.tabs && (
+                <div className="mt-4 flex flex-wrap gap-2 pt-2 border-t border-gray-100">
+                  {module.tabs.map((tab) => {
+                    const isActive = tab.id === activeTabId;
+                    return (
+                      <button
+                        key={tab.id}
+                        onClick={() => setActiveTabId(tab.id)}
+                        className={`relative px-3 py-2 text-xs font-bold rounded-lg transition-all duration-300 flex items-center gap-1.5 cursor-pointer border
+                          ${isActive
+                            ? `${tab.color} shadow-md scale-105 -translate-y-1`
+                            : 'bg-gray-50 text-gray-600 border-gray-200 hover:bg-gray-100 hover:text-gray-900'
+                          }`}
+                      >
+                        {isActive && (
+                          <motion.span
+                            layoutId="activeFolderTab"
+                            className="absolute inset-0 bg-inherit rounded-inherit -z-10"
+                          />
+                        )}
+                        <span className={`w-2 h-2 rounded-full ${isActive ? 'bg-white' : tab.tabBadge}`} />
+                        {tab.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
           </div>
 
-          {/* Left Column - Scrollable */}
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="space-y-8"
-          >
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">توضیحات کامل</h2>
-              <p className="text-gray-600 leading-relaxed">
-                {module.longDescription}
-              </p>
-            </div>
+          {/* ستون چپ - بدنه تفصیلی سند (کارتابل اداری) */}
+          <div className="lg:col-span-7 space-y-6">
+            {module.tabs ? (
+              <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-200/80 min-h-[500px] relative overflow-hidden">
+                <div className="absolute top-0 right-0 bottom-0 w-2.5 bg-gradient-to-b from-gray-200 to-gray-300 rounded-r-3xl" />
 
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">قابلیت‌های اصلی</h2>
-              <div className="grid grid-cols-1 gap-12">
-                {module.features.map((feature, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.3, delay: 0.4 + index * 0.1 }}
-                    className="bg-white p-8 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300"
-                  >
-                    <div className="flex flex-col gap-8">
-                      <div className="relative aspect-[16/9] rounded-xl overflow-hidden shadow-md">
-                        <Image
-                          src={feature.image}
-                          alt={feature.title}
-                          fill
-                          className="object-cover hover:scale-105 transition-transform duration-500"
-                          sizes="(max-width: 768px) 100vw, 100vw"
-                          priority={index === 0}
-                        />
-                      </div>
-                      <div className="flex flex-col">
-                        <div className="flex items-center mb-4">
-                          <div className={`p-3 rounded-xl bg-gradient-to-r ${module.gradient} text-white ml-4`}>
-                            {feature.icon}
-                          </div>
-                          <h3 className="font-bold text-gray-900 text-2xl">{feature.title}</h3>
+                <AnimatePresence mode="wait">
+                  {currentTab && (
+                    <motion.div
+                      key={currentTab.id}
+                      initial={{ opacity: 0, x: -15 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 15 }}
+                      transition={{ duration: 0.25 }}
+                      className="space-y-8 pr-4"
+                    >
+                      {/* هدر سند */}
+                      <div className="border-b border-gray-100 pb-4">
+                        <div className="flex items-center gap-3 mb-2">
+                          <span className={`px-2.5 py-1 rounded text-xs font-bold border ${currentTab.tabColor}`}>
+                            شناسه فرآیند: {currentTab.id.toUpperCase()}
+                          </span>
                         </div>
-                        <p className="text-gray-600 text-lg leading-relaxed">{feature.description}</p>
+                        <h2 className="text-2xl font-extrabold text-gray-800">
+                          {currentTab.content.title}
+                        </h2>
+                        <p className="text-gray-500 text-sm mt-1">{currentTab.content.subtitle}</p>
+                      </div>
+
+                      {/* هدف کلی */}
+                      {currentTab.content.goal && (
+                        <div className="bg-blue-50/50 border-r-4 border-blue-500 p-4 rounded-l-xl">
+                          <h4 className="font-bold text-blue-900 text-sm mb-1 flex items-center gap-1.5">
+                            <FaLightbulb className="text-blue-500" /> هدف اصلی فرآیند:
+                          </h4>
+                          <p className="text-gray-700 text-xs md:text-sm leading-relaxed">
+                            {currentTab.content.goal}
+                          </p>
+                        </div>
+                      )}
+
+                      {/* گام‌های اجرایی (Timeline) */}
+                      {currentTab.content.steps && currentTab.content.steps.length > 0 && (
+                        <div className="space-y-4">
+                          <h3 className="font-bold text-gray-800 text-base">مراحل و گام‌های گردش کار</h3>
+                          <div className="relative border-r border-gray-200 pr-6 mr-3 space-y-6">
+                            {currentTab.content.steps.map((step, index) => (
+                              <div key={index} className="relative">
+                                <span className="absolute -right-[35px] top-0 flex items-center justify-center w-6 h-6 rounded-full bg-blue-100 text-blue-700 text-xs font-bold ring-4 ring-white">
+                                  {step.num}
+                                </span>
+                                <h4 className="font-bold text-gray-800 text-sm">{step.title}</h4>
+                                <p className="text-gray-600 text-xs mt-1 leading-relaxed">{step.desc}</p>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* ورودی‌ها و خروجی‌ها */}
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                          <h4 className="font-bold text-gray-700 text-xs mb-3 flex items-center gap-1.5">
+                            <FaSignInAlt className="text-amber-500" /> داده‌های ورودی (Inputs)
+                          </h4>
+                          <ul className="space-y-2">
+                            {currentTab.content.inputs.map((inp, idx) => (
+                              <li key={idx} className="text-xs text-gray-600 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+                                {inp}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        <div className="bg-gray-50 p-4 rounded-xl border border-gray-100">
+                          <h4 className="font-bold text-gray-700 text-xs mb-3 flex items-center gap-1.5">
+                            <FaSignOutAlt className="text-emerald-500" /> خروجی‌های فرآیند (Outputs)
+                          </h4>
+                          <ul className="space-y-2">
+                            {currentTab.content.outputs.map((out, idx) => (
+                              <li key={idx} className="text-xs text-gray-600 flex items-center gap-1.5">
+                                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+                                {out}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      </div>
+
+                      {/* نقش‌ها و مسئولیت‌ها */}
+                      {currentTab.content.roles && currentTab.content.roles.length > 0 && (
+                        <div className="space-y-3">
+                          <h3 className="font-bold text-gray-800 text-sm flex items-center gap-1.5">
+                            <FaUserShield className="text-indigo-500" /> ماتریس مسئولیت‌ها (RACI)
+                          </h3>
+                          <div className="overflow-x-auto rounded-xl border border-gray-100">
+                            <table className="w-full text-right text-xs">
+                              <thead className="bg-gray-50 text-gray-700 uppercase">
+                                <tr>
+                                  <th className="px-4 py-2 font-bold">سمت / نقش</th>
+                                  <th className="px-4 py-2 font-bold">وظیفه و حیطه مسئولیت</th>
+                                </tr>
+                              </thead>
+                              <tbody className="divide-y divide-gray-100">
+                                {currentTab.content.roles.map((role, idx) => (
+                                  <tr key={idx} className="hover:bg-gray-50/50">
+                                    <td className="px-4 py-2.5 font-bold text-gray-800">{role.name}</td>
+                                    <td className="px-4 py-2.5 text-gray-600 leading-relaxed">{role.duty}</td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              // سایر حالت‌های عادی
+              <div className="space-y-8">
+                <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+                  <h2 className="text-2xl font-bold text-gray-900 mb-4">توضیحات کامل</h2>
+                  <p className="text-gray-600 leading-relaxed">{module.longDescription}</p>
+                </div>
+              </div>
+            )}
+
+            {/* بخش ویژگی‌های کلیدی در صورتی که ماژول زونکنی نباشد */}
+            {!module.tabs && module.features && module.features.length > 0 && (
+              <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">ویژگی‌های کلیدی ماژول</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {module.features.map((feature, index) => (
+                    <div key={index} className="p-4 rounded-2xl bg-gray-50 border border-gray-100 flex items-start gap-4">
+                      <div className={`p-3 rounded-xl bg-gradient-to-br ${module.gradient}`}>
+                        {renderIcon(feature.iconKey, "w-5 h-5 text-white")}
+                      </div>
+                      <div>
+                        <h3 className="font-bold text-gray-800 text-sm mb-1">{feature.title}</h3>
+                        <p className="text-xs text-gray-500 leading-relaxed">{feature.description}</p>
                       </div>
                     </div>
-                  </motion.div>
-                ))}
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
-            <div>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">مزایای استفاده</h2>
+            {/* بخش مزایای ثابت */}
+            <div className="bg-white rounded-3xl p-8 shadow-lg border border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-900 mb-6">مزایای ساختاری سیستم</h2>
               <ul className="space-y-3">
                 {module.benefits.map((benefit, index) => (
                   <motion.li
                     key={index}
-                    initial={{ opacity: 0, x: -20 }}
+                    initial={{ opacity: 0, x: -10 }}
                     animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.3, delay: 0.6 + index * 0.1 }}
-                    className="flex items-center"
+                    transition={{ duration: 0.3, delay: index * 0.05 }}
+                    className="flex items-center text-gray-700 text-sm"
                   >
-                    <FaCheckCircle className="text-green-500 ml-2" />
-                    <span className="text-gray-600">{benefit}</span>
+                    <FaCheckCircle className="text-emerald-500 ml-3 flex-shrink-0" />
+                    <span>{benefit}</span>
                   </motion.li>
                 ))}
               </ul>
             </div>
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.8 }}
-              className="pt-6"
-            >
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center w-full px-6 py-3 border border-transparent text-base font-medium rounded-xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl"
-              >
-                درخواست دمو و مشاوره رایگان
-              </Link>
-            </motion.div>
-          </motion.div>
+            {/* باکس اکشن‌ها (درخواست دمو + دانلود فایل پی‌دی‌اف مستندات) */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                <Link
+                  href="/contact"
+                  className="inline-flex items-center justify-center w-full px-6 py-4 text-base font-bold rounded-2xl text-white bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-200 shadow-md hover:shadow-lg text-center"
+                >
+                  درخواست دمو و مشاوره رایگان
+                </Link>
+              </motion.div>
+
+              {module.pdfUrl && (
+                <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.99 }}>
+                  <a
+                    href={module.pdfUrl}
+                    download
+                    className="inline-flex items-center justify-center w-full px-6 py-4 text-base font-bold rounded-2xl text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow-md text-center gap-2"
+                  >
+                    <FaFilePdf className="text-red-500 text-lg" />
+                    دانلود مستندات فنی (PDF)
+                  </a>
+                </motion.div>
+              )}
+            </div>
+
+          </div>
         </div>
       </div>
     </div>
   );
-} 
+}
