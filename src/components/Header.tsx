@@ -49,11 +49,10 @@ export default function Header() {
 
   return (
     <motion.header
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled
-          ? 'bg-white/80 backdrop-blur-lg shadow-lg'
-          : 'bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10'
-      }`}
+      className={`fixed w-full z-50 transition-all duration-300 ${isScrolled
+        ? 'bg-white/80 backdrop-blur-lg shadow-lg'
+        : 'bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10'
+        }`}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20 }}
@@ -75,8 +74,8 @@ export default function Header() {
               <Image
                 src="/logo.webp"
                 alt="Reyhan Logo"
-                width={60}
-                height={60}
+                width={40}
+                height={40}
                 className="rounded-xl shadow-lg"
                 priority
               />

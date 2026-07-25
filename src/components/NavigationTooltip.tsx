@@ -14,37 +14,37 @@ interface Section {
 }
 
 const sections: Section[] = [
-  { 
-    id: 'hero', 
-    label: 'صفحه اصلی', 
+  {
+    id: 'hero',
+    label: 'صفحه اصلی',
     icon: '🏠',
     preview: '/previews/hero.png',
     description: 'معرفی شرکت و خدمات ما'
   },
-  { 
-    id: 'benefits', 
-    label: 'مزایا', 
+  {
+    id: 'benefits',
+    label: 'مزایا',
     icon: '✨',
     preview: '/previews/benefits.png',
     description: 'مزایای استفاده از خدمات ما'
   },
-  { 
-    id: 'features', 
-    label: 'ویژگی‌ها', 
+  {
+    id: 'features',
+    label: 'ویژگی‌ها',
     icon: '🚀',
     preview: '/previews/features.png',
     description: 'ویژگی‌های منحصر به فرد محصولات ما'
   },
-  { 
-    id: 'testimonials', 
-    label: 'نظرات', 
+  {
+    id: 'testimonials',
+    label: 'نظرات',
     icon: '💬',
     preview: '/previews/testimonials.png',
     description: 'نظرات مشتریان راضی ما'
   },
-  { 
-    id: 'contact', 
-    label: 'تماس', 
+  {
+    id: 'contact',
+    label: 'تماس',
     icon: '📞',
     preview: '/previews/contact.png',
     description: 'راه‌های ارتباطی با ما'
@@ -69,7 +69,7 @@ const NavigationTooltip = () => {
       if (element) {
         const { top, bottom, height } = element.getBoundingClientRect();
         const viewportHeight = window.innerHeight;
-        
+
         // Calculate progress
         const progress = Math.min(
           Math.max(
@@ -102,10 +102,10 @@ const NavigationTooltip = () => {
   // Optimize scroll event listener
   useEffect(() => {
     let timeoutId: NodeJS.Timeout;
-    
+
     const throttledScroll = () => {
       if (timeoutId) return;
-      
+
       timeoutId = setTimeout(() => {
         handleScroll();
         timeoutId = null as any;
@@ -176,7 +176,7 @@ const NavigationTooltip = () => {
           const isActive = activeSection === section.id;
           const isHovered = hoveredSection === section.id;
           const progress = sectionProgress[section.id] || 0;
-          
+
           return (
             <motion.div
               key={section.id}
@@ -212,11 +212,10 @@ const NavigationTooltip = () => {
               <button
                 onClick={() => handleSectionClick(section.id)}
                 onKeyPress={(e) => handleKeyPress(e, section.id)}
-                className={`relative flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:ring-offset-2 ${
-                  isActive
-                    ? 'bg-[#F97316] text-white'
-                    : 'bg-white/80 text-gray-600 hover:bg-white'
-                } shadow-lg hover:shadow-xl`}
+                className={`relative flex items-center justify-center w-12 h-12 rounded-full transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-[#F97316] focus:ring-offset-2 ${isActive
+                  ? 'bg-[#F97316] text-white'
+                  : 'bg-white/80 text-gray-600 hover:bg-white'
+                  } shadow-lg hover:shadow-xl`}
                 aria-label={section.label}
                 aria-current={isActive ? 'page' : undefined}
               >

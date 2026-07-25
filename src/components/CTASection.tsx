@@ -38,7 +38,7 @@ const CTASection = () => {
       toast.success('درخواست شما با موفقیت ثبت شد. به زودی با شما تماس می‌گیریم.');
 
       // پاک کردن فرم
-      setFormData({ full_name: '', email: '',phone: '', company: '' });
+      setFormData({ full_name: '', email: '', phone: '', company: '' });
 
     } catch (error: any) {
       toast.error(error.message || 'خطا در ارسال درخواست');
@@ -71,7 +71,7 @@ const CTASection = () => {
         </motion.div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
-          
+
           {/* فرم درخواست دمو */}
           <motion.div
             initial={{ opacity: 0, y: 40 }}
@@ -83,7 +83,7 @@ const CTASection = () => {
             <div className="relative">
               <h3 className="text-2xl font-bold text-gray-900 mb-2">درخواست دمو رایگان</h3>
               <p className="text-sm text-gray-500 mb-6">برای دریافت مشاوره اختصاصی فرم زیر را تکمیل کنید.</p>
-              
+
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <input
@@ -106,7 +106,7 @@ const CTASection = () => {
                   />
                 </div>
                 <div>
-                <input
+                  <input
                     type="tel"
                     name="phone"
                     value={formData.phone}
@@ -146,12 +146,12 @@ const CTASection = () => {
           >
             <div className="absolute top-0 left-0 w-32 h-32 bg-gradient-to-bl from-[#2563EB]/5 to-transparent rounded-full -ml-16 -mt-16 pointer-events-none" />
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-gradient-to-tl from-[#F97316]/5 to-transparent rounded-full -mr-16 -mb-16 pointer-events-none" />
-            
+
             <div className="relative flex flex-col h-full justify-between">
               {/* بخش لوگو و عنوان شرکت */}
               <div className="flex items-center gap-4 mb-8">
                 <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gray-50 flex items-center justify-center p-2 shadow-sm border border-gray-100 shrink-0">
-                  <Image src="/logo.webp"  alt="Logo" width={56} height={56} className="object-contain" priority />
+                  <Image src="/logo.webp" alt="Logo" width={56} height={56} className="object-contain" priority />
                 </div>
                 <div>
                   <h3 className="text-xl font-extrabold text-gray-900">راهکارهای هوشمند ریحان</h3>
@@ -162,8 +162,8 @@ const CTASection = () => {
               {/* راه‌های ارتباطی */}
               <div className="space-y-4 flex-grow">
                 {/* تلفن تماس */}
-                <a 
-                  href="tel:02333605000" 
+                <a
+                  href="tel:02333605000"
                   className="flex items-center gap-4 p-3.5 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-100 group"
                 >
                   <div className="w-11 h-11 rounded-xl bg-[#2563EB]/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -176,8 +176,8 @@ const CTASection = () => {
                 </a>
 
                 {/* ایمیل */}
-                <a 
-                  href="mailto:saeed@komeylian.com" 
+                <a
+                  href="mailto:saeed@komeylian.com"
                   className="flex items-center gap-4 p-3.5 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-100 group"
                 >
                   <div className="w-11 h-11 rounded-xl bg-[#F97316]/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
@@ -190,10 +190,10 @@ const CTASection = () => {
                 </a>
 
                 {/* آدرس دفتر */}
-                <a 
-                  href="https://maps.app.goo.gl/V4oJJXW8rTVu2WDv5" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+                <a
+                  href="https://maps.app.goo.gl/V4oJJXW8rTVu2WDv5"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center gap-4 p-3.5 rounded-xl hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-100 group"
                 >
                   <div className="w-11 h-11 rounded-xl bg-[#F97316]/10 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">

@@ -22,20 +22,20 @@ const Hero = () => {
       {/* Background Image بهینه‌شده با next/image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="/bgHero.webp"
+          src="https://img2.wallspic.com/previews/2/6/6/3/1/113662/113662-geometry-pattern-creative_arts-euclidean_vector-geometric_shape-x750.jpg"
           alt=""
           fill
           priority
           sizes="100vw"
-          quality={85}
-          className="object-cover"
+          quality={100}
+          className="object-cover opacity-70"
           style={{ objectPosition: 'center' }}
         />
       </div>
 
       {/* Overlays (سبک‌تر) */}
-      <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.48)_50%,rgba(0,0,0,0.42)_100%)]" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_20%,rgba(37,99,235,0.12),transparent_40%)]" />
+      <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.18)_50%,rgba(0,0,0,0.22)_100%)]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(37,99,235,0.52),transparent_40%)]" />
 
       <div className="container relative mx-auto flex min-h-screen items-center px-4 py-24 sm:px-6 lg:px-8">
         <div className="grid w-full items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">

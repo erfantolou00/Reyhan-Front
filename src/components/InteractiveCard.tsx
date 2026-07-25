@@ -210,7 +210,7 @@ export default function CinematicCardStack() {
                bg-white/45
                backdrop-blur-2xl
                shadow-[0_30px_80px_rgba(0,0,0,.18)]
-              `} 
+              `}
             >
               <div
                 className={`rounded-[24px] bg-gradient-to-br ${card.theme.from} ${card.theme.to} p-6`}

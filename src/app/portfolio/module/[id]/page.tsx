@@ -16,7 +16,9 @@ import {
   FaUserShield,
   FaCheckCircle,
   FaFilePdf,
-  FaLightbulb
+  FaLightbulb,
+  FaTimes,
+  FaSearchPlus
 } from "react-icons/fa";
 
 // ۲. تعریف استایل‌های ثابت برای تب‌ها جهت اطمینان از خروجی گرفتن درست Tailwind در پروداکشن
@@ -45,11 +47,35 @@ const tabStylesMap: Record<string, { active: string; inactive: string; badge: st
     badge: "bg-white",
     badgeLabel: "bg-sky-50 text-sky-800 border-sky-200"
   },
+  quo: {
+    active: "bg-violet-600 text-white border-violet-600 shadow-md scale-105 -translate-y-0.5",
+    inactive: "bg-gray-50 text-gray-600 border-gray-200 hover:bg-violet-50 hover:text-violet-800 hover:border-violet-300",
+    badge: "bg-white",
+    badgeLabel: "bg-violet-50 text-violet-800 border-violet-200"
+  },
+  pro: {
+    active: "bg-teal-600 text-white border-teal-600 shadow-md scale-105 -translate-y-0.5",
+    inactive: "bg-gray-50 text-gray-600 border-gray-200 hover:bg-teal-50 hover:text-teal-800 hover:border-teal-300",
+    badge: "bg-white",
+    badgeLabel: "bg-teal-50 text-teal-800 border-teal-200"
+  },
   po: {
     active: "bg-emerald-500 text-white border-emerald-500 shadow-md scale-105 -translate-y-0.5",
     inactive: "bg-gray-50 text-gray-600 border-gray-200 hover:bg-emerald-50 hover:text-emerald-800 hover:border-emerald-300",
     badge: "bg-white",
     badgeLabel: "bg-emerald-50 text-emerald-800 border-emerald-200"
+  },
+  qc: {
+    active: "bg-cyan-600 text-white border-cyan-600 shadow-md scale-105 -translate-y-0.5",
+    inactive: "bg-gray-50 text-gray-600 border-gray-200 hover:bg-cyan-50 hover:text-cyan-800 hover:border-cyan-300",
+    badge: "bg-white",
+    badgeLabel: "bg-cyan-50 text-cyan-800 border-cyan-200"
+  },
+  proc: {
+    active: "bg-indigo-600 text-white border-indigo-600 shadow-md scale-105 -translate-y-0.5",
+    inactive: "bg-gray-50 text-gray-600 border-gray-200 hover:bg-indigo-50 hover:text-indigo-800 hover:border-indigo-300",
+    badge: "bg-white",
+    badgeLabel: "bg-indigo-50 text-indigo-800 border-indigo-200"
   }
 };
 
@@ -108,6 +134,7 @@ export default function ModuleDetailPage({ params }: { params: { id: string } })
   const defaultTab = module?.tabs?.find((t) => t.id === "overview")?.id || module?.tabs?.[0]?.id || "mr";
   const [activeTabId, setActiveTabId] = useState(defaultTab);
   const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
 
   const currentTab = module?.tabs?.find((t) => t.id === activeTabId) || module?.tabs?.[0];
 
@@ -128,6 +155,17 @@ export default function ModuleDetailPage({ params }: { params: { id: string } })
   useEffect(() => {
     setCurrentImgIndex(0);
   }, [activeTabId]);
+
+  // بستن لایت‌باکس با فشردن دکمه Esc
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsLightboxOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const handleNextImage = (e: React.MouseEvent) => {
     e.stopPropagation();
@@ -177,41 +215,64 @@ export default function ModuleDetailPage({ params }: { params: { id: string } })
             </motion.div>
 
             <div className="relative bg-white rounded-3xl p-4 shadow-xl border border-gray-200/80">
-              <div className="relative h-[280px] md:h-[380px] rounded-2xl overflow-hidden shadow-inner bg-gray-900">
+              {/* قاب نمایش تصویر با افکت بک‌گراند بلور شده برای فیت شدن تصاویر در ابعاد مختلف */}
+              <div 
+                onClick={() => setIsLightboxOpen(true)}
+                className="relative h-[280px] md:h-[380px] rounded-2xl overflow-hidden shadow-inner bg-gray-950 group/image cursor-zoom-in"
+              >
+                {/* تصویر پس‌زمینه بلور شده جهت پر کردن کناره‌های خالی عکس‌های نامتقارن */}
+                <div className="absolute inset-0 opacity-30 blur-xl scale-110 select-none pointer-events-none">
+                  <Image
+                    src={images[currentImgIndex]}
+                    alt="Background blur"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={`${activeTabId}-${currentImgIndex}`}
-                    initial={{ opacity: 0, scale: 1.02 }}
+                    initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="absolute inset-0"
+                    className="absolute inset-0 flex items-center justify-center p-2"
                   >
-                    <Image
-                      src={images[currentImgIndex]}
-                      alt={`${module.title} - تصویر ${currentImgIndex + 1}`}
-                      fill
-                      className="object-cover"
-                      priority
-                    />
+                    <div className="relative w-full h-full">
+                      <Image
+                        src={images[currentImgIndex]}
+                        alt={`${module.title} - تصویر ${currentImgIndex + 1}`}
+                        fill
+                        className="object-contain"
+                        priority
+                      />
+                    </div>
                   </motion.div>
                 </AnimatePresence>
+
+                {/* هاور افکت دکمه زوم */}
+                <div className="absolute inset-0 bg-black/10 opacity-0 group-hover/image:opacity-100 transition-opacity flex items-center justify-center pointer-events-none">
+                  <span className="bg-black/60 text-white px-4 py-2 rounded-full text-xs font-semibold flex items-center gap-2 backdrop-blur-sm">
+                    <FaSearchPlus /> بزرگ‌نمایی تصویر
+                  </span>
+                </div>
 
                 {images.length > 1 && (
                   <>
                     <button
                       onClick={handlePrevImage}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors z-10 cursor-pointer"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/50 hover:bg-black/75 text-white transition-colors z-10 cursor-pointer"
                     >
                       <FaArrowRight className="w-3 h-3" />
                     </button>
                     <button
                       onClick={handleNextImage}
-                      className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/40 hover:bg-black/60 text-white transition-colors z-10 cursor-pointer"
+                      className="absolute left-3 top-1/2 -translate-y-1/2 p-2.5 rounded-full bg-black/50 hover:bg-black/75 text-white transition-colors z-10 cursor-pointer"
                     >
                       <FaArrowLeft className="w-3 h-3" />
                     </button>
-                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10 bg-black/30 px-3 py-1 rounded-full">
+                    <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-1.5 z-10 bg-black/35 px-3 py-1 rounded-full backdrop-blur-sm">
                       {images.map((_, idx) => (
                         <span
                           key={idx}
@@ -226,7 +287,7 @@ export default function ModuleDetailPage({ params }: { params: { id: string } })
               {/* دکمه‌های ناوبری تب‌ها با استفاده از نگاشت کلاس استاتیک */}
               {module.tabs && (
                 <div className="mt-4 flex flex-wrap gap-2 pt-2 border-t border-gray-100">
-                  {module.tabs.map((tab,idx) => {
+                  {module.tabs.map((tab, idx) => {
                     const isActive = tab.id === activeTabId;
                     const style = tabStylesMap[tab.id] || defaultTabStyle;
                     const activeColorClass = isActive ? style.active : style.inactive;
@@ -240,7 +301,9 @@ export default function ModuleDetailPage({ params }: { params: { id: string } })
                         {isActive && (
                           <motion.span layoutId="activeFolderTab" className="absolute inset-0 bg-inherit rounded-inherit -z-10" />
                         )}
-                        <span className={`w-4 h-4 text-center rounded-full ${isActive ? 'bg-white' : 'bg-gray-400'}`} >{idx === 0 ? null : idx }</span>
+                        <span className={`w-4 h-4 text-center rounded-full text-[10px] flex items-center justify-center ${isActive ? 'bg-white text-gray-800' : 'bg-gray-400 text-white'}`} >
+                          {idx === 0 ? "★" : idx}
+                        </span>
                         {tab.label}
                       </button>
                     );
@@ -250,7 +313,7 @@ export default function ModuleDetailPage({ params }: { params: { id: string } })
             </div>
           </div>
 
-          {/* ستون چپ - مستندات و دکمه دانلود متحرک */}
+          {/* ستون چپ - مستندات و جزئیات تب */}
           <div className="lg:col-span-7 space-y-6">
             {module.tabs ? (
               <div className="bg-white rounded-3xl p-8 shadow-xl border border-gray-200/80 min-h-[480px] relative overflow-hidden">
@@ -268,7 +331,6 @@ export default function ModuleDetailPage({ params }: { params: { id: string } })
                     >
                       <div className="border-b border-gray-100 pb-4 flex justify-between items-start gap-4">
                         <div>
-                          {/* استایل‌دهی شناسه فرآیند بدون تکیه به کلاس داینامیک JSON */}
                           <span className={`px-2.5 py-1 rounded text-xs font-bold border ${(tabStylesMap[currentTab.id] || defaultTabStyle).badgeLabel}`}>
                             شناسه فرآیند: {currentTab.id.toUpperCase()}
                           </span>
@@ -423,6 +485,63 @@ export default function ModuleDetailPage({ params }: { params: { id: string } })
           </div>
         </div>
       </div>
+
+      {/* بخش مدال لایت‌باکس با انیمیشن‌های ورود و خروج نرم */}
+      <AnimatePresence>
+        {isLightboxOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setIsLightboxOpen(false)}
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 p-4 md:p-8 backdrop-blur-md cursor-zoom-out"
+          >
+            <button
+              onClick={() => setIsLightboxOpen(false)}
+              className="absolute top-6 left-6 text-white/80 hover:text-white bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all z-50 cursor-pointer"
+            >
+              <FaTimes className="text-xl" />
+            </button>
+
+            {images.length > 1 && (
+              <>
+                <button
+                  onClick={handlePrevImage}
+                  className="absolute right-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all z-10 cursor-pointer"
+                >
+                  <FaArrowRight className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={handleNextImage}
+                  className="absolute left-6 top-1/2 -translate-y-1/2 p-4 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all z-10 cursor-pointer"
+                >
+                  <FaArrowLeft className="w-5 h-5" />
+                </button>
+              </>
+            )}
+
+            <motion.div
+              initial={{ scale: 0.95 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.95 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center"
+            >
+              <Image
+                src={images[currentImgIndex]}
+                alt={`${module.title} - نمای بزرگ`}
+                fill
+                className="object-contain"
+                sizes="(max-width: 1280px) 100vw, 1280px"
+              />
+            </motion.div>
+
+            <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-sm font-medium bg-black/50 px-4 py-1.5 rounded-full">
+              تصویر {currentImgIndex + 1} از {images.length}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

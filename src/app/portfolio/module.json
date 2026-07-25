@@ -200,197 +200,296 @@
         "gradient": "from-orange-500 to-amber-400"
     },
     "6": {
-        "title": "سامانه زنجیره تامین",
-        "mainImage": "/images/modules/main/5.png",
-        "description": "سیستم یکپارچه مدیریت چرخه خرید و تامین کالا از درخواست تا سفارش نهایی (MR، PR، استعلام و PO)",
-        "longDescription": "ماژول زنجیره تامین ریحان، راهکاری تخصصی و مکانیزه برای مدیریت صفر تا صد فرآیند خرید و تامین کالا در سازمان است که تمامی تعاملات بین بخش مهندسی، برنامه‌ریزی، انبار، تدارکات و مالی را به صورت یکپارچه پوشش می‌دهد.",
-        "tabs": [
-            {
-                "id": "overview",
-                "label": "معرفی کل سیستم",
-                "color": "bg-slate-700 text-white border-slate-700",
-                "tabColor": "bg-slate-50 text-slate-800 border-slate-200",
-                "tabBadge": "bg-slate-700",
-                "pdfUrl": "/documents/supply-chain/main-doc.pdf",
-                "images": [
-                    "/images/modules/supply/main.png",
-                    "/images/portfolio/9.jpg"
+    "title": "سامانه زنجیره تامین",
+    "mainImage": "/images/modules/main/5.png",
+    "description": "سیستم یکپارچه مدیریت چرخه خرید و تامین کالا از درخواست تا سفارش نهایی (MR، PR، استعلام و PO)",
+    "longDescription": "ماژول زنجیره تامین ریحان، راهکاری تخصصی و مکانیزه برای مدیریت صفر تا صد فرآیند خرید و تامین کالا در سازمان است که تمامی تعاملات بین بخش مهندسی، برنامه‌ریزی، انبار، تدارکات و مالی را به صورت یکپارچه پوشش می‌دهد.",
+    "tabs": [
+        {
+            "id": "overview",
+            "label": "معرفی کل سیستم",
+            "color": "bg-slate-700 text-white border-slate-700",
+            "tabColor": "bg-slate-50 text-slate-800 border-slate-200",
+            "tabBadge": "bg-slate-700",
+            "pdfUrl": "/documents/supply-chain/main-doc.pdf",
+            "images": [
+                "/images/modules/supply/main.png",
+                "/images/portfolio/9.jpg"
+            ],
+            "content": {
+                "title": "یکپارچگی فرآیندهای زنجیره تامین",
+                "subtitle": "از شناسایی نیاز تا پرداخت نهایی به تامین‌کننده",
+                "goal": "ایجاد همسویی میان تقاضا و زنجیره تامین کالا به منظور کاهش هزینه‌های راکد انبار، حذف فرآیندهای دستی کاغذی، افزایش سرعت خریدهای فوری و پیاده‌سازی مکانیزم‌های کنترلی پیشرفته در سازمان.",
+                "steps": [
+                    {
+                        "num": "۱",
+                        "title": "ثبت تقاضا (MR)",
+                        "desc": "اعلام نیاز متقاضی و بررسی سیستمی انبار."
+                    },
+                    {
+                        "num": "۲",
+                        "title": "تایید خرید (PR)",
+                        "desc": "بررسی بودجه و ارسال به تدارکات."
+                    },
+                    {
+                        "num": "۳",
+                        "title": "استعلام رقابتی (RFQ)",
+                        "desc": "جمع‌آوری سیستمی قیمت‌ها."
+                    },
+                    {
+                        "num": "۴",
+                        "title": "سفارش قطعی (PO)",
+                        "desc": "عقد قرارداد خرید و تحویل انبار."
+                    }
                 ],
-                "content": {
-                    "title": "یکپارچگی فرآیندهای زنجیره تامین",
-                    "subtitle": "از شناسایی نیاز تا پرداخت نهایی به تامین‌کننده",
-                    "goal": "ایجاد همسویی میان تقاضا و زنجیره تامین کالا به منظور کاهش هزینه‌های راکد انبار، حذف فرآیندهای دستی کاغذی، افزایش سرعت خریدهای فوری و پیاده‌سازی مکانیزم‌های کنترلی پیشرفته در سازمان.",
-                    "steps": [
-                        {
-                            "num": "۱",
-                            "title": "ثبت تقاضا (MR)",
-                            "desc": "اعلام نیاز متقاضی و بررسی سیستمی انبار."
-                        },
-                        {
-                            "num": "۲",
-                            "title": "تایید خرید (PR)",
-                            "desc": "بررسی بودجه و ارسال به تدارکات."
-                        },
-                        {
-                            "num": "۳",
-                            "title": "استعلام رقابتی (RFQ)",
-                            "desc": "جمع‌آوری سیستمی قیمت‌ها."
-                        },
-                        {
-                            "num": "۴",
-                            "title": "سفارش قطعی (PO)",
-                            "desc": "عقد قرارداد خرید و تحویل انبار."
-                        }
-                    ],
-                    "inputs": [
-                        "برنامه ریزی تولید",
-                        "موجودی انبارها",
-                        "فهرست تامین‌کنندگان معتبر"
-                    ],
-                    "outputs": [
-                        "کاهش هزینه‌های تامین کالا",
-                        "شفافیت مالی و تدارکاتی",
-                        "داشبوردهای مدیریتی زمان خرید"
-                    ],
-                    "roles": [
-                        {
-                            "name": "مدیر زنجیره تامین",
-                            "duty": "نظارت بر سرعت گردش اسناد و رفع گلوگاه‌های تدارکاتی"
-                        },
-                        {
-                            "name": "کاربران واحدها",
-                            "duty": "ثبت دقیق نیازمندی‌ها متناسب با استانداردهای کالا"
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "mr",
-                "label": "درخواست کالا (MR)",
-                "color": "bg-rose-600 text-white border-rose-600",
-                "tabColor": "bg-rose-50 text-rose-800 border-rose-200",
-                "tabBadge": "bg-rose-600",
-                "pdfUrl": "/documents/supply-chain/MR-doc.pdf",
-                "images": [
-                    "/images/modules/supply/mr.png",
-                    "/images/portfolio/9.jpg"
+                "inputs": [
+                    "برنامه ریزی تولید",
+                    "موجوبی انبارها",
+                    "فهرست تامین‌کنندگان معتبر"
                 ],
-                "content": {
-                    "title": "مدیریت و کنترل درخواست کالا (Material Request)",
-                    "subtitle": "ثبت، بررسی و تعیین مسیر تأمین نیازهای کالایی سازمان",
-                    "goal": "ایجاد سازوکار رسمی برای ثبت، بررسی و کنترل درخواست‌های کالایی واحدهای سازمان با هدف مدیریت صحیح نیازها، جلوگیری از خریدهای غیرضروری، کنترل موجودی انبار و تعیین مسیر تأمین کالا.",
-                    "steps": [
-                        {
-                            "num": "۱",
-                            "title": "ایجاد درخواست کالا",
-                            "desc": "ثبت اطلاعات کالا، مقدار مورد نیاز و پروژه در سامانه."
-                        },
-                        {
-                            "num": "۲",
-                            "title": "بررسی انبار",
-                            "desc": "در صورت وجود کالا، ارجاع به مصرف (CR) و در غیر این صورت ارجاع به فرآیند خرید (PR)."
-                        }
-                    ],
-                    "inputs": [
-                        "نیاز اعلام‌شده توسط واحد متقاضی",
-                        "رسید انبار دائم"
-                    ],
-                    "outputs": [
-                        "درخواست خرید (PR) - در صورت عدم موجودی",
-                        "حواله مصرف (CR) - در صورت موجود بودن کالا"
-                    ],
-                    "roles": [
-                        {
-                            "name": "واحد متقاضی",
-                            "duty": "ثبت نیاز کالا و ایجاد درخواست اولیه در سامانه"
-                        },
-                        {
-                            "name": "واحد برنامه‌ریزی",
-                            "duty": "بررسی و کنترل درخواست کالا"
-                        }
-                    ]
-                }
-            },
-            {
-                "id": "pr",
-                "label": "درخواست خرید (PR)",
-                "color": "bg-amber-500 text-white border-amber-500",
-                "tabColor": "bg-amber-50 text-amber-800 border-amber-200",
-                "tabBadge": "bg-amber-500",
-                "pdfUrl": "/documents/supply-chain/PR-details.pdf",
-                "images": [
-                    "/images/modules/supply/mr-pr.png"
+                "outputs": [
+                    "کاهش هزینه‌های تامین کالا",
+                    "شفافیت مالی و تدارکاتی",
+                    "داشبوردهای مدیریتی زمان خرید"
                 ],
-                "content": {
-                    "title": "درخواست خرید کالا (Purchase Requisition)",
-                    "subtitle": "ارجاع نیازهای تامین‌نشده از انبار به دپارتمان تدارکات",
-                    "goal": "مکانیزم رسمی ارجاع کالاهای ناموجود یا کسری به تدارکات جهت استعلام قیمت و خرید رسمی.",
-                    "steps": [],
-                    "inputs": [
-                        "درخواست کالا (MR) تایید شده"
-                    ],
-                    "outputs": [
-                        "لیست اقلام آماده استعلام"
-                    ],
-                    "roles": []
-                }
-            },
-            {
-                "id": "rfq",
-                "label": "استعلام بها (RFQ)",
-                "color": "bg-sky-500 text-white border-sky-500",
-                "tabColor": "bg-sky-50 text-sky-800 border-sky-200",
-                "tabBadge": "bg-sky-500",
-                "pdfUrl": "/documents/supply-chain/RFQ-details.pdf",
-                "images": [
-                    "/images/modules/supply/rfq.png"
-                ],
-                "content": {
-                    "title": "استعلام قیمت رقابتی (Request for Quotation)",
-                    "subtitle": "جمع‌آوری پیشنهادات مالی و مقایسه هوشمند تامین‌کنندگان",
-                    "goal": "حذف فرآیندهای دستی تدارکات و دریافت پیش‌فاکتورها به صورت سیستمی و شفاف.",
-                    "steps": [],
-                    "inputs": [
-                        "درخواست خرید تایید شده (PR)"
-                    ],
-                    "outputs": [
-                        "ماتریس مقایسه قیمت و امتیازدهی تامین‌کننده"
-                    ],
-                    "roles": []
-                }
-            },
-            {
-                "id": "po",
-                "label": "سفارش خرید (PO)",
-                "color": "bg-emerald-500 text-white border-emerald-500",
-                "tabColor": "bg-emerald-50 text-emerald-800 border-emerald-200",
-                "tabBadge": "bg-emerald-500",
-                "pdfUrl": "/documents/supply-chain/PO-details.pdf",
-                "images": [
-                    "/images/modules/supply/po.png"
-                ],
-                "content": {
-                    "title": "صدور سفارش خرید رسمی (Purchase Order)",
-                    "subtitle": "نهایی‌سازی معامله و ثبت تعهدات مالی طرفین",
-                    "goal": "صدور سند رسمی خرید جهت ارسال به تامین‌کننده منتخب بر اساس نتایج ارزیابی استعلام‌ها.",
-                    "steps": [],
-                    "inputs": [
-                        "استعلام تایید شده"
-                    ],
-                    "outputs": [
-                        "سند رسمی PO جهت رسید انبار و فاکتور مالی"
-                    ],
-                    "roles": []
-                }
+                "roles": [
+                    {
+                        "name": "مدیر زنجیره تامین",
+                        "duty": "نظارت بر سرعت گردش اسناد و رفع گلوگاه‌های تدارکاتی"
+                    },
+                    {
+                        "name": "کاربران واحدها",
+                        "duty": "ثبت دقیق نیازمندی‌ها متناسب با استانداردهای کالا"
+                    }
+                ]
             }
-        ],
-        "features": [],
-        "benefits": [
-            "کاهش 50% در زمان چرخه تایید درخواست‌ها (MR to PO)",
-            "حذف کامل مغایرت‌های کالا و بهینه‌سازی بودجه خرید با فرآیند استعلام متمرکز",
-            "شفافیت ۱۰۰ درصدی در رهگیری وضعیت سفارشات و تعهدات تامین‌کنندگان"
-        ],
-        "screenshot": "/images/portfolio/9.jpg",
-        "gradient": "from-slate-800 to-indigo-900"
-    }
+        },
+        {
+            "id": "mr",
+            "label": "درخواست کالا (MR)",
+            "color": "bg-rose-600 text-white border-rose-600",
+            "tabColor": "bg-rose-50 text-rose-800 border-rose-200",
+            "tabBadge": "bg-rose-600",
+            "pdfUrl": "/documents/supply-chain/MR-doc.pdf",
+            "images": [
+                "/images/modules/supply/mr.png"
+            ],
+            "content": {
+                "title": "مدیریت و کنترل درخواست کالا (Material Request)",
+                "subtitle": "ثبت، بررسی و تعیین مسیر تأمین نیازهای کالایی سازمان",
+                "goal": "ایجاد سازوکار رسمی برای ثبت، بررسی و کنترل درخواست‌های کالایی واحدهای سازمان با هدف مدیریت صحیح نیازها، جلوگیری از خریدهای غیرضروری، کنترل موجودی انبار و تعیین مسیر تأمین کالا.",
+                "steps": [
+                    {
+                        "num": "۱",
+                        "title": "ایجاد درخواست کالا",
+                        "desc": "ثبت اطلاعات کالا، مقدار مورد نیاز و پروژه در سامانه."
+                    },
+                    {
+                        "num": "۲",
+                        "title": "بررسی انبار",
+                        "desc": "در صورت وجود کالا، ارجاع به مصرف (CR) و در غیر این صورت ارجاع به فرآیند خرید (PR)."
+                    }
+                ],
+                "inputs": [
+                    "نیاز اعلام‌شده توسط واحد متقاضی",
+                    "رسید انبار دائم"
+                ],
+                "outputs": [
+                    "درخواست خرید (PR) - در صورت عدم موجودی",
+                    "حواله مصرف (CR) - در صورت موجود بودن کالا"
+                ],
+                "roles": [
+                    {
+                        "name": "واحد متقاضی",
+                        "duty": "ثبت نیاز کالا و ایجاد درخواست اولیه در سامانه"
+                    },
+                    {
+                        "name": "واحد برنامه‌ریزی",
+                        "duty": "بررسی و کنترل درخواست کالا"
+                    }
+                ]
+            }
+        },
+        {
+            "id": "pr",
+            "label": "درخواست خرید (PR)",
+            "color": "bg-amber-500 text-white border-amber-500",
+            "tabColor": "bg-amber-50 text-amber-800 border-amber-200",
+            "tabBadge": "bg-amber-500",
+            "pdfUrl": "/documents/supply-chain/pr-doc.pdf",
+            "images": [
+                "/images/modules/supply/pr.png"
+            ],
+            "content": {
+                "title": "درخواست خرید کالا (Purchase Requisition)",
+                "subtitle": "ارجاع نیازهای تامین‌نشده از انبار به دپارتمان تدارکات",
+                "goal": "مکانیزم رسمی ارجاع کالاهای ناموجود یا کسری به تدارکات جهت استعلام قیمت و خرید رسمی.",
+                "steps": [],
+                "inputs": [
+                    "درخواست کالا (MR) تایید شده"
+                ],
+                "outputs": [
+                    "لیست اقلام آماده استعلام"
+                ],
+                "roles": []
+            }
+        },
+        {
+            "id": "rfq",
+            "label": "استعلام بها (RFQ)",
+            "color": "bg-sky-500 text-white border-sky-500",
+            "tabColor": "bg-sky-50 text-sky-800 border-sky-200",
+            "tabBadge": "bg-sky-500",
+            "pdfUrl": "/documents/supply-chain/rfq-doc.pdf",
+            "images": [
+                "/images/modules/supply/rfq.png"
+            ],
+            "content": {
+                "title": "استعلام قیمت رقابتی (Request for Quotation)",
+                "subtitle": "جمع‌آوری پیشنهادات مالی و مقایسه هوشمند تامین‌کنندگان",
+                "goal": "حذف فرآیندهای دستی تدارکات و دریافت پیش‌فاکتورها به صورت سیستمی و شفاف.",
+                "steps": [],
+                "inputs": [
+                    "درخواست خرید تایید شده (PR)"
+                ],
+                "outputs": [
+                    "ماتریس مقایسه قیمت و امتیازدهی تامین‌کننده"
+                ],
+                "roles": []
+            }
+        },
+        {
+            "id": "quo",
+            "label": "پیش‌فاکتور (QUO)",
+            "color": "bg-violet-600 text-white border-violet-600",
+            "tabColor": "bg-violet-50 text-violet-800 border-violet-200",
+            "tabBadge": "bg-violet-600",
+            "pdfUrl": "/documents/supply-chain/quo-doc.pdf",
+            "images": [
+                "/images/modules/supply/quo.png"
+            ],
+            "content": {
+                "title": "ثبت و ارزیابی پیش‌فاکتورها (Quotation)",
+                "subtitle": "مستندسازی و تحلیل مالی پیشنهادات واصله از تامین‌کنندگان",
+                "goal": "ثبت متمرکز شرایط مالی، زمان تحویل و نحوه پرداخت پیشنهادی تامین‌کنندگان جهت تسهیل فرآیند مقایسه بازار.",
+                "steps": [],
+                "inputs": [
+                    "پاسخ‌های دریافتی از استعلام بها (RFQ)"
+                ],
+                "outputs": [
+                    "لیست مقایسه‌ای آفرها و شرایط پرداخت"
+                ],
+                "roles": []
+            }
+        },
+        {
+            "id": "pro",
+            "label": "پروپوزال فنی (PRO)",
+            "color": "bg-teal-600 text-white border-teal-600",
+            "tabColor": "bg-teal-50 text-teal-800 border-teal-200",
+            "tabBadge": "bg-teal-600",
+            "pdfUrl": "/documents/supply-chain/pro-doc.pdf",
+            "images": [
+                "/images/modules/supply/pro.png"
+            ],
+            "content": {
+                "title": "ارزیابی فنی پروپوزال‌ها (Proposal)",
+                "subtitle": "بررسی فنی و تطابق مهندسی کالاهای سفارشی و پروژه‌ای",
+                "goal": "بررسی و انطباق مستندات فنی، تاییدیه‌ها و استانداردهای پیشنهادی فروشندگان قبل از تایید مالی خرید.",
+                "steps": [],
+                "inputs": [
+                    "پروپوزال فنی تامین‌کنندگان",
+                    "نقشه‌ها و استانداردهای مرجع مهندسی"
+                ],
+                "outputs": [
+                    "تاییدیه یا عدم تایید فنی (Technical Clearance)"
+                ],
+                "roles": []
+            }
+        },
+        {
+            "id": "po",
+            "label": "سفارش خرید (PO)",
+            "color": "bg-emerald-500 text-white border-emerald-500",
+            "tabColor": "bg-emerald-50 text-emerald-800 border-emerald-200",
+            "tabBadge": "bg-emerald-500",
+            "pdfUrl": "/documents/supply-chain/po-doc.pdf",
+            "images": [
+                "/images/modules/supply/po.png"
+            ],
+            "content": {
+                "title": "صدور سفارش خرید رسمی (Purchase Order)",
+                "subtitle": "نهایی‌سازی معامله و ثبت تعهدات مالی طرفین",
+                "goal": "صدور سند رسمی خرید جهت ارسال به تامین‌کننده منتخب بر اساس نتایج ارزیابی استعلام‌ها.",
+                "steps": [],
+                "inputs": [
+                    "استعلام تایید شده"
+                ],
+                "outputs": [
+                    "سند رسمی PO جهت رسید انبار و فاکتور مالی"
+                ],
+                "roles": []
+            }
+        },
+        {
+            "id": "qc",
+            "label": "کنترل کیفیت (QC)",
+            "color": "bg-cyan-600 text-white border-cyan-600",
+            "tabColor": "bg-cyan-50 text-cyan-800 border-cyan-200",
+            "tabBadge": "bg-cyan-600",
+            "pdfUrl": "/documents/supply-chain/qc-doc.pdf",
+            "images": [
+                "/images/modules/supply/qc.png"
+            ],
+            "content": {
+                "title": "بازرسی و کنترل کیفیت اقلام (Quality Control)",
+                "subtitle": "تضمین انطباق کالاهای خریداری‌شده با استانداردهای درخواستی قبل از ورود به انبار",
+                "goal": "جلوگیری از ورود کالای معیوب، ناسازگار یا بی‌کیفیت به انبارها و خطوط تولید سازمان از طریق بازرسی دقیق شیت‌های آزمایش و مشخصات فیزیکی.",
+                "steps": [],
+                "inputs": [
+                    "کالای تحویلی موقت",
+                    "استانداردها و مشخصات فنی سفارش خرید (PO)"
+                ],
+                "outputs": [
+                    "مجوز ورود به انبار دائم یا صورت‌جلسه عودت کالا"
+                ],
+                "roles": []
+            }
+        },
+        {
+            "id": "proc",
+            "label": "مدیریت خرید (PROC)",
+            "color": "bg-indigo-600 text-white border-indigo-600",
+            "tabColor": "bg-indigo-50 text-indigo-800 border-indigo-200",
+            "tabBadge": "bg-indigo-600",
+            "pdfUrl": "/documents/supply-chain/proc-doc.pdf",
+            "images": [
+                "/images/modules/supply/proc.png"
+            ],
+            "content": {
+                "title": "مدیریت فرآیند تدارکات (Procurement)",
+                "subtitle": "رهگیری، پایش و هماهنگی کلان فرآیندهای خرید و لجستیک",
+                "goal": "مدیریت یکپارچه روابط با تامین‌کنندگان، پایش زنجیره حمل، ترخیص و زمان‌بندی تحویل کالا به پروژه‌ها.",
+                "steps": [],
+                "inputs": [
+                    "سفارش خرید نهایی‌شده (PO)",
+                    "اطلاعات حمل و لجستیک"
+                ],
+                "outputs": [
+                    "گزارش‌های زمان تحویل (Lead Time) و ارزیابی عملکرد تامین‌کنندگان"
+                ],
+                "roles": []
+            }
+        }
+    ],
+    "features": [],
+    "benefits": [
+        "کاهش 50% در زمان چرخه تایید درخواست‌ها (MR to PO)",
+        "حذف کامل مغایرت‌های کالا و بهینه‌سازی بودجه خرید با فرآیند استعلام متمرکز",
+        "شفافیت ۱۰۰ درصدی در رهگیری وضعیت سفارشات و تعهدات تامین‌کنندگان"
+    ],
+    "screenshot": "/images/portfolio/9.jpg",
+    "gradient": "from-slate-800 to-indigo-900"
+}
+
 }

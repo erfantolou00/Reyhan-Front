@@ -23,9 +23,8 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
       />
 
       <motion.nav
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
-          isScrolled ? 'bg-white/90 backdrop-blur-xl shadow-xl' : 'bg-transparent'
-        }`}
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-xl shadow-xl' : 'bg-transparent'
+          }`}
         initial={{ y: -120 }}
         animate={{ y: isScrolled ? 0 : -120, opacity: isScrolled ? 1 : 0 }}
         transition={{ duration: 0.25 }}
@@ -49,9 +48,8 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
                     key={section.id}
                     type="button"
                     onClick={() => scrollToSection(section.id)}
-                    className={`relative rounded-full px-3 py-2 text-sm font-medium transition ${
-                      isActive ? 'text-primary shadow-sm' : 'text-gray-600 hover:text-primary'
-                    }`}
+                    className={`relative rounded-full px-3 py-2 text-sm font-medium transition ${isActive ? 'text-primary shadow-sm' : 'text-gray-600 hover:text-primary'
+                      }`}
                   >
                     <span className="flex items-center gap-2">
                       <span>{section.icon}</span>
@@ -90,9 +88,8 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
                       scrollToSection(section.id);
                       setIsMobileOpen(false);
                     }}
-                    className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-right text-sm font-medium transition ${
-                      isActive ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-50'
-                    }`}
+                    className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-right text-sm font-medium transition ${isActive ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-50'
+                      }`}
                   >
                     <span className="flex items-center gap-2">
                       <span>{section.icon}</span>
@@ -110,4 +107,3 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
 };
 
 export default FloatingNavbar;
- 
