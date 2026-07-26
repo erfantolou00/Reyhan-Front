@@ -8,7 +8,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 const navigation = [
   { name: 'خانه', href: '/', icon: '🏠' },
   { name: 'وبلاگ', href: '/blog', icon: '📝' },
-  { name: 'نمونه کارها', href: '/portfolio', icon: '🎯' },
+  { name: 'سامانه ها', href: '/portfolio', icon: '🎯' },
   { name: 'گالری تصاویر', href: '/products', icon: '🖼️' },
   { name: 'درباره ما', href: '/about', icon: 'ℹ️' },
   { name: 'تماس با ما', href: '/contact', icon: '📞' },

@@ -16,7 +16,7 @@ const quickLinks = [
   { label: 'درباره ما', href: '/about' },
   { label: 'خدمات و ماژول‌ها', href: '/products' },
   { label: 'بلاگ آموزشی', href: '/blog' },
-  { label: 'ویترین نمونه‌کارها', href: '/portfolio' },
+  { label: 'ویترین سامانه ها', href: '/portfolio' },
   { label: 'تماس با تیم فروش', href: '/contact' },
 ];
 
