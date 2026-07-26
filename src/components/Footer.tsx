@@ -47,7 +47,6 @@ export default function Footer() {
                   width={80} 
                   height={80} 
                   className="relative rounded-2xl p-2 border border-white/10 bg-slate-300" 
-                  priority 
                 />
               </div>
               <div>

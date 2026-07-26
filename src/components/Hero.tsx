@@ -22,7 +22,7 @@ const Hero = () => {
       {/* Background Image بهینه‌شده با next/image */}
       <div className="absolute inset-0 -z-10">
         <Image
-          src="https://img2.wallspic.com/previews/2/6/6/3/1/113662/113662-geometry-pattern-creative_arts-euclidean_vector-geometric_shape-x750.jpg"
+          src="/bgHeroHappy.webp"
           alt=""
           fill
           priority

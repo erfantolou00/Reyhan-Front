@@ -1,8 +1,22 @@
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+'use client'
+
 import Image from 'next/image'
+import { useEffect, useState } from 'react';
 
 export default function About() {
+  const [shouldLoadGif, setShouldLoadGif] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setShouldLoadGif(true);
+      window.removeEventListener('scroll', handleScroll);
+    };
+
+    // فقط بعد از لود کامل صفحه و شروع اسکرول
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
   return (
     <>
       <main>
@@ -89,7 +103,13 @@ export default function About() {
                   className="bg-white p-6 rounded-lg shadow-lg text-center"
                 >
                   <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4">
-                    <Image priority src={member.image} alt="Team Member" width={400} height={400} />
+                    {shouldLoadGif ? (
+                      <Image src={member.image} alt="Team Member" width={400} height={400} />
+
+                    ) : (
+                      // placeholder تا زمانی که اسکرول شروع نشده
+                      <div className="absolute inset-0 animate-pulse bg-slate-200" />
+                    )}
                   </div>
                   <h3 className="text-xl font-semibold mb-2">{member.role}</h3>
                   <p className="text-gray-600">{member.description}</p>
