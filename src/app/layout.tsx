@@ -6,6 +6,7 @@ import Header from '@/components/Header'
 import { Toaster } from 'react-hot-toast'
 import Footer from '@/components/Footer'
 import { Analytics } from '@vercel/analytics/next'
+import ChatWidget from '@/components/ChatWidget'
 // import { Vazirmatn } from 'next/font/google' // یا next/font/local
 
 // const vazirmatn = Vazirmatn({
@@ -33,6 +34,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Header />
             <main className="min-h-screen bg-white">
               {children}
+              <ChatWidget />
             </main>
             <Toaster position="top-center" />
             <Footer />

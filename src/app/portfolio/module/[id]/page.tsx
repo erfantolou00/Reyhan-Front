@@ -5,7 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 
-// ۱. ایمپورت فایل JSON
+// ۱. ایمپورت فایل JSON (حالا به صورت آرایه)
 import modulesData from '@/app/portfolio/module.json';
 
 import { 
@@ -114,6 +114,7 @@ interface Feature {
 }
 
 interface Module {
+  id: number; 
   title: string;
   mainImage: string;
   description: string;
@@ -128,8 +129,10 @@ interface Module {
 
 export default function ModuleDetailPage({ params }: { params: { id: string } }) {
   const { id } = params;
-  const typedModulesData = modulesData as Record<string, Module>;
-  const module = typedModulesData[id];
+
+  // ← تغییر اصلی: پیدا کردن ماژول از آرایه
+  const typedModulesData = modulesData as Module[];
+  const module = typedModulesData.find((m) => m.id === Number(id));
 
   const defaultTab = module?.tabs?.find((t) => t.id === "overview")?.id || module?.tabs?.[0]?.id || "mr";
   const [activeTabId, setActiveTabId] = useState(defaultTab);

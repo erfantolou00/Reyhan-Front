@@ -1,8 +1,10 @@
-// components/Hero.tsx
+"use client";
+
 import Image from 'next/image';
-import Typewriter from './Typewriter'; // اگر خیلی سنگین هست، بعداً optimize کن
-import InteractiveCard from './InteractiveCard';
+import Typewriter from './Typewriter';
 import HeroCardStack from './InteractiveCard';
+import { useRef } from 'react';
+import Link from 'next/link';
 
 const highlights = ['اتوماسیون فرآیندها', 'داشبورد تحلیلی', 'پشتیبانی تخصصی'];
 
@@ -13,13 +15,68 @@ const stats = [
 ];
 
 const Hero = () => {
-  const handleDemo = () => {
-    window.open('http://demo.reyhanehsoft.ir', '_blank');
+  // استفاده از useRef برای کش کردن بین رندرها
+  const gatewayUrlRef = useRef<string | null>(null);
+  const urlPromiseRef = useRef<Promise<string | null> | null>(null);
+
+  const getLoginGatewayUrl = async (): Promise<string | null> => {
+    const endpoints = [
+      "http://server:9020/geturl",
+      "http://v1:9020/geturl",
+      "http://reyhansmart.ir:5020/geturl",
+    ];
+
+    try {
+      const firstResponse = await Promise.any(
+        endpoints.map(async (endpoint) => {
+          const res = await fetch(endpoint);
+
+          if (!res.ok) {
+            throw new Error(`Request failed: ${endpoint}`);
+          }
+
+          return res.json();
+        })
+      );
+
+      return firstResponse.demoURL ?? null;
+    } catch (error) {
+      console.error("No endpoint responded successfully", error);
+      return null;
+    }
+  };
+
+  const getGatewayUrl = async (): Promise<string | null> => {
+    // اگر قبلاً گرفته شده، مستقیم برگردون
+    if (gatewayUrlRef.current) {
+      return gatewayUrlRef.current;
+    }
+
+    // اگر در حال گرفتنه، همون Promise رو برگردون (جلوگیری از درخواست تکراری)
+    if (!urlPromiseRef.current) {
+      urlPromiseRef.current = getLoginGatewayUrl().then((url) => {
+        gatewayUrlRef.current = url;
+        return url;
+      });
+    }
+
+    return urlPromiseRef.current;
+  };
+
+  const handleDemo = async () => {
+    const url = await getGatewayUrl();
+
+    if (url) {
+      window.open(url, '_blank');
+    } else {
+      console.error("دمو در دسترس نیست");
+      // می‌تونی اینجا toast یا alert بذاری
+    }
   };
 
   return (
     <section className="relative isolate min-h-screen overflow-hidden">
-      {/* Background Image بهینه‌شده با next/image */}
+      {/* Background Image */}
       <div className="absolute inset-0 -z-10">
         <Image
           src="/bgHeroHappy.webp"
@@ -33,14 +90,14 @@ const Hero = () => {
         />
       </div>
 
-      {/* Overlays (سبک‌تر) */}
+      {/* Overlays */}
       <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.18)_50%,rgba(0,0,0,0.22)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(37,99,235,0.52),transparent_40%)]" />
 
       <div className="container relative mx-auto flex min-h-screen items-center px-4 py-24 sm:px-6 lg:px-8">
         <div className="grid w-full items-center gap-12 lg:grid-cols-[1.1fr_0.9fr] lg:gap-16">
 
-          {/* Left Content - بدون motion سنگین */}
+          {/* Left Content */}
           <div className="max-w-3xl text-right">
             <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-primary/20 bg-white/80 px-4 py-2 text-sm font-medium text-primary shadow-sm backdrop-blur">
               <span className="h-2.5 w-2.5 rounded-full bg-primary" />
@@ -70,7 +127,10 @@ const Hero = () => {
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row">
               <button className="rounded-full bg-primary px-7 py-3.5 text-lg font-semibold text-white shadow-lg shadow-primary/20 transition hover:-translate-y-0.5 hover:bg-primary-dark">
+                <Link href={"/contact"}>
+                
                 درخواست مشاوره
+                </Link>
               </button>
               <button
                 onClick={handleDemo}
@@ -82,14 +142,17 @@ const Hero = () => {
 
             <div className="mt-8 flex flex-wrap gap-3">
               {highlights.map((item) => (
-                <span key={item} className="rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-sm font-medium text-slate-600 shadow-sm backdrop-blur">
+                <span
+                  key={item}
+                  className="rounded-full border border-slate-200 bg-white/70 px-4 py-2 text-sm font-medium text-slate-600 shadow-sm backdrop-blur"
+                >
                   {item}
                 </span>
               ))}
             </div>
           </div>
 
-          {/* Right Card - ساده‌تر */}
+          {/* Right Card */}
           <HeroCardStack />
         </div>
       </div>

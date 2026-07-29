@@ -3,13 +3,27 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+
+// لیست زیرمنوهای سامانه ها (بر اساس اهمیت فرایندهای سازمانی)
+const portfolioSubMenu = [
+  { id: 1, name: 'منابع انسانی (HRM)', icon: '👥' },
+  { id: 2, name: 'مدیریت مالی و حسابداری', icon: '💵' },
+  { id: 3, name: 'مدیریت زنجیره تأمین (SCM)', icon: '🤝' },
+  { id: 4, name: 'انبار و کالا', icon: '📦' },
+  { id: 5, name: 'پروژه و وظایف', icon: '📅' },
+  { id: 6, name: 'اتوماسیون اداری', icon: '📁' },
+  { id: 7, name: 'فروش و مشتریان (CRM)', icon: '📈' },
+  { id: 8, name: 'مدیریت تولید و کارخانه', icon: '🏭' },
+  { id: 9, name: 'تعمیرات و نگهداری (PM)', icon: '🔧' },
+  { id: 10, name: 'گزارشات مدیریتی (BI)', icon: '📊' },
+];
 
 const navigation = [
   { name: 'خانه', href: '/', icon: '🏠' },
   { name: 'وبلاگ', href: '/blog', icon: '📝' },
-  { name: 'سامانه ها', href: '/portfolio', icon: '🎯' },
-  { name: 'گالری تصاویر', href: '/products', icon: '🖼️' },
+  { name: 'سامانه‌ها', href: '/portfolio', icon: '🎯', hasDropdown: true },
   { name: 'درباره ما', href: '/about', icon: 'ℹ️' },
   { name: 'تماس با ما', href: '/contact', icon: '📞' },
   {
@@ -21,9 +35,14 @@ const navigation = [
 ];
 
 export default function Header() {
+  const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeHover, setActiveHover] = useState<string | null>(null);
+  
+  // وضعیت باز بودن زیرمنو در دسکتاپ و موبایل
+  const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
+  const [isMobileSubMenuOpen, setIsMobileSubMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,11 +59,37 @@ export default function Header() {
 
       const link = document.createElement('a');
       link.href = href;
-      link.download = 'کاتالوگ-ریحان.pdf'; // نام فایل هنگام دانلود
+      link.download = 'کاتالوگ-ریحان.pdf';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
     }
+  };
+
+  // تابع ارسال آیدی ماژول به سرور و ریدایرکت به صفحه آن ماژول
+  const handleModuleClick = async (id: number) => {
+    console.log(`ارسال شناسه سامانه به سرور: ${id}`);
+    
+    // در صورت تمایل به ارسال لاگ یا آمار به بک‌اند قبل از انتقال:
+    try {
+      /*
+      await fetch('/api/track-module-click', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ moduleId: id }),
+      });
+      */
+    } catch (error) {
+      console.error("خطا در ارسال داده به سرور:", error);
+    }
+
+    // بستن منو‌ها
+    setIsSubMenuOpen(false);
+    setIsMobileMenuOpen(false);
+    setIsMobileSubMenuOpen(false);
+
+    // انتقال به صفحه ماژول اختصاصی
+    router.push(`/portfolio`);
   };
 
   return (
@@ -98,6 +143,74 @@ export default function Header() {
             <div className="flex items-center space-x-6 space-x-reverse">
               {navigation.map((item) => {
                 const isDownload = item.isDownload || item.href.endsWith('.pdf');
+
+                if (item.hasDropdown) {
+                  return (
+                    <div
+                      key={item.name}
+                      className="relative"
+                      onMouseEnter={() => {
+                        setActiveHover(item.name);
+                        setIsSubMenuOpen(true);
+                      }}
+                      onMouseLeave={() => {
+                        setActiveHover(null);
+                        setIsSubMenuOpen(false);
+                      }}
+                    >
+                      <button
+                        className="relative text-gray-700 hover:text-primary px-3 py-2 text-lg font-medium group flex items-center gap-2 outline-none cursor-pointer"
+                      >
+                        <motion.span
+                          initial={{ scale: 0 }}
+                          animate={{ scale: activeHover === item.name ? 1 : 0 }}
+                          transition={{ type: 'spring', stiffness: 400, damping: 10 }}
+                          className="text-xl"
+                        >
+                          {item.icon}
+                        </motion.span>
+                        {item.name}
+                        {/* آیکون فلش رو به پایین */}
+                        <svg className={`w-4 h-4 transition-transform duration-250 ${isSubMenuOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                        </svg>
+                        <motion.span
+                          className="absolute bottom-0 left-0 w-full h-0.5 bg-gradient-to-r from-primary to-secondary"
+                          initial={{ scaleX: 0, originX: 0 }}
+                          animate={{ scaleX: isSubMenuOpen ? 1 : 0 }}
+                          transition={{ duration: 0.3 }}
+                        />
+                      </button>
+
+                      {/* Dropdown Menu */}
+                      <AnimatePresence>
+                        {isSubMenuOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 15, scale: 0.95 }}
+                            animate={{ opacity: 1, y: 0, scale: 1 }}
+                            exit={{ opacity: 0, y: 15, scale: 0.95 }}
+                            transition={{ duration: 0.2 }}
+                            className="absolute right-0 mt-2 w-80 bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden z-50 p-2 grid grid-cols-1 gap-1"
+                          >
+                            <div className="px-3 py-2 text-xs font-semibold text-gray-400 border-b border-gray-50 mb-1">
+                              فرایندهای سازمانی سیستم ریحان
+                            </div>
+                            {portfolioSubMenu.map((sub) => (
+                              <button
+                                key={sub.id}
+                                onClick={() => handleModuleClick(sub.id)}
+                                className="flex items-center gap-3 w-full px-3 py-2.5 text-right text-gray-700 hover:text-primary hover:bg-gradient-to-r hover:from-primary/5 hover:to-secondary/5 rounded-xl transition-all duration-150 text-sm font-medium"
+                              >
+                                <span className="text-xl bg-gray-100 p-1.5 rounded-lg group-hover:bg-white">{sub.icon}</span>
+                                <span>{sub.name}</span>
+                              </button>
+                            ))}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                }
 
                 return (
                   <motion.div
@@ -222,6 +335,48 @@ export default function Header() {
               >
                 {navigation.map((item, index) => {
                   const isDownload = item.isDownload || item.href.endsWith('.pdf');
+
+                  if (item.hasDropdown) {
+                    return (
+                      <div key={item.name} className="flex flex-col">
+                        <button
+                          onClick={() => setIsMobileSubMenuOpen(!isMobileSubMenuOpen)}
+                          className="flex items-center justify-between w-full px-3 py-2 text-base font-medium text-gray-700 hover:text-primary hover:bg-gray-50 rounded-lg transition-colors duration-200"
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className="text-xl">{item.icon}</span>
+                            {item.name}
+                          </div>
+                          <svg className={`w-4 h-4 transition-transform duration-200 ${isMobileSubMenuOpen ? 'rotate-180' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        
+                        {/* زیرمنوی موبایل به صورت آکاردئونی */}
+                        <AnimatePresence>
+                          {isMobileSubMenuOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: 'auto' }}
+                              exit={{ opacity: 0, height: 0 }}
+                              className="mr-4 pl-2 space-y-1 border-r border-gray-100 mt-1"
+                            >
+                              {portfolioSubMenu.map((sub) => (
+                                <button
+                                  key={sub.id}
+                                  onClick={() => handleModuleClick(sub.id)}
+                                  className="flex items-center gap-2 w-full px-3 py-2 text-sm text-gray-600 hover:text-primary hover:bg-gray-50 rounded-md text-right"
+                                >
+                                  <span>{sub.icon}</span>
+                                  <span>{sub.name}</span>
+                                </button>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    );
+                  }
 
                   return (
                     <motion.div

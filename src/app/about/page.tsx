@@ -7,16 +7,12 @@ export default function About() {
   const [shouldLoadGif, setShouldLoadGif] = useState(false);
 
   useEffect(() => {
-    const handleScroll = () => {
+    setTimeout(() => {
       setShouldLoadGif(true);
-      window.removeEventListener('scroll', handleScroll);
-    };
-
-    // فقط بعد از لود کامل صفحه و شروع اسکرول
-    window.addEventListener('scroll', handleScroll, { passive: true });
-
-    return () => window.removeEventListener('scroll', handleScroll);
+    }, 1000);
   }, []);
+
+
   return (
     <>
       <main>
@@ -102,7 +98,7 @@ export default function About() {
                   key={index}
                   className="bg-white p-6 rounded-lg shadow-lg text-center"
                 >
-                  <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4">
+                  <div className="w-32 h-32 bg-gray-200 rounded-full mx-auto mb-4 relative">
                     {shouldLoadGif ? (
                       <Image src={member.image} alt="Team Member" width={400} height={400} />
 
