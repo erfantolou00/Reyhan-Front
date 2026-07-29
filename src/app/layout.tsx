@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast'
 import Footer from '@/components/Footer'
 import { Analytics } from '@vercel/analytics/next'
 import ChatWidget from '@/components/ChatWidget'
+import { AuthProvider } from '@/context/AuthContext'
 // import { Vazirmatn } from 'next/font/google' // یا next/font/local
 
 // const vazirmatn = Vazirmatn({
@@ -30,6 +31,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <link rel="icon" type="image/webp" sizes="16x16" href="/logo.webp" />
       <body className="antialiased">
         <ErrorBoundary>
+          <AuthProvider>
           <Providers>
             <Header />
             <main className="min-h-screen bg-white">
@@ -39,6 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Toaster position="top-center" />
             <Footer />
           </Providers>
+          </AuthProvider>
         </ErrorBoundary>
         <Analytics />
       </body>

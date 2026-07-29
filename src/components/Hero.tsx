@@ -5,6 +5,7 @@ import Typewriter from './Typewriter';
 import HeroCardStack from './InteractiveCard';
 import { useRef } from 'react';
 import Link from 'next/link';
+import AdminLogin from '@/app/admin/login/page';
 
 const highlights = ['اتوماسیون فرآیندها', 'داشبورد تحلیلی', 'پشتیبانی تخصصی'];
 

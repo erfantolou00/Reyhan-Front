@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useAuth } from '@/context/AuthContext';
+import { User } from 'lucide-react';
 
 // لیست زیرمنوهای سامانه ها (بر اساس اهمیت فرایندهای سازمانی)
 const portfolioSubMenu = [
@@ -39,11 +41,14 @@ export default function Header() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeHover, setActiveHover] = useState<string | null>(null);
-  
+
   // وضعیت باز بودن زیرمنو در دسکتاپ و موبایل
   const [isSubMenuOpen, setIsSubMenuOpen] = useState(false);
   const [isMobileSubMenuOpen, setIsMobileSubMenuOpen] = useState(false);
 
+
+  const { user, logout, isLoading } = useAuth();
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
@@ -69,7 +74,7 @@ export default function Header() {
   // تابع ارسال آیدی ماژول به سرور و ریدایرکت به صفحه آن ماژول
   const handleModuleClick = async (id: number) => {
     console.log(`ارسال شناسه سامانه به سرور: ${id}`);
-    
+
     // در صورت تمایل به ارسال لاگ یا آمار به بک‌اند قبل از انتقال:
     try {
       /*
@@ -283,6 +288,81 @@ export default function Header() {
             </div>
           </div>
 
+          {/* Auth Button - Desktop */}
+          <div className="hidden md:flex items-center mr-4 relative">
+            {isLoading ? null : user ? (
+              <div className="relative">
+                <button
+                  onClick={() => setIsProfileOpen(!isProfileOpen)}
+                  className="flex items-center gap-2 rounded-xl bg-gradient-to-r from-primary/10 to-secondary/10 px-4 py-2 text-sm font-medium text-gray-800 hover:from-primary/20 hover:to-secondary/20 transition"
+                >
+
+<span className="flex h-8 w-8 items-center justify-center rounded-full overflow-hidden bg-gradient-to-br from-primary to-secondary text-white shrink-0">
+  {user.avatar ? (
+    <img
+      src={user.avatar}
+      alt={user.name}
+      className="h-full w-full object-cover"
+    />
+  ) : (
+    <User size={16} />
+  )}
+</span>
+<span className="max-w-[120px] truncate">{user.name}</span>
+                  <svg
+                    className={`w-4 h-4 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`}
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </button>
+
+                <AnimatePresence>
+                  {isProfileOpen && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: 8 }}
+                      className="absolute left-0 mt-2 w-48 rounded-xl bg-white shadow-xl border border-gray-100 overflow-hidden z-50"
+                    >
+                      <div className="px-4 py-3 border-b border-gray-50">
+                        <p className="text-sm font-medium text-gray-800 truncate">{user.name}</p>
+                        <p className="text-xs text-gray-400 truncate">{user.emailOrPhone}</p>
+                      </div>
+
+                      <Link
+                        href="/profile"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="block w-full px-4 py-2.5 text-right text-sm text-gray-700 hover:bg-gray-50 transition"
+                      >
+                        ویرایش پروفایل
+                      </Link>
+
+                      <button
+                        onClick={() => {
+                          logout();
+                          setIsProfileOpen(false);
+                        }}
+                        className="w-full px-4 py-2.5 text-right text-sm text-red-600 hover:bg-red-50 transition"
+                      >
+                        خروج از حساب
+                      </button>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ) : (
+              <Link
+                href="/login"
+                className="rounded-xl bg-gradient-to-r from-primary to-primary-dark px-5 py-2.5 text-sm font-medium text-white shadow-md hover:opacity-90 transition"
+              >
+                ورود / ثبت‌نام
+              </Link>
+            )}
+          </div>
+
           {/* Mobile Menu Button */}
           <motion.button
             className="md:hidden p-2 rounded-lg hover:bg-gray-100 relative"
@@ -327,6 +407,38 @@ export default function Header() {
               exit={{ opacity: 0, height: 0 }}
               className="md:hidden"
             >
+              <div className="border-t border-gray-100 mt-2 pt-2">
+                {user ? (
+                  <div className="px-3 py-2">
+                    <p className="text-sm font-medium text-gray-800">{user.name}</p>
+                    <p className="text-xs text-gray-400 mb-2">{user.emailOrPhone}</p>
+                    <Link
+                      href="/profile"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="block w-full text-right text-sm text-gray-700 py-2"
+                    >
+                      ویرایش پروفایل
+                    </Link>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsMobileMenuOpen(false);
+                      }}
+                      className="w-full text-right text-sm text-red-600 py-2"
+                    >
+                      خروج از حساب
+                    </button>
+                  </div>
+                ) : (
+                  <Link
+                    href="/login"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="flex items-center justify-center mx-2 mb-1 rounded-xl bg-gradient-to-r from-primary to-primary-dark px-4 py-2.5 text-sm font-medium text-white"
+                  >
+                    ورود / ثبت‌نام
+                  </Link>
+                )}
+              </div>
               <motion.div
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
@@ -351,7 +463,7 @@ export default function Header() {
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                           </svg>
                         </button>
-                        
+
                         {/* زیرمنوی موبایل به صورت آکاردئونی */}
                         <AnimatePresence>
                           {isMobileSubMenuOpen && (
@@ -416,6 +528,7 @@ export default function Header() {
                   );
                 })}
               </motion.div>
+
             </motion.div>
           )}
         </AnimatePresence>
