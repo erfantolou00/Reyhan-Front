@@ -37,16 +37,16 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+    const response = await fetch('https://api.gapgpt.app/v1/chat/completions', {
       method: 'POST',
       headers: {
-        Authorization: `Bearer ${process.env.OPENROUTER_API_KEY}`,
+        Authorization: `Bearer ${process.env.GAPGPT_API_KEY}`,
         'HTTP-Referer': 'https://reyhan-front.vercel.app',
         'X-Title': 'Reyhan Smart Systems',
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'deepseek/deepseek-v4-flash',
+        model: 'deepseek-v4-flash',
         messages: [
           {
             role: 'system',
@@ -54,7 +54,6 @@ export async function POST(req: NextRequest) {
           },
           ...messages,
         ],
-    
       }),
     });
 
@@ -68,6 +67,7 @@ export async function POST(req: NextRequest) {
     }
 
     const data = await response.json();
+    console.log('%c⧭', 'color: #00bf00', data);
     const reply = data.choices?.[0]?.message?.content || 'پاسخی دریافت نشد.';
 
     return NextResponse.json({ reply });
