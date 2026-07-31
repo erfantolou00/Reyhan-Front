@@ -8,16 +8,6 @@ import Footer from '@/components/Footer'
 import { Analytics } from '@vercel/analytics/next'
 import ChatWidget from '@/components/ChatWidget'
 import { AuthProvider } from '@/context/AuthContext'
-// import { Vazirmatn } from 'next/font/google' // یا next/font/local
-
-// const vazirmatn = Vazirmatn({
-//   subsets: ['arabic'],
-//   display: 'swap',
-//   variable: '--font-vazirmatn',
-//   weight: ['400', '500', '700'],
-//   preload: true,
-//   adjustFontFallback: true,
-// })
 
 export const metadata: Metadata = {
   title: 'ریحان سامانه هوشمند',

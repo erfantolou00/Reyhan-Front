@@ -10,7 +10,15 @@ import FloatingNavbar from '@/components/FloatingNavbar';
 import VerticalTimeline from '@/components/VerticalTimeline';
 import { pageSections } from '@/lib/sections';
 
+import { getGatewayUrl } from '@/helper/FindOut_WhereWeAre'
+import { useEffect } from 'react';
 export default function Home() {
+  
+  const getUrl = () => getGatewayUrl()
+  useEffect(() => {
+    getUrl()
+  }, []);
+
   return (
     <main className="relative bg-white text-gray-900">
       <FloatingNavbar sections={pageSections} />

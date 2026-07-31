@@ -6,6 +6,7 @@ import HeroCardStack from './InteractiveCard';
 import { useRef } from 'react';
 import Link from 'next/link';
 import AdminLogin from '@/app/admin/login/page';
+import { getGatewayUrl } from '@/helper/FindOut_WhereWeAre';
 
 const highlights = ['اتوماسیون فرآیندها', 'داشبورد تحلیلی', 'پشتیبانی تخصصی'];
 
@@ -16,53 +17,7 @@ const stats = [
 ];
 
 const Hero = () => {
-  // استفاده از useRef برای کش کردن بین رندرها
-  const gatewayUrlRef = useRef<string | null>(null);
-  const urlPromiseRef = useRef<Promise<string | null> | null>(null);
 
-  const getLoginGatewayUrl = async (): Promise<string | null> => {
-    const endpoints = [
-      "http://server:9020/geturl",
-      "http://v1:9020/geturl",
-      "http://reyhansmart.ir:5020/geturl",
-    ];
-
-    try {
-      const firstResponse = await Promise.any(
-        endpoints.map(async (endpoint) => {
-          const res = await fetch(endpoint);
-
-          if (!res.ok) {
-            throw new Error(`Request failed: ${endpoint}`);
-          }
-
-          return res.json();
-        })
-      );
-
-      return firstResponse.demoURL ?? null;
-    } catch (error) {
-      console.error("No endpoint responded successfully", error);
-      return null;
-    }
-  };
-
-  const getGatewayUrl = async (): Promise<string | null> => {
-    // اگر قبلاً گرفته شده، مستقیم برگردون
-    if (gatewayUrlRef.current) {
-      return gatewayUrlRef.current;
-    }
-
-    // اگر در حال گرفتنه، همون Promise رو برگردون (جلوگیری از درخواست تکراری)
-    if (!urlPromiseRef.current) {
-      urlPromiseRef.current = getLoginGatewayUrl().then((url) => {
-        gatewayUrlRef.current = url;
-        return url;
-      });
-    }
-
-    return urlPromiseRef.current;
-  };
 
   const handleDemo = async () => {
     const url = await getGatewayUrl();
