@@ -1,6 +1,9 @@
 const GATEWAY_URL_KEY = "gateway_url";
 const GATEWAY_URL_TIMESTAMP_KEY = "gateway_url_timestamp";
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 24 ساعت به میلی‌ثانیه
+const CACHE_DURATION = 1 * 60 * 60 * 1000; // 1 ساعت به میلی‌ثانیه
+
+// 👇 با این فلگ می‌تونی کش رو خاموش/روشن کنی
+const ENABLE_CACHE = false; // false بذار تا کش کاملاً غیرفعال بشه
 
 const getLoginGatewayUrl = async (): Promise<string | null> => {
   const endpoints = [
@@ -34,6 +37,7 @@ let gatewayUrlRef: string | null | undefined;
 let urlPromiseRef: Promise<string | null> | null = null;
 
 const isCacheValid = (): boolean => {
+  if (!ENABLE_CACHE) return false;
   if (typeof window === "undefined") return false;
 
   const timestamp = localStorage.getItem(GATEWAY_URL_TIMESTAMP_KEY);
@@ -44,6 +48,11 @@ const isCacheValid = (): boolean => {
 };
 
 export const getGatewayUrl = async (): Promise<string | null> => {
+  // اگر کش خاموش باشه، مستقیم درخواست بزن
+  if (!ENABLE_CACHE) {
+    return getLoginGatewayUrl();
+  }
+
   // اول چک کن کش localStorage هنوز معتبره یا نه
   if (typeof window !== "undefined" && isCacheValid()) {
     const cached = localStorage.getItem(GATEWAY_URL_KEY);

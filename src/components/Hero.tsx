@@ -16,11 +16,15 @@ const stats = [
   { value: '۹۸٪', label: 'رضایت مشتری' },
 ];
 
-const Hero = () => {
+interface HeroProps {
+  gatewayUrl: string | null
+}
+
+const Hero = ({gatewayUrl}: HeroProps) => {
 
 
   const handleDemo = async () => {
-    const url = await getGatewayUrl();
+    const url = gatewayUrl || null;
 
     if (url) {
       window.open(url, '_blank');

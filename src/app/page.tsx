@@ -11,12 +11,33 @@ import VerticalTimeline from '@/components/VerticalTimeline';
 import { pageSections } from '@/lib/sections';
 
 import { getGatewayUrl } from '@/helper/FindOut_WhereWeAre'
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 export default function Home() {
   
-  const getUrl = () => getGatewayUrl()
+  const [gatewayUrl, setGatewayUrl] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    getUrl()
+    let isMounted = true;
+
+    const fetchUrl = async () => {
+      try {
+        const url = await getGatewayUrl();
+        if (isMounted) {
+          setGatewayUrl(url);
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchUrl();
+
+    return () => {
+      isMounted = false; // جلوگیری از setState بعد از unmount
+    };
   }, []);
 
   return (
@@ -25,7 +46,7 @@ export default function Home() {
       <VerticalTimeline sections={pageSections} />
 
       <section id="hero">
-        <Hero />
+        <Hero gatewayUrl={gatewayUrl} />
       </section>
 
       <SectionDivider />

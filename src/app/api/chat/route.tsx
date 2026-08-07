@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 const SYSTEM_PROMPT = `
 تو مشاور هوشمند رسمی شرکت «ریحان سامانه هوشمند» هستی.
@@ -11,6 +11,7 @@ const SYSTEM_PROMPT = `
 - مدیریت یکپارچه (مالی، منابع انسانی، انبار، فروش و ...)
 - سفارشی‌سازی کامل بر اساس فرآیند واقعی هر سازمان
 - پشتیبانی تا پیاده‌سازی کامل
+- این سایتی که میفرستم رو بخون و اگر کاربر درباره زنجیره تامین پرسید از این پاسخ بده https://www.systemgroup.net/knowledge-network/what-is-supply-chain-management/
 
 ### قوانین رفتاری تو:
 1. همیشه مودب، حرفه‌ای و دوستانه صحبت کن.
@@ -26,18 +27,21 @@ const SYSTEM_PROMPT = `
 کمک به کاربر برای درک بهتر محصول و تشویق او به ثبت درخواست دمو یا مشاوره.
 `;
 
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic'; // خیلی مهم: جلوگیری از کش و بافر شدن
+
 export async function POST(req: NextRequest) {
   try {
     const { messages } = await req.json();
 
     if (!messages || !Array.isArray(messages)) {
-      return NextResponse.json(
-        { error: 'پیام‌ها معتبر نیستند' },
-        { status: 400 }
-      );
+      return new Response(JSON.stringify({ error: 'پیام‌ها معتبر نیستند' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
-    const response = await fetch('https://api.gapgpt.app/v1/chat/completions', {
+    const upstream = await fetch('https://api.gapgpt.app/v1/chat/completions', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${process.env.GAPGPT_API_KEY}`,
@@ -46,36 +50,59 @@ export async function POST(req: NextRequest) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: 'deepseek-v4-flash',
+        model: 'gpt-4.1-nano',
         messages: [
-          {
-            role: 'system',
-            content: SYSTEM_PROMPT,
-          },
+          { role: 'system', content: SYSTEM_PROMPT },
           ...messages,
         ],
+        stream: true,
       }),
     });
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('OpenRouter Error:', errorData);
-      return NextResponse.json(
-        { error: 'خطا در ارتباط با هوش مصنوعی' },
-        { status: 500 }
-      );
+    if (!upstream.ok || !upstream.body) {
+      const errorText = await upstream.text();
+      console.error('GapGPT Error:', errorText);
+      return new Response(JSON.stringify({ error: 'خطا در ارتباط با هوش مصنوعی' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json' },
+      });
     }
 
-    const data = await response.json();
-    console.log('%c⧭', 'color: #00bf00', data);
-    const reply = data.choices?.[0]?.message?.content || 'پاسخی دریافت نشد.';
+    // تبدیل استریم upstream به استریم خودمان با flush فوری
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = upstream.body!.getReader();
+        const decoder = new TextDecoder();
 
-    return NextResponse.json({ reply });
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            // هر تکه را بلافاصله به کلاینت می‌فرستیم
+            controller.enqueue(value);
+          }
+        } catch (err) {
+          controller.error(err);
+        } finally {
+          controller.close();
+        }
+      },
+    });
+
+    return new Response(stream, {
+      headers: {
+        'Content-Type': 'text/event-stream; charset=utf-8',
+        'Cache-Control': 'no-cache, no-transform',
+        Connection: 'keep-alive',
+        'X-Accel-Buffering': 'no', // برای nginx / vercel
+      },
+    });
   } catch (error) {
     console.error('Chat API Error:', error);
-    return NextResponse.json(
-      { error: 'خطای داخلی سرور' },
-      { status: 500 }
-    );
+    return new Response(JSON.stringify({ error: 'خطای داخلی سرور' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' },
+    });
   }
 }
