@@ -1,0 +1,104 @@
+{
+    "brand": {
+      "name": "ریحان",
+      "logo": "/logo.webp",
+      "tagline": "Smart ERP Solution",
+      "description": "تجربه‌ای مدرن در مدیریت هوشمند منابع سازمانی. ما با تکیه بر دانش فنی و نگاهی نوآورانه، مسیر رشد و بهره‌وری کسب‌وکار شما را هموار می‌کنیم.",
+      "badge": "ERP هوشمند"
+    },
+    "quickLinks": [
+      { "label": "درباره ما", "href": "/about", "icon": "Info" },
+      { "label": "خدمات و ماژول‌ها", "href": "/products", "icon": "Package" },
+      { "label": "بلاگ آموزشی", "href": "/blog", "icon": "FileText" },
+      { "label": "ویترین سامانه‌ها", "href": "/portfolio", "icon": "LayoutDashboard" },
+      { "label": "تماس با تیم فروش", "href": "/contact", "icon": "Phone" },
+      { "label": "پشتیبانی", "href": "/support", "icon": "Headphones" },
+      { "label": "مستندات API", "href": "/docs", "icon": "BookOpen" }
+    ],
+    "socialMedia": [
+      { 
+        "name": "لینکدین", 
+        "href": "https://linkedin.com/company/reyhan", 
+        "icon": "Linkedin", 
+        "color": "blue-600" 
+      },
+      { 
+        "name": "اینستاگرام", 
+        "href": "https://instagram.com/reyhan_erp", 
+        "icon": "Instagram", 
+        "color": "pink-600" 
+      },
+      { 
+        "name": "تلگرام", 
+        "href": "https://t.me/reyhan_erp", 
+        "icon": "Send", 
+        "color": "blue-400" 
+      },
+      { 
+        "name": "یوتیوب", 
+        "href": "https://youtube.com/@reyhan_erp", 
+        "icon": "Youtube", 
+        "color": "red-600" 
+      },
+      { 
+        "name": "توییتر", 
+        "href": "https://twitter.com/reyhan_erp", 
+        "icon": "Twitter", 
+        "color": "sky-500" 
+      }
+    ],
+    "contactInfo": {
+      "address": {
+        "label": "آدرس",
+        "value": "سمنان، بلوار دانشگاه، پارک علم و فناوری دانشگاه سمنان",
+        "icon": "MapPin"
+      },
+      "phone": {
+        "label": "تلفن",
+        "value": "۰۲۳-۳۳۶۰۵۰۰۰",
+        "icon": "Phone",
+        "description": "ساعات پاسخگویی: ۸ الی ۱۶"
+      },
+      "email": {
+        "label": "ایمیل",
+        "value": "info@reyhanerp.com",
+        "icon": "Mail",
+        "description": "ایمیل سازمانی"
+      },
+      "workingHours": {
+        "label": "ساعات کاری",
+        "value": "شنبه تا چهارشنبه: ۸:۰۰ - ۱۶:۰۰",
+        "icon": "Clock",
+        "description": "پنجشنبه‌ها: ۸:۰۰ - ۱۲:۰۰"
+      }
+    },
+    "footer": {
+      "copyright": "تمامی حقوق مادی و معنوی محفوظ است.",
+      "links": [
+        { "label": "قوانین و مقررات", "href": "/terms" },
+        { "label": "حریم خصوصی", "href": "/privacy" },
+        { "label": "پرسش‌های متداول", "href": "/faq" }
+      ],
+      "badge": {
+        "text": "ساخت ایران",
+        "icon": "Flag"
+      }
+    },
+    "newsletter": {
+      "title": "خبرنامه",
+      "description": "برای دریافت آخرین اخبار و مقالات، ایمیل خود را وارد کنید",
+      "placeholder": "ایمیل خود را وارد کنید",
+      "button": "عضویت",
+      "successMessage": "با موفقیت عضو شدید!",
+      "errorMessage": "خطا در عضویت، لطفاً دوباره تلاش کنید"
+    },
+    "theme": {
+      "background": "bg-[#020617]",
+      "border": "border-white/5",
+      "gradient": "from-blue-600 to-indigo-600",
+      "textPrimary": "text-white",
+      "textSecondary": "text-slate-400",
+      "hoverBg": "hover:bg-blue-600",
+      "hoverBorder": "hover:border-blue-500"
+    }
+  }

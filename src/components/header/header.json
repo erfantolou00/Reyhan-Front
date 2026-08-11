@@ -1,0 +1,147 @@
+{
+    "logo": {
+      "text": "ریحان",
+      "image": "/logo.webp",
+      "alt": "Reyhan Logo"
+    },
+    "navigation": [
+      {
+        "id": "home",
+        "name": "خانه",
+        "href": "/",
+        "icon": "Home",
+        "hasDropdown": false
+      },
+      {
+        "id": "blog",
+        "name": "وبلاگ",
+        "href": "/blog",
+        "icon": "FileText",
+        "hasDropdown": false
+      },
+      {
+        "id": "portfolio",
+        "name": "سامانه‌ها",
+        "href": "/portfolio",
+        "icon": "LayoutDashboard",
+        "hasDropdown": true
+      },
+      {
+        "id": "about",
+        "name": "درباره ما",
+        "href": "/about",
+        "icon": "Info",
+        "hasDropdown": false
+      },
+      {
+        "id": "contact",
+        "name": "تماس با ما",
+        "href": "/contact",
+        "icon": "Phone",
+        "hasDropdown": false
+      },
+      {
+        "id": "catalog",
+        "name": "کاتالوگ",
+        "href": "/reyhan-catalog.pdf",
+        "icon": "Download",
+        "hasDropdown": false,
+        "isDownload": true
+      }
+    ],
+    "portfolioSubMenu": [
+      {
+        "id": 1,
+        "name": "منابع انسانی (HRM)",
+        "icon": "Users",
+        "description": "مدیریت جامع منابع انسانی"
+      },
+      {
+        "id": 2,
+        "name": "مدیریت مالی و حسابداری",
+        "icon": "DollarSign",
+        "description": "مدیریت مالی و حسابداری سازمان"
+      },
+      {
+        "id": 3,
+        "name": "مدیریت زنجیره تأمین (SCM)",
+        "icon": "Truck",
+        "description": "مدیریت زنجیره تأمین"
+      },
+      {
+        "id": 4,
+        "name": "انبار و کالا",
+        "icon": "Package",
+        "description": "مدیریت انبار و کالا"
+      },
+      {
+        "id": 5,
+        "name": "پروژه و وظایف",
+        "icon": "Calendar",
+        "description": "مدیریت پروژه و وظایف"
+      },
+      {
+        "id": 6,
+        "name": "اتوماسیون اداری",
+        "icon": "FolderOpen",
+        "description": "اتوماسیون اداری"
+      },
+      {
+        "id": 7,
+        "name": "فروش و مشتریان (CRM)",
+        "icon": "TrendingUp",
+        "description": "مدیریت فروش و مشتریان"
+      },
+      {
+        "id": 8,
+        "name": "مدیریت تولید و کارخانه",
+        "icon": "Factory",
+        "description": "مدیریت تولید و کارخانه"
+      },
+      {
+        "id": 9,
+        "name": "تعمیرات و نگهداری (PM)",
+        "icon": "Wrench",
+        "description": "تعمیرات و نگهداری"
+      },
+      {
+        "id": 10,
+        "name": "گزارشات مدیریتی (BI)",
+        "icon": "BarChart3",
+        "description": "گزارشات مدیریتی"
+      }
+    ],
+    "auth": {
+      "loginText": "ورود / ثبت‌نام",
+      "profileText": "ویرایش پروفایل",
+      "logoutText": "خروج از حساب",
+      "dropdownTitle": "حساب کاربری"
+    },
+    "styles": {
+      "header": {
+        "scrolled": "bg-white/80 backdrop-blur-lg shadow-lg",
+        "default": "bg-gradient-to-r from-primary/10 via-secondary/10 to-primary/10"
+      },
+      "button": {
+        "primary": "rounded-xl bg-gradient-to-r from-primary to-primary-dark px-5 py-2.5 text-sm font-medium text-white shadow-md hover:opacity-90 transition",
+        "secondary": "rounded-xl bg-gradient-to-r from-primary/10 to-secondary/10 px-4 py-2 text-sm font-medium text-gray-800 hover:from-primary/20 hover:to-secondary/20 transition"
+      }
+    },
+    "animations": {
+      "header": {
+        "initial": { "y": -100 },
+        "animate": { "y": 0 },
+        "transition": { "type": "spring", "stiffness": 100, "damping": 20 }
+      },
+      "logo": {
+        "whileHover": { "scale": 1.05, "rotateY": 5 },
+        "transition": { "type": "spring", "stiffness": 400, "damping": 10 }
+      },
+      "dropdown": {
+        "initial": { "opacity": 0, "y": 15, "scale": 0.95 },
+        "animate": { "opacity": 1, "y": 0, "scale": 1 },
+        "exit": { "opacity": 0, "y": 15, "scale": 0.95 },
+        "transition": { "duration": 0.2 }
+      }
+    }
+  }

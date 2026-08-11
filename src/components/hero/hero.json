@@ -1,0 +1,190 @@
+{
+    "badge": {
+      "text": "راهکار دیجیتال سازمانی",
+      "icon": "Sparkles"
+    },
+    "title": {
+      "main": "مدیریت هوشمند،",
+      "highlight": "برای رشد سریع‌تر",
+      "gradient": "from-primary-dark to-slate-900"
+    },
+    "typewriter": {
+      "texts": [
+        "راهکار یکپارچه مدیریت سازمان",
+        "سفارشی‌سازی‌شده برای نیازهای شما",
+        "سریع، دقیق، قابل اعتماد"
+      ],
+      "speed": 80,
+      "delay": 2000
+    },
+    "description": "ریحان، تمام فرایندهای سازمانی شما را در یک تجربه روان، شفاف و حرفه‌ای یکپارچه می‌کند.",
+    "highlights": [
+      "اتوماسیون فرآیندها",
+      "داشبورد تحلیلی",
+      "پشتیبانی تخصصی",
+      "امنیت بالا",
+      "مقیاس‌پذیری"
+    ],
+    "stats": [
+      { "value": "۵+", "label": "سازمان فعال" },
+      { "value": "۲۴/۷", "label": "پشتیبانی" },
+      { "value": "۹۸٪", "label": "رضایت مشتری" },
+      { "value": "۱۰۰+", "label": "ماژول فعال" }
+    ],
+    "buttons": {
+      "primary": {
+        "text": "درخواست مشاوره",
+        "href": "/contact",
+        "variant": "primary"
+      },
+      "secondary": {
+        "text": "مشاهده دمو",
+        "variant": "secondary",
+        "action": "demo"
+      },
+      "tertiary": {
+        "text": "مشاهده محصولات",
+        "href": "/portfolio",
+        "variant": "outline"
+      }
+    },
+    "background": {
+      "image": "/bgHeroHappy.webp",
+      "overlays": {
+        "gradient": "bg-[linear-gradient(110deg,rgba(255,255,255,0.08)_0%,rgba(255,255,255,0.18)_50%,rgba(0,0,0,0.22)_100%)]",
+        "radial": "bg-[radial-gradient(circle_at_10%_20%,rgba(37,99,235,0.52),transparent_40%)]"
+      }
+    },
+    "animations": {
+      "fadeIn": {
+        "initial": { "opacity": 0, "y": 20 },
+        "animate": { "opacity": 1, "y": 0 },
+        "transition": { "duration": 0.6 }
+      },
+      "stagger": {
+        "staggerChildren": 0.1
+      }
+    },
+    "trustSignals": {
+      "show": true,
+      "logos": [
+        { "src": "/images/trust/1.svg", "alt": "شرکت اول" },
+        { "src": "/images/trust/2.svg", "alt": "شرکت دوم" },
+        { "src": "/images/trust/3.svg", "alt": "شرکت سوم" },
+        { "src": "/images/trust/4.svg", "alt": "شرکت چهارم" }
+      ]
+    },
+    "cards": {
+      "autoPlay": true,
+      "interval": 10000,
+      "transition": {
+        "duration": 0.85,
+        "stiffness": 110,
+        "damping": 17
+      },
+      "items": [
+        {
+          "id": 1,
+          "eyebrow": "پلتفرم سازمانی مدرن",
+          "title": "عملکردی شفاف و سریع",
+          "footerLabel": "عملکرد لحظه‌ای",
+          "footerTitle": "یکپارچه، مطمئن و آماده برای رشد",
+          "theme": {
+            "from": "from-blue-500/15",
+            "to": "to-indigo-500/10",
+            "badgeBg": "bg-blue-50"
+          },
+          "stats": [
+            { "label": "کاربران فعال", "value": "12.4K" },
+            { "label": "درخواست موفق", "value": "98.7%" },
+            { "label": "زمان پاسخ", "value": "0.8s" }
+          ]
+        },
+        {
+          "id": 2,
+          "eyebrow": "زیرساخت داده هوشمند",
+          "title": "تصمیم‌گیری دقیق‌تر در لحظه",
+          "footerLabel": "تحلیل داده",
+          "footerTitle": "بینش سریع برای تیم‌های در حال توسعه",
+          "theme": {
+            "from": "from-emerald-500/15",
+            "to": "to-teal-500/10",
+            "badgeBg": "bg-emerald-50"
+          },
+          "stats": [
+            { "label": "گزارش روزانه", "value": "1.2K" },
+            { "label": "دقت تحلیل", "value": "96.3%" },
+            { "label": "به‌روزرسانی", "value": "لحظه‌ای" }
+          ]
+        },
+        {
+          "id": 3,
+          "eyebrow": "اتوماسیون عملیاتی",
+          "title": "مدیریت روان و بدون اصطکاک",
+          "footerLabel": "فرآیندها",
+          "footerTitle": "کاهش خطا و افزایش سرعت اجرا",
+          "theme": {
+            "from": "from-amber-500/15",
+            "to": "to-orange-500/10",
+            "badgeBg": "bg-amber-50"
+          },
+          "stats": [
+            { "label": "تسک تکمیل‌شده", "value": "8.9K" },
+            { "label": "کاهش خطا", "value": "43%" },
+            { "label": "بهره‌وری", "value": "+28%" }
+          ]
+        },
+        {
+          "id": 4,
+          "eyebrow": "رشد‌پذیری سازمانی",
+          "title": "آماده برای مقیاس‌های بزرگ‌تر",
+          "footerLabel": "مقیاس‌پذیری",
+          "footerTitle": "پایدار، سریع و مناسب توسعه بلندمدت",
+          "theme": {
+            "from": "from-rose-500/15",
+            "to": "to-purple-500/10",
+            "badgeBg": "bg-rose-50"
+          },
+          "stats": [
+            { "label": "تیم‌های فعال", "value": "320+" },
+            { "label": "آپ‌تایم", "value": "99.9%" },
+            { "label": "رشد ماهانه", "value": "18%" }
+          ]
+        },
+        {
+          "id": 5,
+          "eyebrow": "امنیت و حریم خصوصی",
+          "title": "اطمینان در هر تراکنش",
+          "footerLabel": "امنیت سایبری",
+          "footerTitle": "محافظت از داده‌های شما در بالاترین سطح",
+          "theme": {
+            "from": "from-violet-500/15",
+            "to": "to-purple-500/10",
+            "badgeBg": "bg-violet-50"
+          },
+          "stats": [
+            { "label": "رمزنگاری", "value": "AES-256" },
+            { "label": "امتیاز امنیت", "value": "A+" },
+            { "label": "پشتیبان‌گیری", "value": "Real-time" }
+          ]
+        },
+        {
+          "id": 6,
+          "eyebrow": "یکپارچگی کامل",
+          "title": "اتصال همه اجزای سازمان",
+          "footerLabel": "API یکپارچه",
+          "footerTitle": "ارتباط روان بین تمام سامانه‌های شما",
+          "theme": {
+            "from": "from-cyan-500/15",
+            "to": "to-blue-500/10",
+            "badgeBg": "bg-cyan-50"
+          },
+          "stats": [
+            { "label": "API متصل", "value": "50+" },
+            { "label": "سرعت پاسخ", "value": "<100ms" },
+            { "label": "قابلیت اطمینان", "value": "99.95%" }
+          ]
+        }
+      ]
+    }
+  }

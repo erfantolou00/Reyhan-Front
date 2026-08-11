@@ -1,0 +1,80 @@
+{
+  "title": "اطلاعات تماس",
+  "subtitle": "ما مشتاق شنیدن نظرات شما هستیم",
+  "address": {
+    "label": "آدرس",
+    "value": "پارک علم و فناوری دانشگاه سمنان",
+    "icon": "MapPin"
+  },
+  "phone": {
+    "label": "تلفن",
+    "value": "۰۲۳-۳۳۶۰۵۰۰۰",
+    "icon": "Phone"
+  },
+  "email": {
+    "label": "ایمیل",
+    "value": "sdkomeylian@gmail.com",
+    "icon": "Mail"
+  },
+  "workingHours": {
+    "label": "ساعات کاری",
+    "value": [
+      "شنبه تا چهارشنبه: ۹ صبح تا ۵ عصر",
+      "پنجشنبه: ۹ صبح تا ۱ ظهر"
+    ],
+    "icon": "Clock"
+  },
+  "mapImage": "/images/contact/1.webp",
+  "socialMedia": [
+    {
+      "name": "لینکدین",
+      "url": "https://linkedin.com",
+      "icon": "Linkedin"
+    },
+    {
+      "name": "اینستاگرام",
+      "url": "https://instagram.com",
+      "icon": "Instagram"
+    },
+    {
+      "name": "تلگرام",
+      "url": "https://t.me",
+      "icon": "Send"
+    }
+  ],
+  "form": {
+    "title": "ارسال پیام",
+    "description": "با ما در ارتباط باشید، تیم ما در اسرع وقت به شما پاسخ خواهد داد",
+    "fields": {
+      "full_name": {
+        "label": "نام و نام خانوادگی",
+        "placeholder": "نام کامل خود را وارد کنید",
+        "required": true
+      },
+      "email": {
+        "label": "ایمیل",
+        "placeholder": "ایمیل خود را وارد کنید",
+        "required": true
+      },
+      "phone": {
+        "label": "شماره تماس",
+        "placeholder": "شماره تماس خود را وارد کنید",
+        "required": true
+      },
+      "subject": {
+        "label": "موضوع",
+        "placeholder": "موضوع پیام خود را انتخاب کنید",
+        "required": false
+      },
+      "message": {
+        "label": "پیام شما",
+        "placeholder": "پیام خود را بنویسید...",
+        "required": true
+      }
+    },
+    "submitButton": "ارسال پیام",
+    "loadingButton": "در حال ارسال..."
+  },
+  "successMessage": "پیام شما با موفقیت ارسال شد",
+  "errorMessage": "خطا در ارسال پیام"
+}

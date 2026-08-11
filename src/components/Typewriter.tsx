@@ -1,86 +1,55 @@
-import React, { useState, useEffect } from "react";
+'use client';
 
-const Typewriter = ({
-  texts,
-  typingSpeed = 50,
-  deletingSpeed = 25,
-  delay = 1000,
-  lastTextDelay = 6000,
-}: {
+import { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+
+interface TypewriterProps {
   texts: string[];
-  typingSpeed?: number;
-  deletingSpeed?: number;
+  speed?: number;
   delay?: number;
-  lastTextDelay?: number;
-}) => {
-  const [currentText, setCurrentText] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
+  className?: string;
+}
+
+export default function Typewriter({ 
+  texts, 
+  speed = 80, 
+  delay = 2000,
+  className = ""
+}: TypewriterProps) {
+  const [currentTextIndex, setCurrentTextIndex] = useState(0);
+  const [currentText, setCurrentText] = useState('');
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
-
-  // Ensure the first client render matches the server by delaying dynamic typing until mount
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
 
   useEffect(() => {
-    if (!isMounted) return; // Avoid SSR/CSR mismatch by not typing before mount
-
-    let timeout: NodeJS.Timeout;
-
-    if (!isPaused) {
-      if (isDeleting) {
-        // Deleting text
-        timeout = setTimeout(() => {
-          setCurrentText((prev) => prev.slice(0, -1));
-          if (currentText === "") {
-            setIsDeleting(false);
-            setCurrentIndex((prevIndex) => (prevIndex + 1) % texts.length);
-            setIsPaused(true);
-            setTimeout(() => setIsPaused(false), delay);
-          }
-        }, deletingSpeed);
+    const timeout = setTimeout(() => {
+      const fullText = texts[currentTextIndex];
+      
+      if (!isDeleting) {
+        setCurrentText(fullText.substring(0, currentText.length + 1));
+        if (currentText === fullText) {
+          setTimeout(() => setIsDeleting(true), delay);
+        }
       } else {
-        // Typing text
-        timeout = setTimeout(() => {
-          const currentWord = texts[currentIndex];
-          setCurrentText((prev) => currentWord.slice(0, prev.length + 1));
-          if (currentText === currentWord) {
-            setIsPaused(true);
-            const currentDelay =
-              currentIndex === texts.length - 1 ? lastTextDelay : delay;
-            setTimeout(() => {
-              setIsPaused(false);
-              setIsDeleting(true);
-            }, currentDelay);
-          }
-        }, typingSpeed);
+        setCurrentText(fullText.substring(0, currentText.length - 1));
+        if (currentText === '') {
+          setIsDeleting(false);
+          setCurrentTextIndex((prev) => (prev + 1) % texts.length);
+        }
       }
-    }
+    }, isDeleting ? speed / 2 : speed);
 
     return () => clearTimeout(timeout);
-  }, [
-    currentText,
-    currentIndex,
-    isDeleting,
-    isPaused,
-    texts,
-    typingSpeed,
-    deletingSpeed,
-    delay,
-    lastTextDelay,
-    isMounted,
-  ]);
+  }, [currentText, currentTextIndex, isDeleting, texts, speed, delay]);
 
   return (
-    <span
-      suppressHydrationWarning
-      className={`${currentIndex === texts.length - 1 ? "text-primary" : ""}`}
-    >
-      {isMounted ? currentText : ""}
+    <span className={className}>
+      {currentText}
+      <motion.span
+        initial={{ opacity: 1 }}
+        animate={{ opacity: [1, 0, 1] }}
+        transition={{ duration: 0.8, repeat: Infinity }}
+        className="inline-block w-1 h-8 bg-primary ml-1"
+      />
     </span>
   );
-};
-
-export default Typewriter;
+}

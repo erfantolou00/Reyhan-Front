@@ -1,6 +1,5 @@
 "use client";
 import { SpeedInsights } from '@vercel/speed-insights/next';
-import Hero from '@/components/Hero';
 import BenefitsSection from '@/components/BenefitsSection';
 import SectionDivider from '@/components/SectionDivider';
 import ProductShowcase from '@/components/ProductShowcase';
@@ -12,6 +11,7 @@ import { pageSections } from '@/lib/sections';
 
 import { getGatewayUrl } from '@/helper/FindOut_WhereWeAre'
 import { useEffect, useState } from 'react';
+import Hero from '@/components/hero/Hero';
 export default function Home() {
   
   const [gatewayUrl, setGatewayUrl] = useState<string | null>(null);

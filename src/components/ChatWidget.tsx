@@ -1,10 +1,25 @@
 'use client';
 
-import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Bot, User, Sparkles, StopCircle } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type KeyboardEvent,
+} from 'react';
+import {
+  MessageCircle,
+  X,
+  Send,
+  Bot,
+  User,
+  Sparkles,
+  StopCircle,
+} from 'lucide-react';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type Message = {
+  id: string;
   role: 'user' | 'assistant';
   content: string;
 };
@@ -22,141 +37,352 @@ const PROMPT_BUBBLES = [
   'نیازسنجی رایگان بگیرید',
 ];
 
+const createMessageId = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+
+  return `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+};
+
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    {
-      role: 'assistant',
-      content:
-        'سلام! من مشاور هوشمند ریحان هستم. می‌تونم در مورد ماژول‌ها، قابلیت‌ها و مناسب بودن سیستم برای سازمان شما راهنمایی کنم.',
-    },
-  ]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [bubbleIndex, setBubbleIndex] = useState(0);
   const [showBubble, setShowBubble] = useState(true);
 
+  const [messages, setMessages] = useState<Message[]>([
+    {
+      id: createMessageId(),
+      role: 'assistant',
+      content:
+        'سلام! من مشاور هوشمند ریحان هستم. می‌تونم در مورد ماژول‌ها، قابلیت‌ها و مناسب بودن سیستم برای سازمان شما راهنمایی کنم.',
+    },
+  ]);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+
+  /**
+   * صف متن دریافت‌شده از API که هنوز در UI نمایش داده نشده است.
+   * مدل ممکن است متن را یک‌باره یا با سرعت نامنظم بفرستد؛
+   * این صف آن را با سرعت یکنواخت نمایش می‌دهد.
+   */
+  const typingQueueRef = useRef('');
+  const typingFrameRef = useRef<number | null>(null);
+  const lastFrameTimeRef = useRef<number>(0);
+  const streamFinishedRef = useRef(false);
+  const activeAssistantIdRef = useRef<string | null>(null);
+
+  const updateAssistantMessage = useCallback(
+    (messageId: string, text: string) => {
+      setMessages((prev) =>
+        prev.map((message) =>
+          message.id === messageId
+            ? { ...message, content: text }
+            : message,
+        ),
+      );
+    },
+    [],
+  );
+
+  /**
+   * اجرای نرم انیمیشن تایپ.
+   *
+   * سرعت پایه حدود 50 کاراکتر در ثانیه است.
+   * اگر صف طولانی شود، کمی سریع‌تر می‌شود تا پاسخ عقب نماند.
+   */
+  const processTypingQueue = useCallback(
+    (timestamp: number) => {
+      const assistantId = activeAssistantIdRef.current;
+
+      if (!assistantId) {
+        typingFrameRef.current = null;
+        return;
+      }
+
+      if (!lastFrameTimeRef.current) {
+        lastFrameTimeRef.current = timestamp;
+      }
+
+      const elapsed = timestamp - lastFrameTimeRef.current;
+
+      // هر 18ms یک رندر کنترل‌شده؛ برای روان بودن و جلوگیری از رندر اضافی
+      if (elapsed >= 18 && typingQueueRef.current.length > 0) {
+        const queueLength = typingQueueRef.current.length;
+
+        /**
+         * در وضعیت معمول، تقریباً هر 18ms یک کاراکتر نشان داده می‌شود.
+         * در صورت طولانی شدن صف، سرعت بالاتر می‌رود تا UI عقب نیفتد.
+         */
+        const multiplier =
+          queueLength > 250 ? 7 : queueLength > 120 ? 4 : queueLength > 50 ? 2 : 1;
+
+        const charsToRender = Math.min(
+          queueLength,
+          Math.max(1, Math.floor((elapsed / 18) * multiplier)),
+        );
+
+        const nextPart = typingQueueRef.current.slice(0, charsToRender);
+        typingQueueRef.current = typingQueueRef.current.slice(charsToRender);
+
+        setMessages((prev) =>
+          prev.map((message) => {
+            if (message.id !== assistantId) return message;
+
+            return {
+              ...message,
+              content: message.content + nextPart,
+            };
+          }),
+        );
+
+        lastFrameTimeRef.current = timestamp;
+      }
+
+      if (typingQueueRef.current.length > 0) {
+        typingFrameRef.current = requestAnimationFrame(processTypingQueue);
+        return;
+      }
+
+      typingFrameRef.current = null;
+      lastFrameTimeRef.current = 0;
+
+      // وقتی استریم تمام شده و تمام صف هم نمایش داده شد، لودینگ قطع می‌شود.
+      if (streamFinishedRef.current) {
+        setIsLoading(false);
+        streamFinishedRef.current = false;
+        activeAssistantIdRef.current = null;
+      }
+    },
+    [],
+  );
+
+  const startTyping = useCallback(() => {
+    if (typingFrameRef.current !== null) return;
+
+    lastFrameTimeRef.current = 0;
+    typingFrameRef.current = requestAnimationFrame(processTypingQueue);
+  }, [processTypingQueue]);
 
   // چرخش پیام‌های تشویقی
   useEffect(() => {
     if (isOpen) return;
 
-    const interval = setInterval(() => {
+    const interval = window.setInterval(() => {
       setShowBubble(false);
-      setTimeout(() => {
+
+      window.setTimeout(() => {
         setBubbleIndex((prev) => (prev + 1) % PROMPT_BUBBLES.length);
         setShowBubble(true);
-      }, 300);
+      }, 260);
     }, 4000);
 
-    return () => clearInterval(interval);
+    return () => window.clearInterval(interval);
   }, [isOpen]);
 
-  // اسکرول خودکار
+  /**
+   * حین تایپ از smooth استفاده نمی‌کنیم، چون برای هر کاراکتر
+   * یک انیمیشن اسکرول جدید ساخته و نتیجه را لرزان می‌کند.
+   */
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({
+      behavior: isLoading ? 'auto' : 'smooth',
+      block: 'end',
+    });
   }, [messages, isLoading]);
 
-  const handleStopStreaming = () => {
-    if (abortControllerRef.current) {
-      abortControllerRef.current.abort();
-      setIsLoading(false);
+  useEffect(() => {
+    return () => {
+      abortControllerRef.current?.abort();
+
+      if (typingFrameRef.current !== null) {
+        cancelAnimationFrame(typingFrameRef.current);
+      }
+    };
+  }, []);
+
+  const handleStopStreaming = useCallback(() => {
+    abortControllerRef.current?.abort();
+    abortControllerRef.current = null;
+
+    // متن‌هایی که رسیده‌اند اما هنوز دیده نشده‌اند را نمایش نمی‌دهیم.
+    typingQueueRef.current = '';
+    streamFinishedRef.current = false;
+    activeAssistantIdRef.current = null;
+
+    if (typingFrameRef.current !== null) {
+      cancelAnimationFrame(typingFrameRef.current);
+      typingFrameRef.current = null;
     }
-  };
+
+    setIsLoading(false);
+  }, []);
+
+  /**
+   * پردازش یک event کامل SSE.
+   * هر event ممکن است چند خط داشته باشد؛ فقط data: ها را می‌خوانیم.
+   */
+  const processSSEEvent = useCallback(
+    (eventBlock: string) => {
+      const data = eventBlock
+        .split('\n')
+        .filter((line) => line.startsWith('data:'))
+        .map((line) => line.slice(5).trimStart())
+        .join('\n');
+
+      if (!data || data === '[DONE]') return;
+
+      try {
+        const parsed = JSON.parse(data);
+        const delta = parsed.choices?.[0]?.delta?.content;
+
+        if (typeof delta === 'string' && delta.length > 0) {
+          typingQueueRef.current += delta;
+          startTyping();
+        }
+      } catch {
+        // event ناقص یا غیر JSON را نادیده می‌گیریم.
+      }
+    },
+    [startTyping],
+  );
 
   const sendMessage = async (text?: string) => {
     const content = (text ?? input).trim();
+
     if (!content || isLoading) return;
-  
-    const userMessage: Message = { role: 'user', content };
-    const newMessages = [...messages, userMessage];
-  
-    // پیام کاربر + پیام خالی دستیار
-    setMessages([...newMessages, { role: 'assistant', content: '' }]);
+
+    const userMessage: Message = {
+      id: createMessageId(),
+      role: 'user',
+      content,
+    };
+
+    const assistantMessage: Message = {
+      id: createMessageId(),
+      role: 'assistant',
+      content: '',
+    };
+
+    const conversationMessages = [
+      ...messages.map(({ role, content: messageContent }) => ({
+        role,
+        content: messageContent,
+      })),
+      {
+        role: userMessage.role,
+        content: userMessage.content,
+      },
+    ];
+
+    setMessages((prev) => [...prev, userMessage, assistantMessage]);
     setInput('');
     setIsLoading(true);
-  
+
+    typingQueueRef.current = '';
+    streamFinishedRef.current = false;
+    activeAssistantIdRef.current = assistantMessage.id;
+
     const abortController = new AbortController();
     abortControllerRef.current = abortController;
-  
+
     try {
-      const res = await fetch('/api/chat', {
+      const response = await fetch('/api/chat', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages }),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          messages: conversationMessages,
+        }),
         signal: abortController.signal,
       });
-  
-      if (!res.ok) throw new Error('خطا در ارتباط با سرور');
-      if (!res.body) throw new Error('بدنه پاسخ یافت نشد');
-  
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let assistantReply = '';
+
+      if (!response.ok) {
+        throw new Error('خطا در ارتباط با سرور');
+      }
+
+      if (!response.body) {
+        throw new Error('بدنه پاسخ یافت نشد');
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder('utf-8');
+
       let buffer = '';
-  
-      while (true) {
-        const { value, done } = await reader.read();
-        if (done) break;
-  
-        // هر تکه را بلافاصله دیکد می‌کنیم
-        buffer += decoder.decode(value, { stream: true });
-  
-        // خطوط کامل را جدا می‌کنیم
-        const lines = buffer.split('\n');
-        buffer = lines.pop() || ''; // باقی‌مانده ناقص را نگه می‌داریم
-  
-        for (const line of lines) {
-          const trimmed = line.trim();
-          if (!trimmed.startsWith('data: ')) continue;
-  
-          const dataStr = trimmed.slice(6);
-          if (dataStr === '[DONE]') continue;
-  
-          try {
-            const parsed = JSON.parse(dataStr);
-            const delta = parsed.choices?.[0]?.delta?.content;
-            
-            if (delta) {
-              assistantReply += delta;
-  
-              // آپدیت فوری UI (بدون debounce)
-              setMessages((prev) => {
-                const updated = [...prev];
-                updated[updated.length - 1] = {
-                  role: 'assistant',
-                  content: assistantReply,
-                };
-                return updated;
-              });
-            }
-          } catch {
-            // نادیده گرفتن خطاهای پارس موقت
+
+      const consumeBuffer = (force = false) => {
+        // eventهای SSE با یک خط خالی از هم جدا می‌شوند.
+        const events = buffer.split(/\r?\n\r?\n/);
+
+        if (!force) {
+          buffer = events.pop() ?? '';
+        } else {
+          buffer = '';
+        }
+
+        for (const event of events) {
+          if (event.trim()) {
+            processSSEEvent(event.replace(/\r/g, ''));
           }
         }
+      };
+
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) break;
+
+        buffer += decoder.decode(value, { stream: true });
+        consumeBuffer();
       }
-    } catch (err: any) {
-      if (err.name !== 'AbortError') {
-        setMessages((prev) => {
-          const updated = [...prev];
-          updated[updated.length - 1] = {
-            role: 'assistant',
-            content: 'متأسفانه مشکلی در برقراری ارتباط پیش آمد. مجدداً تلاش کنید.',
-          };
-          return updated;
-        });
+
+      // تخلیه‌ی باقی‌مانده‌ی decoder و buffer
+      buffer += decoder.decode();
+      consumeBuffer(true);
+
+      streamFinishedRef.current = true;
+
+      /**
+       * اگر هیچ متنی در صف نمانده بود، processTypingQueue اجرا نمی‌شود.
+       * پس اینجا loading را مستقیم پایان می‌دهیم.
+       */
+      if (typingQueueRef.current.length === 0) {
+        setIsLoading(false);
+        activeAssistantIdRef.current = null;
+        streamFinishedRef.current = false;
+      } else {
+        startTyping();
       }
-    } finally {
+    } catch (error: unknown) {
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        return;
+      }
+
+      if (activeAssistantIdRef.current === assistantMessage.id) {
+        updateAssistantMessage(
+          assistantMessage.id,
+          'متأسفانه مشکلی در برقراری ارتباط پیش آمد. لطفاً دوباره تلاش کنید.',
+        );
+      }
+
       setIsLoading(false);
-      abortControllerRef.current = null;
+      streamFinishedRef.current = false;
+      activeAssistantIdRef.current = null;
+    } finally {
+      if (abortControllerRef.current === abortController) {
+        abortControllerRef.current = null;
+      }
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
       sendMessage();
     }
   };
@@ -170,15 +396,19 @@ export default function ChatWidget() {
             initial={{ opacity: 0, y: 15, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 10, scale: 0.95 }}
-            transition={{ duration: 0.2 }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
             className="fixed bottom-24 left-6 z-50 max-w-[220px]"
           >
-            <div className="relative rounded-2xl bg-white px-4 py-3 text-sm font-medium text-[var(--dark)] shadow-lg border border-gray-100">
+            <div className="relative rounded-2xl border border-gray-100 bg-white px-4 py-3 text-sm font-medium text-[var(--dark)] shadow-lg">
               <div className="flex items-start gap-2">
-                <Sparkles size={16} className="mt-0.5 shrink-0 text-[var(--primary)]" />
+                <Sparkles
+                  size={16}
+                  className="mt-0.5 shrink-0 text-[var(--primary)]"
+                />
                 <span>{PROMPT_BUBBLES[bubbleIndex]}</span>
               </div>
-              <div className="absolute -bottom-1.5 left-6 h-3 w-3 rotate-45 bg-white border-b border-r border-gray-100" />
+
+              <div className="absolute -bottom-1.5 left-6 h-3 w-3 rotate-45 border-b border-r border-gray-100 bg-white" />
             </div>
           </motion.div>
         )}
@@ -187,8 +417,11 @@ export default function ChatWidget() {
       {/* دکمه شناور */}
       <button
         onClick={() => {
-          if (isOpen) handleStopStreaming();
-          setIsOpen(!isOpen);
+          if (isOpen) {
+            handleStopStreaming();
+          }
+
+          setIsOpen((prev) => !prev);
         }}
         className="fixed bottom-6 left-6 z-50 flex h-14 w-14 items-center justify-center rounded-full text-white shadow-lg transition-all duration-300 hover:scale-105"
         style={{
@@ -205,11 +438,12 @@ export default function ChatWidget() {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.9, y: 20 }}
+            initial={{ opacity: 0, scale: 0.92, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.9, y: 20 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="fixed bottom-24 left-6 z-50 flex h-[560px] w-[390px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-2xl bg-white shadow-2xl border border-gray-100"
+            exit={{ opacity: 0, scale: 0.92, y: 20 }}
+            transition={{ duration: 0.24, ease: 'easeOut' }}
+            className="fixed bottom-24 left-6 z-50 flex h-[560px] w-[390px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl"
+            dir="rtl"
           >
             {/* هدر */}
             <div
@@ -223,10 +457,12 @@ export default function ChatWidget() {
                 <Bot size={20} />
                 <span className="absolute bottom-0 left-0 h-2.5 w-2.5 rounded-full border-2 border-[var(--secondary)] bg-emerald-400" />
               </div>
+
               <div className="flex-1">
                 <p className="text-sm font-semibold">مشاور هوشمند ریحان</p>
                 <p className="text-xs text-white/70">آنلاین · پاسخ سریع</p>
               </div>
+
               <button
                 onClick={() => {
                   handleStopStreaming();
@@ -240,83 +476,101 @@ export default function ChatWidget() {
             </div>
 
             {/* پیام‌ها */}
-            <div className="flex-1 space-y-3 overflow-y-auto bg-[var(--light)] p-4">
-              {messages.map((msg, i) => (
-                <motion.div
-                  key={i}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.25 }}
-                  className={`flex gap-2 ${
-                    msg.role === 'user' ? 'flex-row-reverse' : 'flex-row'
-                  }`}
-                >
-                  <div
-                    className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white"
-                    style={{
-                      background:
-                        msg.role === 'user' ? 'var(--primary)' : 'var(--secondary)',
-                    }}
-                  >
-                    {msg.role === 'user' ? <User size={14} /> : <Bot size={14} />}
-                  </div>
-                  <div
-                    className={`max-w-[78%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm relative ${
-                      msg.role === 'user'
-                        ? 'rounded-tl-sm text-white'
-                        : 'rounded-tr-sm bg-white text-[var(--dark)]'
+            <div
+              ref={messagesContainerRef}
+              className="flex-1 space-y-3 overflow-y-auto bg-[var(--light)] p-4"
+            >
+              {messages.map((message) => {
+                const isUser = message.role === 'user';
+                const isStreamingMessage =
+                  isLoading &&
+                  message.id === activeAssistantIdRef.current &&
+                  message.role === 'assistant';
+
+                return (
+                  <motion.div
+                    key={message.id}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.22, ease: 'easeOut' }}
+                    className={`flex gap-2 ${
+                      isUser ? 'flex-row-reverse' : 'flex-row'
                     }`}
-                    style={
-                      msg.role === 'user'
-                        ? {
-                            background:
-                              'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)',
-                          }
-                        : undefined
-                    }
                   >
-                    {msg.content}
-                    {/* Cursor چشمک‌زن */}
-                    {isLoading &&
-                      i === messages.length - 1 &&
-                      msg.role === 'assistant' && (
-                        <span className="inline-block w-1.5 h-3.5 bg-gray-400 animate-pulse mr-1 align-middle" />
+                    <div
+                      className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-white"
+                      style={{
+                        background: isUser
+                          ? 'var(--primary)'
+                          : 'var(--secondary)',
+                      }}
+                    >
+                      {isUser ? <User size={14} /> : <Bot size={14} />}
+                    </div>
+
+                    <div
+                      className={`relative max-w-[78%] rounded-2xl px-3.5 py-2.5 text-sm leading-7 shadow-sm ${
+                        isUser
+                          ? 'rounded-tl-sm text-white'
+                          : 'rounded-tr-sm bg-white text-[var(--dark)]'
+                      }`}
+                      style={
+                        isUser
+                          ? {
+                              background:
+                                'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)',
+                            }
+                          : undefined
+                      }
+                    >
+                      {/* قبل از رسیدن اولین متن، سه نقطه‌ی ملایم */}
+                      {!message.content && isStreamingMessage ? (
+                        <span className="flex items-center gap-1 py-1" dir="ltr">
+                          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400 [animation-delay:0ms]" />
+                          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400 [animation-delay:150ms]" />
+                          <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400 [animation-delay:300ms]" />
+                        </span>
+                      ) : (
+                        <>
+                          <span className="whitespace-pre-wrap">
+                            {message.content}
+                          </span>
+
+                          {/* Cursor نرم فقط روی پاسخ در حال تولید */}
+                          {isStreamingMessage && (
+                            <motion.span
+                              aria-hidden="true"
+                              className="mr-1 inline-block h-4 w-[2px] translate-y-[3px] rounded-full bg-[var(--primary)]"
+                              animate={{ opacity: [0.25, 1, 0.25] }}
+                              transition={{
+                                duration: 0.85,
+                                repeat: Infinity,
+                                ease: 'easeInOut',
+                              }}
+                            />
+                          )}
+                        </>
                       )}
-                  </div>
-                </motion.div>
-              ))}
+                    </div>
+                  </motion.div>
+                );
+              })}
 
               {/* پیشنهادهای سریع */}
               {messages.length === 1 && !isLoading && (
                 <div className="flex flex-wrap gap-2 pt-1">
-                  {SUGGESTIONS.map((s) => (
+                  {SUGGESTIONS.map((suggestion) => (
                     <button
-                      key={s}
-                      onClick={() => sendMessage(s)}
+                      key={suggestion}
+                      onClick={() => sendMessage(suggestion)}
                       className="rounded-full border border-gray-200 bg-white px-3 py-1.5 text-xs text-[var(--dark)] transition hover:border-[var(--primary)] hover:text-[var(--primary)]"
                     >
-                      {s}
+                      {suggestion}
                     </button>
                   ))}
                 </div>
               )}
 
-              {/* لودینگ اولیه */}
-              {isLoading && messages[messages.length - 1]?.content === '' && (
-                <div className="flex gap-2">
-                  <div
-                    className="flex h-8 w-8 items-center justify-center rounded-full text-white"
-                    style={{ background: 'var(--secondary)' }}
-                  >
-                    <Bot size={14} />
-                  </div>
-                  <div className="flex items-center gap-1 rounded-2xl rounded-tr-sm bg-white px-4 py-3 shadow-sm">
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400 [animation-delay:0ms]" />
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400 [animation-delay:150ms]" />
-                    <span className="h-1.5 w-1.5 animate-bounce rounded-full bg-gray-400 [animation-delay:300ms]" />
-                  </div>
-                </div>
-              )}
               <div ref={messagesEndRef} />
             </div>
 
@@ -326,11 +580,11 @@ export default function ChatWidget() {
                 <input
                   type="text"
                   value={input}
-                  onChange={(e) => setInput(e.target.value)}
+                  onChange={(event) => setInput(event.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="سوال خود را بنویسید..."
                   className="flex-1 rounded-xl border border-gray-200 bg-[var(--light)] px-3.5 py-2.5 text-sm text-[var(--dark)] outline-none transition focus:border-[var(--primary)] focus:bg-white"
-                  disabled={isLoading && messages[messages.length - 1]?.content === ''}
+                  disabled={isLoading}
                 />
 
                 {isLoading ? (
@@ -338,6 +592,7 @@ export default function ChatWidget() {
                     onClick={handleStopStreaming}
                     className="flex h-10 w-10 items-center justify-center rounded-xl bg-red-500 text-white transition hover:bg-red-600"
                     title="توقف تولید پاسخ"
+                    aria-label="توقف تولید پاسخ"
                   >
                     <StopCircle size={18} />
                   </button>
@@ -345,16 +600,18 @@ export default function ChatWidget() {
                   <button
                     onClick={() => sendMessage()}
                     disabled={!input.trim()}
-                    className="flex h-10 w-10 items-center justify-center rounded-xl text-white transition disabled:opacity-40 hover:opacity-90"
+                    className="flex h-10 w-10 items-center justify-center rounded-xl text-white transition hover:opacity-90 disabled:opacity-40"
                     style={{
                       background:
-                        'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)',
+                        'linear-gradient135deg, var(--primary) 0%, var(--primary-dark) 100%)',
                     }}
+                    aria-label="ارسال پیام"
                   >
                     <Send size={16} />
                   </button>
                 )}
               </div>
+
               <p className="mt-2 text-center text-[10px] text-gray-400">
                 پشتیبانی هوشمند ریحان
               </p>
