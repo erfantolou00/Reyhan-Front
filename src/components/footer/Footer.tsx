@@ -4,15 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  FaPhoneAlt, 
-  FaMapMarkerAlt, 
-  FaEnvelope, 
-  FaChevronLeft, 
-  FaLinkedinIn, 
-  FaInstagram, 
-  FaTwitter 
-} from "react-icons/fa";
+import { FaChevronLeft } from 'react-icons/fa';
 import { getIcon } from '@/helper/renderIcon';
 import footerData from './footer.json';
 import { toast } from 'react-hot-toast';
@@ -27,16 +19,15 @@ export default function Footer() {
       toast.error('لطفاً ایمیل خود را وارد کنید');
       return;
     }
-    
+
     setIsSubmitting(true);
     try {
-      // ارسال به API
       const res = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email }),
       });
-      
+
       if (res.ok) {
         toast.success(footerData.newsletter.successMessage);
         setEmail('');
@@ -50,12 +41,20 @@ export default function Footer() {
     }
   };
 
-  const renderIcon = (iconName: string, className: string = "w-5 h-5") => {
+  const renderIcon = (iconName: string, className: string = 'w-5 h-5') => {
     const Icon = getIcon(iconName);
     return Icon ? <Icon className={className} /> : null;
   };
 
-  // انیمیشن‌های ورود
+  // کلاس‌های ثابت برای رنگ شبکه‌های اجتماعی (Tailwind این‌ها را می‌بیند)
+  const socialColorMap: Record<string, string> = {
+    'blue-600': 'hover:bg-blue-600 hover:border-blue-600',
+    'pink-600': 'hover:bg-pink-600 hover:border-pink-600',
+    'blue-400': 'hover:bg-blue-400 hover:border-blue-400',
+    'red-600': 'hover:bg-red-600 hover:border-red-600',
+    'sky-500': 'hover:bg-sky-500 hover:border-sky-500',
+  };
+
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -73,7 +72,7 @@ export default function Footer() {
       opacity: 1,
       y: 0,
       transition: {
-        type: "spring",
+        type: 'spring',
         stiffness: 100,
         damping: 20,
       },
@@ -81,8 +80,11 @@ export default function Footer() {
   };
 
   return (
-    <footer className={`relative ${footerData.theme.background} text-white overflow-hidden ${footerData.theme.border} border-t`} dir="rtl">
-      
+    <footer
+      className="relative text-white overflow-hidden border-t border-white/5"
+      style={{ backgroundColor: '#020617' }}
+      dir="rtl"
+    >
       {/* دکوراسیون پس‌زمینه */}
       <div className="absolute top-0 left-1/4 w-64 h-64 bg-blue-600/10 blur-[120px] rounded-full" />
       <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 blur-[150px] rounded-full" />
@@ -96,18 +98,17 @@ export default function Footer() {
           viewport={{ once: true, amount: 0.1 }}
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8"
         >
-          
-          {/* بخش برندینگ و معرفی */}
+          {/* بخش برندینگ */}
           <motion.div variants={itemVariants} className="lg:col-span-4 space-y-8">
             <div className="flex items-center gap-4">
               <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
-                <Image 
-                  src={footerData.brand.logo} 
-                  alt="Reyhan Logo" 
-                  width={80} 
-                  height={80} 
-                  className="relative rounded-2xl p-2 border border-white/10 bg-slate-300" 
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000" />
+                <Image
+                  src={footerData.brand.logo}
+                  alt="Reyhan Logo"
+                  width={80}
+                  height={80}
+                  className="relative rounded-2xl p-2 border border-white/10 bg-slate-300"
                   priority
                 />
               </div>
@@ -123,7 +124,7 @@ export default function Footer() {
                 </span>
               </div>
             </div>
-            
+
             <p className="text-slate-400 text-base leading-8 max-w-sm">
               {footerData.brand.description}
             </p>
@@ -138,26 +139,28 @@ export default function Footer() {
                   rel="noopener noreferrer"
                   whileHover={{ y: -4, scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className={`w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:bg-${social.color} hover:text-white hover:border-${social.color} transition-all duration-300`}
+                  className={`w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white transition-all duration-300 ${
+                    socialColorMap[social.color] || ''
+                  }`}
                   aria-label={social.name}
                 >
-                  {renderIcon(social.icon, "w-4 h-4")}
+                  {renderIcon(social.icon, 'w-4 h-4')}
                 </motion.a>
               ))}
             </div>
           </motion.div>
 
-          {/* بخش دسترسی سریع */}
+          {/* دسترسی سریع */}
           <motion.div variants={itemVariants} className="lg:col-span-3 lg:mr-auto">
             <h4 className="text-lg font-bold mb-8 relative inline-block">
               دسترسی سریع
-              <span className="absolute -bottom-2 right-0 w-8 h-1 bg-blue-600 rounded-full"></span>
+              <span className="absolute -bottom-2 right-0 w-8 h-1 bg-blue-600 rounded-full" />
             </h4>
             <ul className="space-y-4">
               {footerData.quickLinks.map((link) => (
                 <li key={link.label}>
-                  <Link 
-                    href={link.href} 
+                  <Link
+                    href={link.href}
                     className="flex items-center group text-slate-400 hover:text-white transition-colors"
                   >
                     <FaChevronLeft className="w-3 h-3 ml-2 text-blue-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
@@ -168,22 +171,23 @@ export default function Footer() {
             </ul>
           </motion.div>
 
-          {/* بخش اطلاعات تماس */}
+          {/* اطلاعات تماس */}
           <motion.div variants={itemVariants} className="lg:col-span-5 lg:pr-12">
             <h4 className="text-lg font-bold mb-8 relative inline-block">
               {footerData.contactInfo.address.label}
-              <span className="absolute -bottom-2 right-0 w-8 h-1 bg-indigo-600 rounded-full"></span>
+              <span className="absolute -bottom-2 right-0 w-8 h-1 bg-indigo-600 rounded-full" />
             </h4>
+
             <div className="space-y-6">
               {/* آدرس */}
-              <motion.div 
+              <motion.div
                 variants={itemVariants}
                 className="flex items-start gap-4 group"
                 whileHover={{ x: -4 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                transition={{ type: 'spring', stiffness: 300 }}
               >
                 <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-blue-500/50 transition-colors">
-                  {renderIcon(footerData.contactInfo.address.icon, "text-blue-500 text-xl")}
+                  {renderIcon(footerData.contactInfo.address.icon, 'text-blue-500 text-xl')}
                 </div>
                 <div>
                   <p className="text-slate-400 text-sm leading-7">سمنان، بلوار دانشگاه،</p>
@@ -192,59 +196,72 @@ export default function Footer() {
               </motion.div>
 
               {/* تلفن */}
-              <motion.div 
+              <motion.div
                 variants={itemVariants}
                 className="flex items-center gap-4 group"
                 whileHover={{ x: -4 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                transition={{ type: 'spring', stiffness: 300 }}
               >
                 <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-blue-500/50 transition-colors">
-                  {renderIcon(footerData.contactInfo.phone.icon, "text-blue-500 text-lg")}
+                  {renderIcon(footerData.contactInfo.phone.icon, 'text-blue-500 text-lg')}
                 </div>
                 <div dir="ltr" className="text-right">
-                  <p className="text-white font-bold text-lg tracking-wider">{footerData.contactInfo.phone.value}</p>
-                  <p className="text-slate-500 text-xs">{footerData.contactInfo.phone.description}</p>
+                  <p className="text-white font-bold text-lg tracking-wider">
+                    {footerData.contactInfo.phone.value}
+                  </p>
+                  <p className="text-slate-500 text-xs">
+                    {footerData.contactInfo.phone.description}
+                  </p>
                 </div>
               </motion.div>
 
               {/* ایمیل */}
-              <motion.div 
+              <motion.div
                 variants={itemVariants}
                 className="flex items-center gap-4 group"
                 whileHover={{ x: -4 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                transition={{ type: 'spring', stiffness: 300 }}
               >
                 <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-blue-500/50 transition-colors">
-                  {renderIcon(footerData.contactInfo.email.icon, "text-blue-500 text-lg")}
+                  {renderIcon(footerData.contactInfo.email.icon, 'text-blue-500 text-lg')}
                 </div>
                 <div>
-                  <p className="text-slate-400 text-sm">{footerData.contactInfo.email.description}</p>
-                  <p className="text-white font-medium">{footerData.contactInfo.email.value}</p>
+                  <p className="text-slate-400 text-sm">
+                    {footerData.contactInfo.email.description}
+                  </p>
+                  <p className="text-white font-medium">
+                    {footerData.contactInfo.email.value}
+                  </p>
                 </div>
               </motion.div>
 
               {/* ساعات کاری */}
-              <motion.div 
+              <motion.div
                 variants={itemVariants}
                 className="flex items-center gap-4 group"
                 whileHover={{ x: -4 }}
-                transition={{ type: "spring", stiffness: 300 }}
+                transition={{ type: 'spring', stiffness: 300 }}
               >
                 <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-blue-500/50 transition-colors">
-                  {renderIcon(footerData.contactInfo.workingHours.icon, "text-blue-500 text-lg")}
+                  {renderIcon(footerData.contactInfo.workingHours.icon, 'text-blue-500 text-lg')}
                 </div>
                 <div>
-                  <p className="text-slate-400 text-sm">{footerData.contactInfo.workingHours.label}</p>
-                  <p className="text-white font-medium">{footerData.contactInfo.workingHours.value}</p>
-                  <p className="text-slate-500 text-xs">{footerData.contactInfo.workingHours.description}</p>
+                  <p className="text-slate-400 text-sm">
+                    {footerData.contactInfo.workingHours.label}
+                  </p>
+                  <p className="text-white font-medium">
+                    {footerData.contactInfo.workingHours.value}
+                  </p>
+                  <p className="text-slate-500 text-xs">
+                    {footerData.contactInfo.workingHours.description}
+                  </p>
                 </div>
               </motion.div>
             </div>
           </motion.div>
-
         </motion.div>
 
-        {/* بخش خبرنامه */}
+        {/* خبرنامه */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -279,7 +296,7 @@ export default function Footer() {
           </div>
         </motion.div>
 
-        {/* بخش کپی‌رایت */}
+        {/* کپی‌رایت */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -288,18 +305,20 @@ export default function Footer() {
           className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6"
         >
           <p className="text-slate-500 text-sm">
-            © {new Date().getFullYear()} <span className="text-slate-300 font-bold">{footerData.brand.name}</span>. {footerData.footer.copyright}
+            © {new Date().getFullYear()}{' '}
+            <span className="text-slate-300 font-bold">{footerData.brand.name}</span>.{' '}
+            {footerData.footer.copyright}
           </p>
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-2 text-xs text-slate-500">
-              {renderIcon(footerData.footer.badge.icon, "w-3 h-3")}
+              {renderIcon(footerData.footer.badge.icon, 'w-3 h-3')}
               {footerData.footer.badge.text}
             </span>
             <div className="flex gap-6 text-slate-500 text-sm">
               {footerData.footer.links.map((link, index) => (
-                <Link 
+                <Link
                   key={index}
-                  href={link.href} 
+                  href={link.href}
                   className="hover:text-white transition-colors"
                 >
                   {link.label}

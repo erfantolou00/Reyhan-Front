@@ -442,7 +442,7 @@ export default function ChatWidget() {
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.92, y: 20 }}
             transition={{ duration: 0.24, ease: 'easeOut' }}
-            className="fixed bottom-24 left-6 z-50 flex h-[560px] w-[390px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl"
+            className="fixed bottom-24 left-6 z-50 flex h-[600px] w-[500px] max-w-[calc(100vw-3rem)] flex-col overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl"
             dir="rtl"
           >
             {/* هدر */}
@@ -603,7 +603,7 @@ export default function ChatWidget() {
                     className="flex h-10 w-10 items-center justify-center rounded-xl text-white transition hover:opacity-90 disabled:opacity-40"
                     style={{
                       background:
-                        'linear-gradient135deg, var(--primary) 0%, var(--primary-dark) 100%)',
+                        'linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%)',
                     }}
                     aria-label="ارسال پیام"
                   >
