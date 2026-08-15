@@ -1,22 +1,22 @@
 import { NextRequest } from 'next/server';
+import promptData from '@/app/PROMPT_AI/promptText.json'; // مسیر فایل JSON رو درست تنظیم کن
 
-const SYSTEM_PROMPT = `تو مشاور هوشمند رسمی شرکت «ریحان سامانه هوشمند» هستی.
+const SYSTEM_PROMPT = `
+تو مشاور هوشمند رسمی شرکت «ریحان سامانه هوشمند» هستی.
 
-### وظیفه اصلی
-قبل از پاسخ به هر سوال کاربر، حتماً ابتدا به این آدرس برو و محتوای آن را کامل بخوان:
-https://reyhan-front.vercel.app/PROMPT_AI
-
-سپس پاسخ خود را **فقط و فقط** بر اساس اطلاعات موجود در آن صفحه و دانش به‌روز شرکت بده.
-
-### نقش تو
-- مشاور حرفه‌ای، مودب و دوستانه ریحان باش.
-- فقط به فارسی روان و رسمی-صمیمی صحبت کن.
-- وقتی کاربر نیاز سازمانی مطرح کرد، ماژول‌ها و قابلیت‌های مرتبط ریحان را پیشنهاد بده.
+### قوانین رفتاری
+- همیشه مودب، حرفه‌ای و دوستانه صحبت کن.
+- فقط به فارسی روان و رسمی-صمیمی پاسخ بده.
+- وقتی کاربر نیاز سازمانی مطرح کرد، ماژول‌ها یا قابلیت‌های مرتبط ریحان را پیشنهاد بده.
 - درباره قیمت، زمان اجرا یا امکانات تأییدنشده هیچ اطلاعات ساختگی نده.
 - اگر اطلاعات دقیق نیاز بود، بگو پس از نیازسنجی مشخص می‌شود.
-- پاسخ‌ها را کوتاه و مفید نگه دار (حداکثر ۳ تا ۵ پاراگراف).
+- پاسخ را کوتاه و مفید نگه دار (حداکثر ۳ تا ۵ پاراگراف).
 - در پایان پاسخ‌های مهم، کاربر را با لحن ملایم به درخواست دمو رایگان یا مشاوره هدایت کن.
-- اگر موضوع خارج از خدمات ریحان بود، محترمانه گفتگو را به خدمات شرکت برگردان.`;
+- اگر موضوع خارج از خدمات ریحان بود، محترمانه گفتگو را به خدمات شرکت برگردان.
+
+### اطلاعات کامل شرکت ریحان
+${JSON.stringify(promptData, null, 2)}
+`;
 
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
@@ -33,8 +33,6 @@ export async function POST(request: NextRequest) {
     }
 
     const controller = new AbortController();
-
-    // فقط برای زمان انتظار اتصال اولیه به سرویس
     const timeoutId = setTimeout(() => {
       controller.abort();
     }, 30_000);
@@ -70,7 +68,6 @@ export async function POST(request: NextRequest) {
 
     if (!upstream.ok || !upstream.body) {
       const errorText = await upstream.text();
-
       console.error('GapGPT Error:', {
         status: upstream.status,
         errorText,
@@ -82,10 +79,6 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    /**
-     * بدون ReadableStream واسط.
-     * upstream.body همان SSE را به مرورگر منتقل می‌کند.
-     */
     return new Response(upstream.body, {
       status: 200,
       headers: {
