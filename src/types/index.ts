@@ -26,11 +26,11 @@ export interface Category {
     created_at?: string;
     updated_at?: string;
     featured: boolean;
-    views: number;
-    likes: number;
-    comments: number;
-    author:string
-    author_avatar:string
+    views?: number;
+    likes?: number;
+    comments?: number;
+    author?:string
+    author_avatar?:string
   }
 
   export interface BlogData {

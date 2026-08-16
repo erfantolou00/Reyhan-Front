@@ -1,7 +1,91 @@
-import { NextRequest } from 'next/server';
-import promptData from '@/app/PROMPT_AI/promptText.json'; // مسیر فایل JSON رو درست تنظیم کن
+// app/api/chat/route.ts  (یا مسیر فایل خودت)
 
-const SYSTEM_PROMPT = `
+import { NextRequest } from 'next/server';
+
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
+
+// ====================== Gateway Helpers (Server-side) ======================
+
+const GATEWAY_ENDPOINTS = [
+  'http://server:9020/geturl',
+  'http://v1:9020/geturl',
+  'http://reyhansmart.ir:5020/geturl',
+];
+
+/** گرفتن shareURL (همان Gateway) از سمت سرور */
+async function getServerGatewayUrl(): Promise<string | null> {
+  try {
+    const data = await Promise.any(
+      GATEWAY_ENDPOINTS.map(async (endpoint) => {
+        const res = await fetch(endpoint, { cache: 'no-store' });
+        if (!res.ok) throw new Error(`Failed: ${endpoint}`);
+        return res.json();
+      })
+    );
+
+    return data?.shareURL ?? null;
+  } catch (error) {
+    console.error('Failed to get gateway URL:', error);
+    return null;
+  }
+}
+
+/** گرفتن فایل از Gateway */
+async function fetchFromGateway<T = any>(filePath: string): Promise<T> {
+  const gateway = await getServerGatewayUrl();
+
+  if (!gateway) {
+    throw new Error('آدرس Gateway دریافت نشد');
+  }
+
+  const cleanPath = filePath.replace(/^\/+/, '').replace(/\/+/g, '/');
+
+  if (cleanPath.includes('..') || cleanPath.includes('://')) {
+    throw new Error('مسیر فایل نامعتبر است');
+  }
+
+  const url = `${gateway.replace(/\/+$/, '')}/${cleanPath}`;
+
+  const res = await fetch(url, {
+    method: 'GET',
+    headers: { Accept: 'application/json' },
+    cache: 'no-store',
+  });
+
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+  }
+
+  return res.json() as Promise<T>;
+}
+
+// ====================== Route Handler ======================
+
+export async function POST(request: NextRequest) {
+  try {
+    const { messages } = await request.json();
+
+    if (!Array.isArray(messages)) {
+      return Response.json(
+        { error: 'پیام‌ها معتبر نیستند.' },
+        { status: 400 }
+      );
+    }
+
+    // ——— دریافت prompt از Gateway ———
+    let promptData: any;
+    try {
+      promptData = await fetchFromGateway('data/promptText.json');
+    } catch (err) {
+      console.error('خطا در دریافت promptText.json:', err);
+      return Response.json(
+        { error: 'خطا در دریافت اطلاعات سیستم.' },
+        { status: 500 }
+      );
+    }
+
+    const SYSTEM_PROMPT = `
 تو مشاور هوشمند رسمی شرکت «ریحان سامانه هوشمند» هستی.
 
 ### قوانین رفتاری
@@ -18,24 +102,9 @@ const SYSTEM_PROMPT = `
 ${JSON.stringify(promptData, null, 2)}
 `;
 
-export const runtime = 'edge';
-export const dynamic = 'force-dynamic';
-
-export async function POST(request: NextRequest) {
-  try {
-    const { messages } = await request.json();
-
-    if (!Array.isArray(messages)) {
-      return Response.json(
-        { error: 'پیام‌ها معتبر نیستند.' },
-        { status: 400 },
-      );
-    }
-
+    // ——— فراخوانی مدل ———
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => {
-      controller.abort();
-    }, 30_000);
+    const timeoutId = setTimeout(() => controller.abort(), 30_000);
 
     const upstream = await fetch(
       'https://api.gapgpt.app/v1/chat/completions',
@@ -61,7 +130,7 @@ export async function POST(request: NextRequest) {
           ],
         }),
         signal: controller.signal,
-      },
+      }
     );
 
     clearTimeout(timeoutId);
@@ -75,7 +144,7 @@ export async function POST(request: NextRequest) {
 
       return Response.json(
         { error: 'خطا در ارتباط با هوش مصنوعی.' },
-        { status: 500 },
+        { status: 500 }
       );
     }
 
@@ -92,7 +161,7 @@ export async function POST(request: NextRequest) {
 
     return Response.json(
       { error: 'خطای داخلی سرور.' },
-      { status: 500 },
+      { status: 500 }
     );
   }
 }

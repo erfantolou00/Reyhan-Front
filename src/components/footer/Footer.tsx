@@ -12,6 +12,9 @@ import { toast } from 'react-hot-toast';
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+        // در بالای کامپوننت Footer
+        const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0';
+
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -308,6 +311,9 @@ export default function Footer() {
             © {new Date().getFullYear()}{' '}
             <span className="text-slate-300 font-bold">{footerData.brand.name}</span>.{' '}
             {footerData.footer.copyright}
+          <span className="mr-3 text-xs text-blue-400/60 border-r border-white/10 pr-3">
+    v{appVersion}
+  </span>
           </p>
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-2 text-xs text-slate-500">

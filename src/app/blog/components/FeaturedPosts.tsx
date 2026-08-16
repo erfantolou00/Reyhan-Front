@@ -89,18 +89,18 @@ export default function FeaturedPosts({
                     </span>
                   </div>
                   <div className="mt-4 flex items-center gap-4 text-sm text-gray-400">
-                    <span className="flex items-center gap-1">
+                    {post.views && <span className="flex items-center gap-1">
                       <FaEye />
                       {formatNumber(post.views)}
-                    </span>
-                    <span className="flex items-center gap-1">
+                    </span>}
+                    {post.likes && <span className="flex items-center gap-1">
                       <FaHeart className="text-red-400" />
                       {formatNumber(post.likes)}
-                    </span>
-                    <span className="flex items-center gap-1">
+                    </span>}
+                    {post.comments && <span className="flex items-center gap-1">
                       <FaComment />
                       {formatNumber(post.comments)}
-                    </span>
+                    </span>}
                   </div>
                 </div>
               </div>

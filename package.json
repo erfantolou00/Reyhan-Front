@@ -1,11 +1,11 @@
 {
   "name": "reyhan-front",
-  "version": "0.1.0",
+  "version": "0.1.3",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node copy-standalone.cjs",
     "start": "next start",
     "lint": "next lint",
     "analyze": "cross-env ANALYZE=true next build"
