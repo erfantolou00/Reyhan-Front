@@ -10,11 +10,13 @@ export default function RegularPosts({
   categories,
   searchTerm,
   onSearchChange,
+  gatewayURL
 }: {
   posts: Post[];
   categories: Category[];
   searchTerm: string;
   onSearchChange: (term: string) => void;
+  gatewayURL: string
 }) {
   if (posts.length === 0) {
     return (
@@ -68,7 +70,7 @@ export default function RegularPosts({
               <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full">
                 <div className="relative h-56 w-full overflow-hidden">
                   <Image
-                    src={post.image_url || '/placeholder-blog.jpg'}
+                    src={`${gatewayURL}/${post.image_url.replace(/^\/+/, '')}` || "/images/blog/defaultBlogImage.avif"}
                     alt={post.title}
                     fill
                     className="object-cover transition-transform duration-500 group-hover:scale-110"

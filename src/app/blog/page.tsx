@@ -1,22 +1,9 @@
 'use client'
 
-import Image from 'next/image';
-import Link from 'next/link';
-import {
-  FaCalendarAlt,
-  FaClock,
-  FaUser,
-  FaEye,
-  FaHeart,
-  FaComment,
-  FaSearch,
-  FaSpinner,
-} from 'react-icons/fa';
-import { Sparkles } from 'lucide-react';
-import { getIcon } from '@/helper/renderIcon';
+
 import { useEffect, useState, useMemo, useCallback } from 'react';
 import BlogSidebar from './components/BlogSidebar';
-import { BlogData, Category, Post } from '@/types';
+import { BlogData } from '@/types';
 import BlogHero from './components/BlogHero';
 import FeaturedPosts from './components/FeaturedPosts';
 import LoadingState from './components/LoadingSstate';
@@ -36,6 +23,7 @@ export default function BlogPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [gatewayURL, setGatewayURL] = useState('');
 
   const fetchBlogData = useCallback(async () => {
     setLoading(true);
@@ -51,6 +39,8 @@ export default function BlogPage() {
         gateway = process.env.NEXT_PUBLIC_DEFAULT_GATEWAY_URL || '/api';
         console.warn('Gateway URL not found in localStorage, using default');
       }
+
+      setGatewayURL(gateway)
 
       // ساخت URL با حذف اسلش اضافی
       const baseUrl = gateway.replace(/\/+$/, '');
@@ -158,6 +148,7 @@ export default function BlogPage() {
               categories={categories}
               searchTerm={searchTerm}
               onSearchChange={setSearchTerm}
+              gatewayURL={gatewayURL}
             />
           </div>
 
