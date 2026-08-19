@@ -6,15 +6,26 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { FaChevronLeft } from 'react-icons/fa';
 import { getIcon } from '@/helper/renderIcon';
-import footerData from './footer.json';
 import { toast } from 'react-hot-toast';
+import { useGatewayFetcher } from '@/hooks/useGatewayFetcher';
+import { FooterData } from '@/types';
+
+// تایپ دیتای فوتر (اختیاری ولی بهتره داشته باشی)
+
 
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-        // در بالای کامپوننت Footer
-        const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0';
+  const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0';
 
+  // دریافت دیتای فوتر از Gateway
+  const {
+    data: footerData,
+    loading,
+    error,
+    refetch,
+  } = useGatewayFetcher<FooterData>('data/footer.json');
+  console.log('%c⧭', 'color: #997326', footerData);
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,13 +43,13 @@ export default function Footer() {
       });
 
       if (res.ok) {
-        toast.success(footerData.newsletter.successMessage);
+        toast.success(footerData?.newsletter.successMessage || 'با موفقیت ثبت شد');
         setEmail('');
       } else {
-        toast.error(footerData.newsletter.errorMessage);
+        toast.error(footerData?.newsletter.errorMessage || 'خطا در ثبت');
       }
     } catch (error) {
-      toast.error(footerData.newsletter.errorMessage);
+      toast.error(footerData?.newsletter.errorMessage || 'خطا در ثبت');
     } finally {
       setIsSubmitting(false);
     }
@@ -49,7 +60,6 @@ export default function Footer() {
     return Icon ? <Icon className={className} /> : null;
   };
 
-  // کلاس‌های ثابت برای رنگ شبکه‌های اجتماعی (Tailwind این‌ها را می‌بیند)
   const socialColorMap: Record<string, string> = {
     'blue-600': 'hover:bg-blue-600 hover:border-blue-600',
     'pink-600': 'hover:bg-pink-600 hover:border-pink-600',
@@ -81,6 +91,34 @@ export default function Footer() {
       },
     },
   };
+
+  // حالت لودینگ
+  if (loading) {
+    return (
+      <footer className="bg-[#020617] text-white py-20">
+        <div className="container mx-auto px-6 text-center text-slate-400">
+          در حال بارگذاری فوتر...
+        </div>
+      </footer>
+    );
+  }
+
+  // حالت خطا
+  if (error || !footerData) {
+    return (
+      <footer className="bg-[#020617] text-white py-20">
+        <div className="container mx-auto px-6 text-center">
+          <p className="text-red-400 mb-4">خطا در دریافت اطلاعات فوتر</p>
+          <button
+            onClick={() => refetch()}
+            className="px-4 py-2 bg-blue-600 rounded-lg text-sm hover:bg-blue-500 transition"
+          >
+            تلاش مجدد
+          </button>
+        </div>
+      </footer>
+    );
+  }
 
   return (
     <footer
@@ -311,9 +349,9 @@ export default function Footer() {
             © {new Date().getFullYear()}{' '}
             <span className="text-slate-300 font-bold">{footerData.brand.name}</span>.{' '}
             {footerData.footer.copyright}
-          <span className="mr-3 text-xs text-blue-400/60 border-r border-white/10 pr-3">
-    v{appVersion}
-  </span>
+            <span className="mr-3 text-xs text-blue-400/60 border-r border-white/10 pr-3">
+              v{appVersion}
+            </span>
           </p>
           <div className="flex items-center gap-6">
             <span className="flex items-center gap-2 text-xs text-slate-500">

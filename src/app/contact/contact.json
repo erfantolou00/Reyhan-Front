@@ -1,80 +1,98 @@
 {
-  "title": "اطلاعات تماس",
-  "subtitle": "ما مشتاق شنیدن نظرات شما هستیم",
-  "address": {
-    "label": "آدرس",
-    "value": "پارک علم و فناوری دانشگاه سمنان",
-    "icon": "MapPin"
+  "hero": {
+    "badge": "ارتباط با ما",
+    "title": "تماس با <span className=\"text-yellow-300\">ریحان</span>",
+    "subtitle": "ما همواره آماده شنیدن نظرات و پاسخگویی به سوالات شما هستیم"
   },
-  "phone": {
-    "label": "تلفن",
-    "value": "۰۲۳-۳۳۶۰۵۰۰۰",
-    "icon": "Phone"
+  "contactInfo": {
+    "address": {
+      "label": "آدرس",
+      "value": ["سمنان، بلوار دانشگاه", "پلاک ۱۲۳، ساختمان ریحان"],
+      "icon": "MapPin"
+    },
+    "phone": {
+      "label": "تلفن",
+      "value": "۰۲۳-۳۳۴۴۵۶۷۸",
+      "icon": "Phone"
+    },
+    "email": {
+      "label": "ایمیل",
+      "value": "info@reyhan.ir",
+      "icon": "Mail"
+    },
+    "workingHours": {
+      "label": "ساعات کاری",
+      "value": ["شنبه تا چهارشنبه: ۸ تا ۱۸", "پنجشنبه: ۸ تا ۱۴"],
+      "icon": "Clock"
+    }
   },
-  "email": {
-    "label": "ایمیل",
-    "value": "sdkomeylian@gmail.com",
-    "icon": "Mail"
-  },
-  "workingHours": {
-    "label": "ساعات کاری",
-    "value": [
-      "شنبه تا چهارشنبه: ۹ صبح تا ۵ عصر",
-      "پنجشنبه: ۹ صبح تا ۱ ظهر"
-    ],
-    "icon": "Clock"
-  },
-  "mapImage": "/images/contact/1.webp",
   "socialMedia": [
     {
-      "name": "لینکدین",
-      "url": "https://linkedin.com",
-      "icon": "Linkedin"
-    },
-    {
       "name": "اینستاگرام",
-      "url": "https://instagram.com",
-      "icon": "Instagram"
+      "url": "https://instagram.com/reyhan",
+      "icon": "Instagram",
+      "color": "pink-600"
     },
     {
       "name": "تلگرام",
-      "url": "https://t.me",
-      "icon": "Send"
+      "url": "https://t.me/reyhan",
+      "icon": "Telegram",
+      "color": "blue-600"
+    },
+    {
+      "name": "توییتر",
+      "url": "https://twitter.com/reyhan",
+      "icon": "Twitter",
+      "color": "sky-500"
+    },
+    {
+      "name": "یوتیوب",
+      "url": "https://youtube.com/reyhan",
+      "icon": "Youtube",
+      "color": "red-600"
+    },
+    {
+      "name": "لینکدین",
+      "url": "https://linkedin.com/reyhan",
+      "icon": "Linkedin",
+      "color": "blue-400"
     }
   ],
+  "mapImage": "/images/map.jpg",
   "form": {
     "title": "ارسال پیام",
-    "description": "با ما در ارتباط باشید، تیم ما در اسرع وقت به شما پاسخ خواهد داد",
+    "description": "لطفاً فرم زیر را تکمیل کنید تا در اسرع وقت با شما تماس بگیریم",
+    "submitButton": "ارسال پیام",
+    "loadingButton": "در حال ارسال...",
+    "successMessage": "پیام شما با موفقیت ارسال شد",
+    "errorMessage": "خطا در ارسال پیام",
     "fields": {
       "full_name": {
         "label": "نام و نام خانوادگی",
-        "placeholder": "نام کامل خود را وارد کنید",
-        "required": true
+        "placeholder": "نام کامل خود را وارد کنید"
       },
       "email": {
         "label": "ایمیل",
-        "placeholder": "ایمیل خود را وارد کنید",
-        "required": true
+        "placeholder": "ایمیل خود را وارد کنید"
       },
       "phone": {
         "label": "شماره تماس",
-        "placeholder": "شماره تماس خود را وارد کنید",
-        "required": true
+        "placeholder": "۰۹۱۲۳۴۵۶۷۸۹"
       },
       "subject": {
         "label": "موضوع",
-        "placeholder": "موضوع پیام خود را انتخاب کنید",
-        "required": false
+        "placeholder": "موضوع را انتخاب کنید",
+        "options": [
+          { "value": "مشاوره", "label": "مشاوره" },
+          { "value": "پشتیبانی", "label": "پشتیبانی" },
+          { "value": "همکاری", "label": "همکاری" },
+          { "value": "سایر", "label": "سایر" }
+        ]
       },
       "message": {
-        "label": "پیام شما",
-        "placeholder": "پیام خود را بنویسید...",
-        "required": true
+        "label": "پیام",
+        "placeholder": "پیام خود را بنویسید..."
       }
-    },
-    "submitButton": "ارسال پیام",
-    "loadingButton": "در حال ارسال..."
-  },
-  "successMessage": "پیام شما با موفقیت ارسال شد",
-  "errorMessage": "خطا در ارسال پیام"
+    }
+  }
 }

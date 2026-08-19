@@ -1,6 +1,7 @@
-"use client";
+'use client';
 
 import Image from 'next/image';
+import Link from 'next/link';
 import { useState, FormEvent, useRef, useEffect } from 'react';
 import { motion, useInView, useAnimation } from 'framer-motion';
 import { toast } from 'react-hot-toast';
@@ -10,30 +11,16 @@ import {
   Mail, 
   Clock, 
   Send,
-  CheckCircle,
   AlertCircle,
   User,
   AtSign,
   MessageSquare,
   Loader2
 } from 'lucide-react';
-import contactData from './contact.json';
+import { useGatewayFetcher } from '@/hooks/useGatewayFetcher';
+import { getIcon } from '@/helper/renderIcon';
+import { ContactData, FormData, FormErrors } from '@/types';
 
-interface FormData {
-  full_name: string;
-  email: string;
-  phone: string;
-  subject: string;
-  message: string;
-}
-
-interface FormErrors {
-  full_name?: string;
-  email?: string;
-  phone?: string;
-  subject?: string;
-  message?: string;
-}
 
 export default function ContactPage() {
   const [formData, setFormData] = useState<FormData>({
@@ -43,6 +30,14 @@ export default function ContactPage() {
     subject: '',
     message: ''
   });
+
+  // دریافت دیتای صفحه تماس از Gateway
+  const {
+    data: contactData,
+    loading,
+    error,
+    refetch,
+  } = useGatewayFetcher<ContactData>('data/contact.json');
 
   const [errors, setErrors] = useState<FormErrors>({});
   const [isLoading, setIsLoading] = useState(false);
@@ -92,7 +87,6 @@ export default function ContactPage() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
-    // Mark all fields as touched
     const allFields = new Set(['full_name', 'email', 'phone', 'message']);
     setTouchedFields(allFields);
 
@@ -114,15 +108,14 @@ export default function ContactPage() {
 
       if (!res.ok) throw new Error(data.error || 'خطا در ارسال پیام');
 
-      toast.success(data.message || contactData.successMessage);
+      toast.success(contactData?.form?.successMessage || 'پیام شما با موفقیت ارسال شد');
       
-      // Reset form
       setFormData({ full_name: '', email: '', phone: '', subject: '', message: '' });
       setErrors({});
       setTouchedFields(new Set());
 
     } catch (error: any) {
-      toast.error(error.message || contactData.errorMessage);
+      toast.error(error.message || contactData?.form?.errorMessage || 'خطا در ارسال پیام');
     } finally {
       setIsLoading(false);
     }
@@ -145,16 +138,102 @@ export default function ContactPage() {
     return touchedFields.has(fieldName) ? errors[fieldName] : undefined;
   };
 
-  const contactItems = [
-    { key: 'address', icon: MapPin, data: contactData.address },
-    { key: 'phone', icon: Phone, data: contactData.phone },
-    { key: 'email', icon: Mail, data: contactData.email },
-    { key: 'workingHours', icon: Clock, data: contactData.workingHours },
-  ];
+  // رندر آیکون با استفاده از تابع getIcon (مشابه فوتر)
+  const renderIcon = (iconName: string, className: string = 'w-5 h-5') => {
+    const Icon = getIcon(iconName);
+    return Icon ? <Icon className={className} /> : null;
+  };
 
+  const socialColorMap: Record<string, string> = {
+    'blue-600': 'hover:bg-blue-600 hover:border-blue-600',
+    'pink-600': 'hover:bg-pink-600 hover:border-pink-600',
+    'blue-400': 'hover:bg-blue-400 hover:border-blue-400',
+    'red-600': 'hover:bg-red-600 hover:border-red-600',
+    'sky-500': 'hover:bg-sky-500 hover:border-sky-500',
+    'emerald-600': 'hover:bg-emerald-600 hover:border-emerald-600',
+    'purple-600': 'hover:bg-purple-600 hover:border-purple-600',
+    'orange-600': 'hover:bg-orange-600 hover:border-orange-600',
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        type: 'spring',
+        stiffness: 100,
+        damping: 20,
+      },
+    },
+  };
+
+// ===== بخش شرط‌ها =====
+if (false) {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white flex items-center justify-center">
+      <div className="text-center">
+        <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
+        <p className="text-gray-500">در حال بارگذاری صفحه تماس...</p>
+      </div>
+    </div>
+  );
+}
+
+if (false) {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white flex items-center justify-center">
+      <div className="text-center p-8 max-w-md">
+        <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">خطا در دریافت اطلاعات</h2>
+        <p className="text-gray-500 mb-6">
+          {false || 'متأسفانه در دریافت اطلاعات صفحه تماس مشکلی پیش آمده است.'}
+        </p>
+        <button
+          onClick={() => refetch()}
+          className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition"
+        >
+          تلاش مجدد
+        </button>
+      </div>
+    </div>
+  );
+}
+
+if (!contactData) {
+  return (
+    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white flex items-center justify-center">
+      <div className="text-center p-8 max-w-md">
+        <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
+        <h2 className="text-2xl font-bold text-gray-800 mb-2">داده‌ای وجود ندارد</h2>
+        <p className="text-gray-500 mb-6">اطلاعات صفحه تماس در دسترس نیست.</p>
+        <button
+          onClick={() => refetch()}
+          className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition"
+        >
+          تلاش مجدد
+        </button>
+      </div>
+    </div>
+  );
+}
+
+
+  // حالا مطمئنیم که contactData وجود دارد
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white">
-      {/* Hero Section with Parallax Effect */}
+      {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-primary/90 via-primary/70 to-secondary/90 pt-32 pb-16 overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10" />
         <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
@@ -174,7 +253,7 @@ export default function ContactPage() {
               className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6"
             >
               <Send className="w-4 h-4 text-white" />
-              <span className="text-white text-sm font-medium">ارتباط با ما</span>
+              <span className="text-white text-sm font-medium">{contactData?.hero?.badge}</span>
             </motion.div>
             
             <motion.h1 
@@ -192,7 +271,7 @@ export default function ContactPage() {
               transition={{ delay: 0.4 }}
               className="text-xl text-white/90 max-w-2xl mx-auto"
             >
-              {contactData.subtitle}
+              {contactData.hero.subtitle}
             </motion.p>
           </div>
         </motion.div>
@@ -201,77 +280,131 @@ export default function ContactPage() {
       {/* Contact Section */}
       <section className="py-20" ref={sectionRef}>
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-12">
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            animate={controls}
+            className="grid grid-cols-1 lg:grid-cols-5 gap-12"
+          >
             {/* Contact Info - Left Side */}
             <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              animate={controls}
-              variants={{
-                visible: { opacity: 1, x: 0 },
-                hidden: { opacity: 0, x: -30 }
-              }}
-              transition={{ duration: 0.6 }}
+              variants={itemVariants}
               className="lg:col-span-2"
             >
               <div className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-xl border border-gray-100 sticky top-24">
                 <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
                   <span className="text-primary">📞</span>
-                  {contactData.title}
+                  اطلاعات تماس
                 </h2>
                 
                 <div className="space-y-6">
-                  {contactItems.map((item, index) => {
-                    const Icon = item.icon;
-                    return (
-                      <motion.div
-                        key={item.key}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={controls}
-                        variants={{
-                          visible: { opacity: 1, y: 0 },
-                          hidden: { opacity: 0, y: 10 }
-                        }}
-                        transition={{ delay: index * 0.1 }}
-                        className="group flex items-start gap-4 p-4 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
-                      >
-                        <div className="p-3 bg-primary/10 rounded-full group-hover:bg-primary/20 transition-colors">
-                          <Icon className="w-5 h-5 text-primary" />
+                  {/* آدرس */}
+                  <motion.div
+                    variants={itemVariants}
+                    className="flex items-start gap-4 group p-4 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
+                    whileHover={{ x: -4 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      {renderIcon(contactData.contactInfo.address.icon, 'text-primary w-5 h-5')}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-800 text-sm">
+                        {contactData.contactInfo.address.label}
+                      </h3>
+                      {Array.isArray(contactData.contactInfo.address.value) ? (
+                        <div className="text-gray-600 text-sm mt-1">
+                          {contactData.contactInfo.address.value.map((line, idx) => (
+                            <p key={idx}>{line}</p>
+                          ))}
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-gray-800 text-sm">
-                            {item.data.label}
-                          </h3>
-                          {Array.isArray(item.data.value) ? (
-                            <div className="text-gray-600 text-sm mt-1">
-                              {item.data.value.map((line, idx) => (
-                                <p key={idx}>{line}</p>
-                              ))}
-                            </div>
-                          ) : (
-                            <p className="text-gray-600 text-sm mt-1">{item.data.value}</p>
-                          )}
+                      ) : (
+                        <p className="text-gray-600 text-sm mt-1">{contactData.contactInfo.address.value}</p>
+                      )}
+                    </div>
+                  </motion.div>
+
+                  {/* تلفن */}
+                  <motion.div
+                    variants={itemVariants}
+                    className="flex items-center gap-4 group p-4 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
+                    whileHover={{ x: -4 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      {renderIcon(contactData.contactInfo.phone.icon, 'text-primary w-5 h-5')}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-800 text-sm">
+                        {contactData.contactInfo.phone.label}
+                      </h3>
+                      <p className="text-gray-600 text-sm mt-1">{contactData.contactInfo.phone.value}</p>
+                    </div>
+                  </motion.div>
+
+                  {/* ایمیل */}
+                  <motion.div
+                    variants={itemVariants}
+                    className="flex items-center gap-4 group p-4 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
+                    whileHover={{ x: -4 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      {renderIcon(contactData.contactInfo.email.icon, 'text-primary w-5 h-5')}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-800 text-sm">
+                        {contactData.contactInfo.email.label}
+                      </h3>
+                      <p className="text-gray-600 text-sm mt-1">{contactData.contactInfo.email.value}</p>
+                    </div>
+                  </motion.div>
+
+                  {/* ساعات کاری */}
+                  <motion.div
+                    variants={itemVariants}
+                    className="flex items-start gap-4 group p-4 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
+                    whileHover={{ x: -4 }}
+                    transition={{ type: 'spring', stiffness: 300 }}
+                  >
+                    <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      {renderIcon(contactData.contactInfo.workingHours.icon, 'text-primary w-5 h-5')}
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-gray-800 text-sm">
+                        {contactData.contactInfo.workingHours.label}
+                      </h3>
+                      {Array.isArray(contactData.contactInfo.workingHours.value) ? (
+                        <div className="text-gray-600 text-sm mt-1">
+                          {contactData.contactInfo.workingHours.value.map((line, idx) => (
+                            <p key={idx}>{line}</p>
+                          ))}
                         </div>
-                      </motion.div>
-                    );
-                  })}
+                      ) : (
+                        <p className="text-gray-600 text-sm mt-1">{contactData.contactInfo.workingHours.value}</p>
+                      )}
+                    </div>
+                  </motion.div>
                 </div>
 
                 {/* Social Media */}
                 <div className="mt-8 pt-8 border-t border-gray-200">
                   <h3 className="font-semibold text-gray-800 mb-4">ما را دنبال کنید</h3>
-                  <div className="flex gap-3">
+                  <div className="flex gap-3 flex-wrap">
                     {contactData.socialMedia.map((social, index) => (
                       <motion.a
                         key={index}
                         href={social.url}
                         target="_blank"
                         rel="noopener noreferrer"
-                        whileHover={{ y: -4 }}
-                        className="p-3 bg-gray-100 rounded-full hover:bg-primary/10 transition-colors group"
+                        whileHover={{ y: -4, scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className={`w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 border border-gray-200 text-gray-600 hover:text-white transition-all duration-300 ${
+                          socialColorMap[social.color] || 'hover:bg-primary hover:border-primary'
+                        }`}
+                        aria-label={social.name}
                       >
-                        <span className="text-gray-600 group-hover:text-primary transition-colors">
-                          {social.name}
-                        </span>
+                        {renderIcon(social.icon, 'w-4 h-4')}
                       </motion.a>
                     ))}
                   </div>
@@ -279,12 +412,10 @@ export default function ContactPage() {
 
                 {/* Map */}
                 <div className="relative mt-6 bg-gray-200 rounded-xl h-48 overflow-hidden">
-                  <Image
+                  <img
                     src={contactData.mapImage}
                     alt="نقشه موقعیت"
-                    fill
                     className="object-cover hover:scale-105 transition-transform duration-500"
-                    priority
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
                 </div>
@@ -293,13 +424,7 @@ export default function ContactPage() {
 
             {/* Form - Right Side */}
             <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              animate={controls}
-              variants={{
-                visible: { opacity: 1, x: 0 },
-                hidden: { opacity: 0, x: 30 }
-              }}
-              transition={{ duration: 0.6, delay: 0.2 }}
+              variants={itemVariants}
               className="lg:col-span-3"
             >
               <div className="bg-white p-8 md:p-10 rounded-2xl shadow-xl border border-gray-100">
@@ -415,11 +540,12 @@ export default function ContactPage() {
                         onChange={handleChange}
                         className="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all appearance-none bg-white"
                       >
-                        <option value="">موضوع را انتخاب کنید</option>
-                        <option value="مشاوره">مشاوره</option>
-                        <option value="پشتیبانی">پشتیبانی</option>
-                        <option value="همکاری">همکاری</option>
-                        <option value="سایر">سایر</option>
+                        <option value="">{contactData.form.fields.subject.placeholder}</option>
+                        {contactData.form.fields.subject.options.map((option) => (
+                          <option key={option.value} value={option.value}>
+                            {option.label}
+                          </option>
+                        ))}
                       </select>
                     </div>
                   </div>
@@ -486,21 +612,9 @@ export default function ContactPage() {
                 </form>
               </div>
             </motion.div>
-          </div>
+          </motion.div>
         </div>
       </section>
-
-      {/* Success Toast Customization */}
-      <style jsx global>{`
-        .toast-success {
-          background: #10b981 !important;
-          color: white !important;
-        }
-        .toast-error {
-          background: #ef4444 !important;
-          color: white !important;
-        }
-      `}</style>
     </div>
   );
 }
