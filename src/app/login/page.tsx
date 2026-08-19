@@ -15,13 +15,16 @@ import {
   Eye,
   EyeOff,
 } from 'lucide-react';
+import DemoCaptcha from '@/components/RecaptchaV2';
+import RecaptchaV2 from '@/components/RecaptchaV2';
 
 type Step = 'identifier' | 'register' | 'otp' | 'password';
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
-
+  const API_BASE = process.env.NEXT_PUBLIC_DEFAULT_GATEWAY_URL || 'http://reyhansmart.ir:5020';
+  
   const [step, setStep] = useState<Step>('identifier');
   const [identifier, setIdentifier] = useState(''); // email یا موبایل
   const [password, setPassword] = useState('');
@@ -32,6 +35,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [isExistingUser, setIsExistingUser] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
 
   const isPhone = (val: string) => /^09\d{9}$/.test(val.replace(/\s/g, ''));
   const isEmail = (val: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
@@ -49,27 +53,41 @@ export default function LoginPage() {
 
     setIsLoading(true);
     try {
-      // TODO: اتصال به API واقعی
-      // const res = await fetch('/api/auth/check', {
-      //   method: 'POST',
-      //   headers: { 'Content-Type': 'application/json' },
-      //   body: JSON.stringify({ identifier: value }),
-      // });
-      // const data = await res.json();
+      const res = await fetch(`${API_BASE}/check`,{
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier: value, recaptchaToken: recaptchaToken }),
+      });
 
-      // شبیه‌سازی: اگر شامل @ باشه کاربر موجود فرض می‌شه
-      const exists = value.includes('@') || value.startsWith('09');
-      // برای تست ثبت‌نام جدید، می‌تونی exists رو false بذاری
+      const data = await res.json();
 
-      // فعلاً برای دمو: اعداد خاص → کاربر جدید
+      if (!res.ok) {
+        setError(data.message || 'خطا در بررسی کاربر');
+        return;
+      }
+
+      // منطق دمو (برای تست بدون بک‌اند)
+      // اگر شماره 09000000000 یا ایمیل new@test.com باشه → کاربر جدید
       const isNew = value === '09000000000' || value === 'new@test.com';
-      const userExists = !isNew;
+      const userExists = data.exists ?? !isNew;
 
       setIsExistingUser(userExists);
 
       if (userExists) {
-        // ارسال کد
-        // await fetch('/api/auth/send-otp', { ... });
+        // ارسال OTP
+        const otpRes = await fetch(`${API_BASE}/send-o`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ identifier: value }),
+        });
+
+        const otpData = await otpRes.json();
+
+        if (!otpRes.ok) {
+          setError(otpData.message || 'خطا در ارسال کد تایید');
+          return;
+        }
+
         setStep('otp');
       } else {
         setStep('register');
@@ -81,7 +99,7 @@ export default function LoginPage() {
     }
   };
 
-  // ثبت‌نام (پسورد + تایید)
+  // ثبت‌نام (نام + پسورد)
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
@@ -101,11 +119,33 @@ export default function LoginPage() {
 
     setIsLoading(true);
     try {
-      // TODO: API ثبت‌نام
-      // await fetch('/api/auth/register', { ... });
+      const res = await fetch(`${API_BASE}/register`,{
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          identifier: identifier.trim(),
+          name: name.trim(),
+          password,
+        }),
+      });
 
-      // بعد از ثبت‌نام → همان صفحه OTP
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || 'خطا در ثبت‌نام');
+        return;
+      }
+
+      // بعد از ثبت‌نام موفق → ارسال OTP و رفتن به مرحله تایید
       setIsExistingUser(false);
+
+      // ارسال OTP
+      await fetch(`${API_BASE}/send-o`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier: identifier.trim() }),
+      });
+
       setStep('otp');
     } catch {
       setError('خطا در ثبت‌نام');
@@ -126,23 +166,42 @@ export default function LoginPage() {
 
     setIsLoading(true);
     try {
-      // TODO: API تایید کد
-      // const res = await fetch('/api/auth/verify-otp', { ... });
+      const res = await fetch(`${API_BASE}/verify-o`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          identifier: identifier.trim(),
+          otp,
+        }),
+      });
 
-      // دمو: کد 1234 قبول می‌شه
-      if (otp !== '1234') {
-        setError('کد تایید نامعتبر است (دمو: 1234)');
+      const data = await res.json();
+
+      // دمو: کد 1234 قبول می‌شه (حتی اگر API جواب نده)
+      if (otp !== '1234' && !res.ok) {
+        setError(data.message || 'کد تایید نامعتبر است (دمو: 1234)');
         setIsLoading(false);
         return;
       }
 
+      // اگر API موفق بود یا دمو قبول شد
       login({
         name: name.trim() || identifier.split('@')[0] || 'کاربر ریحان',
         emailOrPhone: identifier,
       });
+
       router.push('/');
     } catch {
-      setError('خطا در تایید کد');
+      // در حالت دمو حتی اگر fetch fail بشه با کد 1234 قبول کنه
+      if (otp === '1234') {
+        login({
+          name: name.trim() || identifier.split('@')[0] || 'کاربر ریحان',
+          emailOrPhone: identifier,
+        });
+        router.push('/');
+      } else {
+        setError('خطا در تایید کد');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -160,13 +219,27 @@ export default function LoginPage() {
 
     setIsLoading(true);
     try {
-      // TODO: API ورود با رمز
-      // const res = await fetch('/api/auth/login', { ... });
+      const res = await fetch(`${API_BASE}/login`,{
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          identifier: identifier.trim(),
+          password,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        setError(data.message || 'رمز عبور اشتباه است');
+        return;
+      }
 
       login({
-        name: identifier.split('@')[0] || 'کاربر ریحان',
+        name: data.user?.name || identifier.split('@')[0] || 'کاربر ریحان',
         emailOrPhone: identifier,
       });
+
       router.push('/');
     } catch {
       setError('رمز عبور اشتباه است');
@@ -179,6 +252,7 @@ export default function LoginPage() {
     setError('');
     setPassword('');
     setConfirmPassword('');
+    setRecaptchaToken(null);
     setOtp('');
     if (step === 'password') setStep('otp');
     else setStep('identifier');
@@ -236,6 +310,11 @@ export default function LoginPage() {
                       dir="ltr"
                     />
                   </div>
+                  {/* کپچا دمو */}
+                  <RecaptchaV2
+                    onChange={setRecaptchaToken}
+                    className="mt-2"
+                  />
                 </div>
 
                 {error && (
@@ -244,7 +323,7 @@ export default function LoginPage() {
 
                 <button
                   type="submit"
-                  disabled={isLoading || !identifier.trim()}
+                  disabled={isLoading || !identifier.trim() || !recaptchaToken}
                   className="w-full flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-dark py-3 text-sm font-medium text-white disabled:opacity-50 hover:opacity-90 transition"
                 >
                   {isLoading ? (
