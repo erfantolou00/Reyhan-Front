@@ -44,14 +44,6 @@ export default function ContactPage() {
   const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
   
   const sectionRef = useRef(null);
-  const isInView = useInView(sectionRef, { once: true, amount: 0.2 });
-  const controls = useAnimation();
-
-  useEffect(() => {
-    if (isInView) {
-      controls.start('visible');
-    }
-  }, [isInView, controls]);
 
   const validateForm = (): boolean => {
     const newErrors: FormErrors = {};
@@ -180,7 +172,7 @@ export default function ContactPage() {
   };
 
 // ===== بخش شرط‌ها =====
-if (false) {
+if (loading) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white flex items-center justify-center">
       <div className="text-center">
@@ -191,14 +183,14 @@ if (false) {
   );
 }
 
-if (false) {
+if (error) {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white flex items-center justify-center">
       <div className="text-center p-8 max-w-md">
         <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
         <h2 className="text-2xl font-bold text-gray-800 mb-2">خطا در دریافت اطلاعات</h2>
         <p className="text-gray-500 mb-6">
-          {false || 'متأسفانه در دریافت اطلاعات صفحه تماس مشکلی پیش آمده است.'}
+          {error || 'متأسفانه در دریافت اطلاعات صفحه تماس مشکلی پیش آمده است.'}
         </p>
         <button
           onClick={() => refetch()}
@@ -283,7 +275,7 @@ if (!contactData) {
           <motion.div
             variants={containerVariants}
             initial="hidden"
-            animate={controls}
+            animate="visible"
             className="grid grid-cols-1 lg:grid-cols-5 gap-12"
           >
             {/* Contact Info - Left Side */}
@@ -297,11 +289,11 @@ if (!contactData) {
                   اطلاعات تماس
                 </h2>
                 
-                <div className="space-y-6">
+                <div className="space-y-4">
                   {/* آدرس */}
                   <motion.div
                     variants={itemVariants}
-                    className="flex items-start gap-4 group p-4 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
+                    className="flex items-start gap-4 group p-3 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
                     whileHover={{ x: -4 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
@@ -313,7 +305,7 @@ if (!contactData) {
                         {contactData.contactInfo.address.label}
                       </h3>
                       {Array.isArray(contactData.contactInfo.address.value) ? (
-                        <div className="text-gray-600 text-sm mt-1">
+                        <div className="text-gray-600 text-sm mt-1 flex">
                           {contactData.contactInfo.address.value.map((line, idx) => (
                             <p key={idx}>{line}</p>
                           ))}
@@ -327,7 +319,7 @@ if (!contactData) {
                   {/* تلفن */}
                   <motion.div
                     variants={itemVariants}
-                    className="flex items-center gap-4 group p-4 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
+                    className="flex items-center gap-4 group p-3 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
                     whileHover={{ x: -4 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
@@ -345,7 +337,7 @@ if (!contactData) {
                   {/* ایمیل */}
                   <motion.div
                     variants={itemVariants}
-                    className="flex items-center gap-4 group p-4 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
+                    className="flex items-center gap-4 group p-3 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
                     whileHover={{ x: -4 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
@@ -363,7 +355,7 @@ if (!contactData) {
                   {/* ساعات کاری */}
                   <motion.div
                     variants={itemVariants}
-                    className="flex items-start gap-4 group p-4 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
+                    className="flex items-start gap-4 group p-3 rounded-xl hover:bg-white/50 transition-all duration-300 hover:shadow-md"
                     whileHover={{ x: -4 }}
                     transition={{ type: 'spring', stiffness: 300 }}
                   >
@@ -388,7 +380,7 @@ if (!contactData) {
                 </div>
 
                 {/* Social Media */}
-                <div className="mt-8 pt-8 border-t border-gray-200">
+                <div className="mt-6 pt-6 border-t border-gray-200">
                   <h3 className="font-semibold text-gray-800 mb-4">ما را دنبال کنید</h3>
                   <div className="flex gap-3 flex-wrap">
                     {contactData.socialMedia.map((social, index) => (
