@@ -13,6 +13,7 @@ import {
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import blogData from '../../blog.json';
+import PageFrame, { PageHero } from '@/components/home/PageFrame';
 
 export const revalidate = 3600;
 
@@ -77,65 +78,34 @@ export default async function CategoryPage({ params }: Props) {
   const posts = getPostsByCategory(params.id);
   const categoryName = getCategoryName(parseInt(params.id));
   const categoryColor = getCategoryColor(parseInt(params.id));
-  const categoryIcon = getCategoryIcon(parseInt(params.id));
-
   // آمار مقالات
   const totalPosts = posts.length;
   const totalReadingTime = posts.reduce((acc, post) => acc + (post.reading_time || 0), 0);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white" dir="rtl">
-      
-      {/* Hero Section */}
-      <section className={`relative bg-gradient-to-br from-${categoryColor}/90 via-${categoryColor}/70 to-${categoryColor}/50 pt-32 pb-16 overflow-hidden`}>
-        <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10" />
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
-        
-        <div className="container mx-auto px-4 relative z-10">
-          <div className="max-w-4xl mx-auto text-center">
-            {/* Back Button */}
-            <Link 
-              href="/blog" 
-              className="inline-flex items-center gap-2 text-white/80 hover:text-white transition-colors mb-6 group"
-            >
-              <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" />
-              بازگشت به بلاگ
-            </Link>
-            
-            <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
-              <span className="text-2xl">{categoryIcon === 'Briefcase' ? '📁' : 
-                categoryIcon === 'Brain' ? '🧠' : 
-                categoryIcon === 'Code' ? '💻' : '📂'}</span>
-              <span className="text-white text-sm font-medium">دسته‌بندی</span>
-            </div>
-            
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6">
-              {categoryName}
-            </h1>
-            
-            <p className="text-xl text-white/90 max-w-2xl mx-auto">
-              {totalPosts} مقاله در این دسته‌بندی
-            </p>
-
-            {/* Category Stats */}
-            <div className="grid grid-cols-3 gap-4 max-w-md mx-auto mt-8">
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3">
-                <div className="text-2xl font-bold text-white">{totalPosts}</div>
-                <div className="text-xs text-white/70">مقاله</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3">
-                <div className="text-2xl font-bold text-white">{totalReadingTime}</div>
-                <div className="text-xs text-white/70">دقیقه مطالعه</div>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3">
-                <div className="text-2xl font-bold text-white">{posts.length > 0 ? '✅' : '❌'}</div>
-                <div className="text-xs text-white/70">وضعیت</div>
-              </div>
-            </div>
+    <PageFrame>
+      <PageHero
+        eyebrow="دسته‌بندی"
+        title={categoryName}
+        subtitle={`${totalPosts} مقاله در این دسته‌بندی`}
+        before={
+          <Link href="/blog" className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-secondary hover:text-primary">
+            <FaArrowLeft />
+            بازگشت به بلاگ
+          </Link>
+        }
+      >
+        <div className="mx-auto mt-8 grid max-w-md grid-cols-2 gap-3">
+          <div className="rounded-2xl border border-slate-200 bg-white px-3 py-3 dark:border-white/10 dark:bg-[#0c1a2c]">
+            <div className="text-2xl font-bold text-slate-950 dark:text-white">{totalPosts}</div>
+            <div className="text-xs text-slate-500">مقاله</div>
+          </div>
+          <div className="rounded-2xl border border-slate-200 bg-white px-3 py-3 dark:border-white/10 dark:bg-[#0c1a2c]">
+            <div className="text-2xl font-bold text-slate-950 dark:text-white">{totalReadingTime}</div>
+            <div className="text-xs text-slate-500">دقیقه مطالعه</div>
           </div>
         </div>
-      </section>
+      </PageHero>
 
       {/* Posts Grid */}
       <div className="container mx-auto px-4 py-16">
@@ -143,10 +113,10 @@ export default async function CategoryPage({ params }: Props) {
           <>
             {/* Results Count */}
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-2xl font-bold text-gray-900">
-                تمام مقالات <span className={`text-${categoryColor}`}>{categoryName}</span>
+              <h2 className="text-2xl font-bold text-slate-950 dark:text-white">
+                تمام مقالات <span className="text-primary">{categoryName}</span>
               </h2>
-              <span className="text-sm text-gray-500">
+              <span className="text-sm text-slate-500">
                 {posts.length} مقاله پیدا شد
               </span>
             </div>
@@ -157,7 +127,7 @@ export default async function CategoryPage({ params }: Props) {
                 <Link 
                   href={`/blog/${post.slug}`} 
                   key={post.id} 
-                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-2"
+                  className="group overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[#0c1a2c]"
                 >
                   <div className="relative h-56 w-full overflow-hidden">
                     <Image
@@ -248,6 +218,6 @@ export default async function CategoryPage({ params }: Props) {
           </div>
         )}
       </div>
-    </div>
+    </PageFrame>
   );
 }

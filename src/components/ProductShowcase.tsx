@@ -1,8 +1,8 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
 import Image from 'next/image';
+import SoftGlow from '@/components/home/SoftGlow';
 
 const features = [
   {
@@ -37,25 +37,19 @@ const ProductShowcase = () => {
   }, []);
 
   return (
-    <section className="relative overflow-hidden bg-slate-50 py-24 sm:py-28">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.08),transparent_35%)]" />
-
-      <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative py-20 sm:py-24">
+      <SoftGlow className="top-16 left-[42%]" delay="-7s" />
+      <SoftGlow tone="blue" className="left-[78%] top-full -mt-48" delay="-14s" />
+      <div className="container relative z-20 mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid items-center gap-10 lg:grid-cols-[0.95fr_1.05fr] lg:gap-14">
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-right"
-          >
-            <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+          <div className="text-right">
+            <span className="inline-flex rounded-full border border-primary/30 bg-white px-3 py-1 text-sm font-semibold text-primary dark:border-primary/40 dark:bg-primary/10">
               امکانات اصلی
             </span>
-            <h2 className="mt-4 text-3xl font-black text-slate-900 sm:text-4xl">
+            <h2 className="mt-4 text-3xl font-bold text-slate-950 dark:text-white sm:text-4xl">
               به‌جای پیچیدگی، تجربه‌ای روان و مدرن
             </h2>
-            <p className="mt-4 text-lg leading-8 text-slate-600">
+            <p className="mt-4 text-lg leading-8 text-slate-600 dark:text-slate-300">
               ماژول‌های ریحان طوری طراحی شده‌اند که کار با سیستم برای مدیران و کارکنان ساده، سریع و مطمئن باشد.
             </p>
 
@@ -63,29 +57,23 @@ const ProductShowcase = () => {
               {features.map((feature, index) => (
                 <div
                   key={feature.title}
-                  className="rounded-[24px] border border-slate-200 bg-white/80 p-5 shadow-sm backdrop-blur"
+                  className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-[#0c1a2c]"
                 >
                   <div className="flex items-start gap-3">
                     <div className="mt-0.5 flex h-10 w-10 items-center justify-center rounded-2xl bg-primary/10 text-lg text-primary">
                       {index + 1}
                     </div>
                     <div>
-                      <h3 className="text-lg font-semibold text-slate-900">{feature.title}</h3>
-                      <p className="mt-2 text-sm leading-7 text-slate-600">{feature.description}</p>
+                      <h3 className="text-lg font-semibold text-slate-950 dark:text-white">{feature.title}</h3>
+                      <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">{feature.description}</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="rounded-[32px] border border-slate-200 bg-white p-4 shadow-[0_25px_80px_-30px_rgba(15,23,42,0.3)]"
-          >
+          <div className="rounded-2xl border border-slate-200 bg-white p-3 dark:border-white/10 dark:bg-[#0c1a2c]">
             <div className="relative aspect-[16/10] overflow-hidden rounded-[24px] border border-slate-200 bg-slate-100">
               {shouldLoadGif ? (
                 <Image
@@ -122,7 +110,7 @@ const ProductShowcase = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

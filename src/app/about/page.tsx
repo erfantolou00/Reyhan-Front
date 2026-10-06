@@ -3,13 +3,10 @@
 import Image from 'next/image'
 import { useEffect, useState, useRef } from 'react';
 import { motion, useInView, useAnimation } from 'framer-motion';
-import { 
-  Briefcase,
-  ChevronDown,
-  Sparkles,
-} from 'lucide-react';
+import { Briefcase } from 'lucide-react';
 import aboutData from './about.json';
 import { getIcon } from '@/helper/renderIcon';
+import PageFrame, { PageHero } from '@/components/home/PageFrame';
 
 export default function About() {
   const [shouldLoadGif, setShouldLoadGif] = useState(false);
@@ -47,9 +44,9 @@ export default function About() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <h2 className="text-3xl font-bold mb-4">{aboutData.story.title}</h2>
+            <h2 className="mb-4 text-3xl font-bold text-slate-950 dark:text-white">{aboutData.story.title}</h2>
             {aboutData.story.paragraphs.map((paragraph, index) => (
-              <p key={index} className="text-gray-600 leading-relaxed mb-4">
+              <p key={index} className="mb-4 leading-relaxed text-slate-600 dark:text-slate-300">
                 {paragraph}
               </p>
             ))}
@@ -62,13 +59,13 @@ export default function About() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <h2 className="text-3xl font-bold mb-4">{aboutData.mission.title}</h2>
-            <p className="text-gray-600 leading-relaxed mb-4">
+            <h2 className="mb-4 text-3xl font-bold text-slate-950 dark:text-white">{aboutData.mission.title}</h2>
+            <p className="mb-4 leading-relaxed text-slate-600 dark:text-slate-300">
               {aboutData.mission.description}
             </p>
-            <div className="bg-primary/5 p-6 rounded-xl border border-primary/10">
-              <h4 className="font-semibold text-primary mb-2">چشم‌انداز</h4>
-              <p className="text-gray-600">{aboutData.mission.vision}</p>
+            <div className="rounded-2xl border border-primary/20 bg-primary/5 p-6">
+              <h4 className="mb-2 font-semibold text-primary">چشم‌انداز</h4>
+              <p className="text-slate-600 dark:text-slate-300">{aboutData.mission.vision}</p>
             </div>
           </motion.div>
         );
@@ -79,12 +76,12 @@ export default function About() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
           >
-            <h2 className="text-3xl font-bold mb-4">💎 ارزش‌های ما</h2>
+            <h2 className="mb-4 text-3xl font-bold text-slate-950 dark:text-white">ارزش‌های ما</h2>
             <div className="space-y-4">
               {aboutData.values.map((value, index) => (
-                <div key={index} className="bg-gray-50 p-4 rounded-xl">
-                  <h4 className="font-semibold text-gray-800 mb-1">{value.title}</h4>
-                  <p className="text-gray-600 text-sm">{value.description}</p>
+                <div key={index} className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-[#0c1a2c]">
+                  <h4 className="mb-1 font-semibold text-slate-800 dark:text-slate-100">{value.title}</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">{value.description}</p>
                 </div>
               ))}
             </div>
@@ -96,65 +93,14 @@ export default function About() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary/90 via-primary/70 to-secondary/90 pt-32 pb-20 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10" />
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="container mx-auto px-4 relative z-10"
-        >
-          <div className="max-w-4xl mx-auto text-center">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6"
-            >
-              <Sparkles className="w-4 h-4 text-white" />
-              <span className="text-white text-sm font-medium">{aboutData.hero.badge}</span>
-            </motion.div>
-            
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6"
-            >
-              {aboutData.hero.title}
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-xl md:text-2xl text-white/90 max-w-2xl mx-auto"
-            >
-              {aboutData.hero.subtitle}
-            </motion.p>
+    <PageFrame>
+      <PageHero
+        eyebrow={aboutData.hero.badge}
+        title={aboutData.hero.title}
+        subtitle={aboutData.hero.subtitle}
+      />
 
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="mt-8"
-            >
-              <div className="inline-flex items-center gap-2 text-white/70 text-sm">
-                <span>کشف کنید</span>
-                <ChevronDown className="w-4 h-4 animate-bounce" />
-              </div>
-            </motion.div>
-          </div>
-        </motion.div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-12 bg-white border-b">
+      <section className="py-12">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
             {aboutData.companyStats.map((stat, index) => (
@@ -163,13 +109,13 @@ export default function About() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="text-center p-4 rounded-xl hover:bg-gray-50 transition-colors"
+                className="rounded-2xl border border-slate-200 bg-white p-4 text-center dark:border-white/10 dark:bg-[#0c1a2c]"
               >
                 <div className="flex justify-center text-primary mb-2">
                   {getIconComponent(stat.icon)}
                 </div>
-                <div className="text-2xl font-bold text-gray-800">{stat.value}</div>
-                <div className="text-sm text-gray-500">{stat.label}</div>
+                <div className="text-2xl font-bold text-slate-950 dark:text-white">{stat.value}</div>
+                <div className="text-sm text-slate-500 dark:text-slate-400">{stat.label}</div>
               </motion.div>
             ))}
           </div>
@@ -189,15 +135,15 @@ export default function About() {
               }}
               transition={{ duration: 0.6 }}
             >
-              <div className="flex gap-2 mb-8 bg-gray-100 p-1 rounded-xl w-fit">
+              <div className="mb-8 flex w-fit gap-2 rounded-xl border border-slate-200 bg-white p-1 dark:border-white/10 dark:bg-[#0c1a2c]">
                 {['story', 'mission', 'values'].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
                     className={`px-6 py-2 rounded-lg text-sm font-medium transition-all ${
                       activeTab === tab 
-                        ? 'bg-white shadow-md text-primary' 
-                        : 'text-gray-600 hover:text-gray-800'
+                        ? 'bg-primary text-white' 
+                        : 'text-slate-600 hover:text-slate-950 dark:text-slate-300 dark:hover:text-white'
                     }`}
                   >
                     {tab === 'story' && 'داستان ما'}
@@ -222,8 +168,8 @@ export default function About() {
               transition={{ duration: 0.6, delay: 0.2 }}
               className="lg:sticky lg:top-24"
             >
-              <div className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-xl border border-gray-100">
-                <h3 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <div className="rounded-2xl border border-slate-200 bg-white p-8 dark:border-white/10 dark:bg-[#0c1a2c]">
+                <h3 className="mb-6 flex items-center gap-2 text-2xl font-bold text-slate-950 dark:text-white">
                   <Briefcase className="w-6 h-6 text-primary" />
                   اطلاعات شرکت
                 </h3>
@@ -234,8 +180,8 @@ export default function About() {
                         {getIconComponent(item.icon, "w-5 h-5 text-primary")}
                       </div>
                       <div>
-                        <div className="text-sm text-gray-500">{item.label}</div>
-                        <div className="font-medium text-gray-800">{item.value}</div>
+                        <div className="text-sm text-slate-500 dark:text-slate-400">{item.label}</div>
+                        <div className="font-medium text-slate-800 dark:text-slate-100">{item.value}</div>
                       </div>
                     </div>
                   ))}
@@ -247,7 +193,7 @@ export default function About() {
       </section>
 
       {/* Team Section */}
-      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-20">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -259,8 +205,8 @@ export default function About() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="text-center mb-12"
           >
-            <h2 className="text-4xl font-bold mb-4">👥 تیم متخصص ما</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto">
+            <h2 className="mb-4 text-4xl font-bold text-slate-950 dark:text-white">تیم متخصص ما</h2>
+            <p className="mx-auto max-w-2xl text-slate-600 dark:text-slate-300">
               تیم ما متشکل از متخصصان با تجربه در حوزه فناوری اطلاعات و مدیریت است
             </p>
           </motion.div>
@@ -277,7 +223,7 @@ export default function About() {
                 }}
                 transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
                 whileHover={{ y: -8 }}
-                className="group bg-white rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden"
+                className="group overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[#0c1a2c]"
               >
                 <div className="relative">
                   <div className="w-full aspect-square bg-gradient-to-br from-gray-100 to-gray-200 relative overflow-hidden">
@@ -303,8 +249,8 @@ export default function About() {
                   <div className="inline-block px-3 py-1 bg-primary/10 text-primary text-xs font-medium rounded-full mb-3">
                     {member.role}
                   </div>
-                  <h3 className="text-xl font-bold mb-2 text-gray-800">{member.name}</h3>
-                  <p className="text-gray-600 text-sm">{member.description}</p>
+                  <h3 className="mb-2 text-xl font-bold text-slate-800 dark:text-slate-100">{member.name}</h3>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">{member.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -313,7 +259,7 @@ export default function About() {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 bg-primary/5">
+      <section className="py-16">
         <div className="container mx-auto px-4 text-center">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -324,21 +270,21 @@ export default function About() {
             }}
             transition={{ duration: 0.6, delay: 0.6 }}
           >
-            <h3 className="text-2xl font-bold mb-4">{aboutData.cta.title}</h3>
-            <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
+            <h3 className="mb-4 text-2xl font-bold text-slate-950 dark:text-white">{aboutData.cta.title}</h3>
+            <p className="mx-auto mb-6 max-w-2xl text-slate-600 dark:text-slate-300">
               {aboutData.cta.description}
             </p>
             <div className="flex flex-wrap gap-4 justify-center">
-              <button className="px-8 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition-colors shadow-lg hover:shadow-xl">
+              <button className="rounded-full bg-primary px-8 py-3 text-white transition-colors hover:bg-primary-dark">
                 {aboutData.cta.primaryButton}
               </button>
-              <button className="px-8 py-3 bg-white text-primary border-2 border-primary rounded-xl hover:bg-primary/5 transition-colors">
+              <button className="rounded-full border border-secondary/30 bg-white px-8 py-3 text-secondary transition-colors hover:bg-secondary hover:text-white dark:bg-white/5 dark:text-white dark:hover:bg-white/10">
                 {aboutData.cta.secondaryButton}
               </button>
             </div>
           </motion.div>
         </div>
       </section>
-    </div>
+    </PageFrame>
   )
 }

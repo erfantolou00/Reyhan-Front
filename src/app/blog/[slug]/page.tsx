@@ -19,6 +19,7 @@ import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 import blogData from '@/app/blog/blog.json';
 import ShareButtons from '@/components/SharedButtons';
+import PageFrame from '@/components/home/PageFrame';
 
 export const revalidate = 3600;
 
@@ -142,7 +143,7 @@ export default async function BlogPost({ params }: Props) {
   const postUrl = `${baseUrl}/blog/${post.slug}`;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white" dir="rtl">
+    <PageFrame>
       
       {/* Progress Bar */}
       <div className="sticky top-0 z-50 w-full h-1 bg-gray-200">
@@ -165,7 +166,7 @@ export default async function BlogPost({ params }: Props) {
         </Link>
 
         {/* Article Container */}
-        <article className="bg-white rounded-3xl shadow-xl overflow-hidden">
+        <article className="overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[#0c1a2c]">
           
           {/* Hero Image */}
           <div className="relative h-[350px] md:h-[450px] lg:h-[500px] overflow-hidden">
@@ -203,17 +204,17 @@ export default async function BlogPost({ params }: Props) {
             
             {/* Header */}
             <div className="mb-8">
-              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 leading-tight mb-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-slate-950 dark:text-white leading-tight mb-4">
                 {post.title}
               </h1>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <p className="text-lg text-slate-600 dark:text-slate-300 leading-relaxed">
                 {post.subtitle}
               </p>
             </div>
 
             {/* Meta Info */}
             <div className="flex flex-wrap items-center justify-between gap-4 border-b border-gray-100 pb-6 mb-8">
-              <div className="flex flex-wrap items-center gap-4 text-gray-600">
+              <div className="flex flex-wrap items-center gap-4 text-slate-600 dark:text-slate-300">
                 {/* Author */}
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full overflow-hidden bg-primary/10">
@@ -232,7 +233,7 @@ export default async function BlogPost({ params }: Props) {
                     )}
                   </div>
                   <div>
-                    <div className="text-sm font-medium text-gray-900">{authorInfo.name}</div>
+                    <div className="text-sm font-medium text-slate-950 dark:text-white">{authorInfo.name}</div>
                     <div className="text-xs text-gray-400">{authorInfo.bio}</div>
                   </div>
                 </div>
@@ -271,7 +272,7 @@ export default async function BlogPost({ params }: Props) {
                   <Link
                     key={index}
                     href={`/blog/tag/${tag}`}
-                    className="px-3 py-1 bg-gray-100 hover:bg-primary/10 text-gray-600 hover:text-primary rounded-full text-xs transition-colors"
+                    className="rounded-full bg-slate-100 px-3 py-1 text-xs text-slate-600 transition-colors hover:bg-primary/10 hover:text-primary dark:bg-white/10 dark:text-slate-300"
                   >
                     #{tag}
                   </Link>
@@ -280,12 +281,12 @@ export default async function BlogPost({ params }: Props) {
             )}
 
             {/* Main Content */}
-            <div className="prose prose-lg max-w-none prose-p:leading-8 text-gray-700">
+            <div className="prose prose-lg max-w-none prose-p:leading-8 text-slate-700 dark:text-slate-200">
               {post.content ? post.content.split('\n').map((paragraph: string, index: number) => {
                 // هدر سطح ۳
                 if (paragraph.trim().startsWith('###')) {
                   return (
-                    <h3 key={index} className="text-2xl font-bold mt-8 mb-4 text-gray-900">
+                    <h3 key={index} className="text-2xl font-bold mt-8 mb-4 text-slate-950 dark:text-white">
                       {paragraph.replace('###', '').trim()}
                     </h3>
                   );
@@ -293,7 +294,7 @@ export default async function BlogPost({ params }: Props) {
                 // هدر سطح ۲
                 if (paragraph.trim().startsWith('##')) {
                   return (
-                    <h2 key={index} className="text-3xl font-bold mt-10 mb-6 text-gray-900">
+                    <h2 key={index} className="text-3xl font-bold mt-10 mb-6 text-slate-950 dark:text-white">
                       {paragraph.replace('##', '').trim()}
                     </h2>
                   );
@@ -301,7 +302,7 @@ export default async function BlogPost({ params }: Props) {
                 // هدر سطح ۱
                 if (paragraph.trim().startsWith('#')) {
                   return (
-                    <h1 key={index} className="text-4xl font-bold mt-12 mb-8 text-gray-900">
+                    <h1 key={index} className="text-4xl font-bold mt-12 mb-8 text-slate-950 dark:text-white">
                       {paragraph.replace('#', '').trim()}
                     </h1>
                   );
@@ -313,7 +314,7 @@ export default async function BlogPost({ params }: Props) {
                       {paragraph.split('\n').map((item, idx) => {
                         if (item.trim().startsWith('-')) {
                           return (
-                            <li key={idx} className="text-gray-700">
+                            <li key={idx} className="text-slate-700 dark:text-slate-200">
                               {item.replace('-', '').trim()}
                             </li>
                           );
@@ -330,7 +331,7 @@ export default async function BlogPost({ params }: Props) {
                       {paragraph.split('\n').map((item, idx) => {
                         if (item.trim().match(/^\d+\./)) {
                           return (
-                            <li key={idx} className="text-gray-700">
+                            <li key={idx} className="text-slate-700 dark:text-slate-200">
                               {item.replace(/^\d+\./, '').trim()}
                             </li>
                           );
@@ -343,7 +344,7 @@ export default async function BlogPost({ params }: Props) {
                 // پاراگراف معمولی
                 if (paragraph.trim()) {
                   return (
-                    <p key={index} className="mb-4 text-gray-700 leading-relaxed">
+                    <p key={index} className="mb-4 text-slate-700 dark:text-slate-200 leading-relaxed">
                       {paragraph.trim()}
                     </p>
                   );
@@ -355,7 +356,7 @@ export default async function BlogPost({ params }: Props) {
            {/* Share Section */}
 <div className="mt-12 pt-8 border-t border-gray-100">
   <div className="flex flex-wrap items-center justify-between gap-4">
-    <span className="text-sm font-medium text-gray-700">اشتراک‌گذاری مقاله:</span>
+    <span className="text-sm font-medium text-slate-700 dark:text-slate-200">اشتراک‌گذاری مقاله:</span>
     <ShareButtons postUrl={postUrl} title={post.title} />
   </div>
 </div>
@@ -379,8 +380,8 @@ export default async function BlogPost({ params }: Props) {
                   )}
                 </div>
                 <div>
-                  <h4 className="text-lg font-bold text-gray-900">{authorInfo.name}</h4>
-                  <p className="text-sm text-gray-600 mt-1">{authorInfo.bio}</p>
+                  <h4 className="text-lg font-bold text-slate-950 dark:text-white">{authorInfo.name}</h4>
+                  <p className="text-sm text-slate-600 dark:text-slate-300 mt-1">{authorInfo.bio}</p>
                 </div>
               </div>
             </div>
@@ -390,7 +391,7 @@ export default async function BlogPost({ params }: Props) {
         {/* Related Posts */}
         {relatedPosts && relatedPosts.length > 0 && (
           <div className="mt-12">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+            <h3 className="text-2xl font-bold text-slate-950 dark:text-white mb-6 flex items-center gap-2">
               <span className="w-1 h-8 bg-primary rounded-full" />
               مقالات مشابه
             </h3>
@@ -399,7 +400,7 @@ export default async function BlogPost({ params }: Props) {
                 <Link
                   key={relatedPost.id}
                   href={`/blog/${relatedPost.slug}`}
-                  className="group bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+                  className="group overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[#0c1a2c]"
                 >
                   <div className="relative h-48 overflow-hidden">
                     <Image
@@ -414,7 +415,7 @@ export default async function BlogPost({ params }: Props) {
                     </span>
                   </div>
                   <div className="p-4">
-                    <h4 className="text-sm font-bold text-gray-900 group-hover:text-primary transition-colors line-clamp-2">
+                    <h4 className="text-sm font-bold text-slate-950 dark:text-white group-hover:text-primary transition-colors line-clamp-2">
                       {relatedPost.title}
                     </h4>
                     <div className="flex items-center justify-between mt-2 text-xs text-gray-400">
@@ -451,6 +452,6 @@ export default async function BlogPost({ params }: Props) {
           `,
         }}
       />
-    </div>
+    </PageFrame>
   );
 }

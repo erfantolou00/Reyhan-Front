@@ -3,29 +3,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FaChevronLeft } from 'react-icons/fa';
 import { getIcon } from '@/helper/renderIcon';
 import { toast } from 'react-hot-toast';
 import { useGatewayFetcher } from '@/hooks/useGatewayFetcher';
 import { FooterData } from '@/types';
+import SoftGlow from '@/components/home/SoftGlow';
 
-// تایپ دیتای فوتر (اختیاری ولی بهتره داشته باشی)
-
+const shell =
+  'relative border-t border-slate-200 bg-[#f3f6fb] text-slate-950 dark:border-white/10 dark:bg-[#071422] dark:text-white';
 
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const appVersion = process.env.NEXT_PUBLIC_APP_VERSION || '1.0.0';
 
-  // دریافت دیتای فوتر از Gateway
-  const {
-    data: footerData,
-    loading,
-    error,
-    refetch,
-  } = useGatewayFetcher<FooterData>('data/footer.json');
-  console.log('%c⧭', 'color: #997326', footerData);
+  const { data: footerData, loading, error, refetch } = useGatewayFetcher<FooterData>('data/footer.json');
 
   const handleNewsletterSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,70 +40,37 @@ export default function Footer() {
       } else {
         toast.error(footerData?.newsletter.errorMessage || 'خطا در ثبت');
       }
-    } catch (error) {
+    } catch {
       toast.error(footerData?.newsletter.errorMessage || 'خطا در ثبت');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const renderIcon = (iconName: string, className: string = 'w-5 h-5') => {
+  const renderIcon = (iconName: string, className = 'h-5 w-5') => {
     const Icon = getIcon(iconName);
     return Icon ? <Icon className={className} /> : null;
   };
 
-  const socialColorMap: Record<string, string> = {
-    'blue-600': 'hover:bg-blue-600 hover:border-blue-600',
-    'pink-600': 'hover:bg-pink-600 hover:border-pink-600',
-    'blue-400': 'hover:bg-blue-400 hover:border-blue-400',
-    'red-600': 'hover:bg-red-600 hover:border-red-600',
-    'sky-500': 'hover:bg-sky-500 hover:border-sky-500',
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.2,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: 'spring',
-        stiffness: 100,
-        damping: 20,
-      },
-    },
-  };
-
-  // حالت لودینگ
   if (loading) {
     return (
-      <footer className="bg-[#020617] text-white py-20">
-        <div className="container mx-auto px-6 text-center text-slate-400">
+      <footer className={shell}>
+        <div className="container mx-auto px-6 py-16 text-center text-slate-500 dark:text-slate-400">
           در حال بارگذاری فوتر...
         </div>
       </footer>
     );
   }
 
-  // حالت خطا
   if (error || !footerData) {
     return (
-      <footer className="bg-[#020617] text-white py-20">
-        <div className="container mx-auto px-6 text-center">
-          <p className="text-red-400 mb-4">خطا در دریافت اطلاعات فوتر</p>
+      <footer className={shell}>
+        <div className="container mx-auto px-6 py-16 text-center">
+          <p className="mb-4 text-red-500">خطا در دریافت اطلاعات فوتر</p>
           <button
+            type="button"
             onClick={() => refetch()}
-            className="px-4 py-2 bg-blue-600 rounded-lg text-sm hover:bg-blue-500 transition"
+            className="rounded-full bg-primary px-5 py-2 text-sm text-white hover:bg-primary-dark"
           >
             تلاش مجدد
           </button>
@@ -120,257 +79,147 @@ export default function Footer() {
     );
   }
 
-  return (
-    <footer
-      className="relative text-white overflow-hidden border-t border-white/5"
-      style={{ backgroundColor: '#020617' }}
-      dir="rtl"
-    >
-      {/* دکوراسیون پس‌زمینه */}
-      <div className="absolute top-0 left-1/4 w-64 h-64 bg-blue-600/10 blur-[120px] rounded-full" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-indigo-600/10 blur-[150px] rounded-full" />
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-blue-500/5 blur-[100px] rounded-full" />
+  const contactRows = [
+    {
+      icon: footerData.contactInfo.address.icon,
+      label: footerData.contactInfo.address.label,
+      value: footerData.contactInfo.address.value,
+    },
+    {
+      icon: footerData.contactInfo.phone.icon,
+      label: footerData.contactInfo.phone.description,
+      value: footerData.contactInfo.phone.value,
+    },
+    {
+      icon: footerData.contactInfo.email.icon,
+      label: footerData.contactInfo.email.description,
+      value: footerData.contactInfo.email.value,
+    },
+    {
+      icon: footerData.contactInfo.workingHours.icon,
+      label: footerData.contactInfo.workingHours.label,
+      value: footerData.contactInfo.workingHours.value,
+      note: footerData.contactInfo.workingHours.description,
+    },
+  ];
 
-      <div className="container mx-auto px-6 py-20 relative z-10">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-12 lg:gap-8"
-        >
-          {/* بخش برندینگ */}
-          <motion.div variants={itemVariants} className="lg:col-span-4 space-y-8">
-            <div className="flex items-center gap-4">
-              <div className="relative group">
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-full blur opacity-25 group-hover:opacity-50 transition duration-1000" />
-                <Image
-                  src={footerData.brand.logo}
-                  alt="Reyhan Logo"
-                  width={80}
-                  height={80}
-                  className="relative rounded-2xl p-2 border border-white/10 bg-slate-300"
-                  priority
-                />
-              </div>
+  return (
+    <footer className={shell} dir="rtl">
+      <SoftGlow className="left-[12%] top-0 -mt-48" delay="-4s" />
+      <SoftGlow tone="blue" className="right-[8%] top-24" delay="-12s" />
+
+      <div className="container relative z-20 mx-auto px-4 py-16 sm:px-6">
+        <div className="grid gap-8 lg:grid-cols-12">
+          <div className="lg:col-span-4">
+            <div className="flex items-center gap-3">
+              <Image
+                src={footerData.brand.logo}
+                alt={footerData.brand.name}
+                width={56}
+                height={56}
+                className="rounded-2xl border border-slate-200 bg-white p-1 dark:border-white/10 dark:bg-[#0c1a2c]"
+              />
               <div>
-                <h3 className="text-3xl font-black bg-clip-text text-transparent bg-gradient-to-l from-white to-slate-400">
-                  {footerData.brand.name}
-                </h3>
-                <p className="text-xs text-blue-400 font-medium tracking-widest mt-1 uppercase">
-                  {footerData.brand.tagline}
-                </p>
-                <span className="inline-block mt-1 px-2 py-0.5 text-[10px] font-semibold bg-blue-500/20 text-blue-300 rounded-full border border-blue-500/30">
-                  {footerData.brand.badge}
-                </span>
+                <h3 className="text-2xl font-bold text-slate-950 dark:text-white">{footerData.brand.name}</h3>
+                <p className="mt-1 text-sm font-semibold text-primary">{footerData.brand.tagline}</p>
               </div>
             </div>
-
-            <p className="text-slate-400 text-base leading-8 max-w-sm">
+            <p className="mt-2 inline-flex rounded-full border border-primary/30 bg-white px-3 py-1 text-xs font-semibold text-primary dark:border-primary/40 dark:bg-primary/10">
+              {footerData.brand.badge}
+            </p>
+            <p className="mt-4 max-w-sm text-sm leading-7 text-slate-600 dark:text-slate-300">
               {footerData.brand.description}
             </p>
-
-            {/* شبکه‌های اجتماعی */}
-            <div className="flex gap-3 flex-wrap">
-              {footerData.socialMedia.map((social, i) => (
-                <motion.a
-                  key={i}
+            <div className="mt-5 flex flex-wrap gap-2">
+              {footerData.socialMedia.map((social) => (
+                <a
+                  key={social.name}
                   href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  whileHover={{ y: -4, scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`w-10 h-10 flex items-center justify-center rounded-xl bg-white/5 border border-white/10 text-slate-400 hover:text-white transition-all duration-300 ${
-                    socialColorMap[social.color] || ''
-                  }`}
                   aria-label={social.name}
+                  className="flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-600 hover:border-primary hover:text-primary dark:border-white/10 dark:bg-[#0c1a2c] dark:text-slate-200"
                 >
-                  {renderIcon(social.icon, 'w-4 h-4')}
-                </motion.a>
+                  {renderIcon(social.icon, 'h-4 w-4')}
+                </a>
               ))}
             </div>
-          </motion.div>
+          </div>
 
-          {/* دسترسی سریع */}
-          <motion.div variants={itemVariants} className="lg:col-span-3 lg:mr-auto">
-            <h4 className="text-lg font-bold mb-8 relative inline-block">
-              دسترسی سریع
-              <span className="absolute -bottom-2 right-0 w-8 h-1 bg-blue-600 rounded-full" />
-            </h4>
-            <ul className="space-y-4">
+          <div className="lg:col-span-3">
+            <h4 className="text-sm font-semibold text-slate-950 dark:text-white">دسترسی سریع</h4>
+            <ul className="mt-4 space-y-2">
               {footerData.quickLinks.map((link) => (
-                <li key={link.label}>
-                  <Link
-                    href={link.href}
-                    className="flex items-center group text-slate-400 hover:text-white transition-colors"
-                  >
-                    <FaChevronLeft className="w-3 h-3 ml-2 text-blue-500 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all" />
-                    <span className="group-hover:mr-1 transition-all">{link.label}</span>
+                <li key={link.href}>
+                  <Link href={link.href} className="text-sm text-slate-600 hover:text-primary dark:text-slate-300">
+                    {link.label}
                   </Link>
                 </li>
               ))}
             </ul>
-          </motion.div>
-
-          {/* اطلاعات تماس */}
-          <motion.div variants={itemVariants} className="lg:col-span-5 lg:pr-12">
-            <h4 className="text-lg font-bold mb-8 relative inline-block">
-              {footerData.contactInfo.address.label}
-              <span className="absolute -bottom-2 right-0 w-8 h-1 bg-indigo-600 rounded-full" />
-            </h4>
-
-            <div className="space-y-6">
-              {/* آدرس */}
-              <motion.div
-                variants={itemVariants}
-                className="flex items-start gap-4 group"
-                whileHover={{ x: -4 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
-                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-blue-500/50 transition-colors">
-                  {renderIcon(footerData.contactInfo.address.icon, 'text-blue-500 text-xl')}
-                </div>
-                <div>
-                  <p className="text-slate-400 text-sm leading-7">سمنان، بلوار دانشگاه،</p>
-                  <p className="text-white font-medium">{footerData.contactInfo.address.value}</p>
-                </div>
-              </motion.div>
-
-              {/* تلفن */}
-              <motion.div
-                variants={itemVariants}
-                className="flex items-center gap-4 group"
-                whileHover={{ x: -4 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
-                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-blue-500/50 transition-colors">
-                  {renderIcon(footerData.contactInfo.phone.icon, 'text-blue-500 text-lg')}
-                </div>
-                <div dir="ltr" className="text-right">
-                  <p className="text-white font-bold text-lg tracking-wider">
-                    {footerData.contactInfo.phone.value}
-                  </p>
-                  <p className="text-slate-500 text-xs">
-                    {footerData.contactInfo.phone.description}
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* ایمیل */}
-              <motion.div
-                variants={itemVariants}
-                className="flex items-center gap-4 group"
-                whileHover={{ x: -4 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
-                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-blue-500/50 transition-colors">
-                  {renderIcon(footerData.contactInfo.email.icon, 'text-blue-500 text-lg')}
-                </div>
-                <div>
-                  <p className="text-slate-400 text-sm">
-                    {footerData.contactInfo.email.description}
-                  </p>
-                  <p className="text-white font-medium">
-                    {footerData.contactInfo.email.value}
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* ساعات کاری */}
-              <motion.div
-                variants={itemVariants}
-                className="flex items-center gap-4 group"
-                whileHover={{ x: -4 }}
-                transition={{ type: 'spring', stiffness: 300 }}
-              >
-                <div className="w-12 h-12 flex-shrink-0 flex items-center justify-center rounded-2xl bg-white/5 border border-white/10 group-hover:border-blue-500/50 transition-colors">
-                  {renderIcon(footerData.contactInfo.workingHours.icon, 'text-blue-500 text-lg')}
-                </div>
-                <div>
-                  <p className="text-slate-400 text-sm">
-                    {footerData.contactInfo.workingHours.label}
-                  </p>
-                  <p className="text-white font-medium">
-                    {footerData.contactInfo.workingHours.value}
-                  </p>
-                  <p className="text-slate-500 text-xs">
-                    {footerData.contactInfo.workingHours.description}
-                  </p>
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        {/* خبرنامه */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.4 }}
-          className="mt-16 pt-12 border-t border-white/10"
-        >
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            <div>
-              <h4 className="text-xl font-bold mb-2">{footerData.newsletter.title}</h4>
-              <p className="text-slate-400 text-sm">{footerData.newsletter.description}</p>
-            </div>
-            <form onSubmit={handleNewsletterSubmit} className="flex flex-col sm:flex-row gap-3">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder={footerData.newsletter.placeholder}
-                className="flex-1 px-4 py-3 rounded-xl bg-white/5 border border-white/10 text-white placeholder:text-slate-500 focus:outline-none focus:border-blue-500 transition-colors"
-                required
-              />
-              <motion.button
-                type="submit"
-                disabled={isSubmitting}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl font-medium hover:shadow-lg hover:shadow-blue-600/25 transition-all disabled:opacity-70 whitespace-nowrap"
-              >
-                {isSubmitting ? 'در حال ارسال...' : footerData.newsletter.button}
-              </motion.button>
-            </form>
           </div>
-        </motion.div>
 
-        {/* کپی‌رایت */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.6 }}
-          className="mt-12 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-6"
-        >
-          <p className="text-slate-500 text-sm">
-            © {new Date().getFullYear()}{' '}
-            <span className="text-slate-300 font-bold">{footerData.brand.name}</span>.{' '}
-            {footerData.footer.copyright}
-            <span className="mr-3 text-xs text-blue-400/60 border-r border-white/10 pr-3">
-              v{appVersion}
-            </span>
-          </p>
-          <div className="flex items-center gap-6">
-            <span className="flex items-center gap-2 text-xs text-slate-500">
-              {renderIcon(footerData.footer.badge.icon, 'w-3 h-3')}
-              {footerData.footer.badge.text}
-            </span>
-            <div className="flex gap-6 text-slate-500 text-sm">
-              {footerData.footer.links.map((link, index) => (
-                <Link
-                  key={index}
-                  href={link.href}
-                  className="hover:text-white transition-colors"
+          <div className="lg:col-span-5">
+            <h4 className="text-sm font-semibold text-slate-950 dark:text-white">ارتباط با ما</h4>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {contactRows.map((row) => (
+                <div
+                  key={row.label}
+                  className="rounded-2xl border border-slate-200 bg-white p-4 dark:border-white/10 dark:bg-[#0c1a2c]"
                 >
-                  {link.label}
-                </Link>
+                  <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    {renderIcon(row.icon, 'h-4 w-4')}
+                  </div>
+                  <p className="text-xs text-slate-500 dark:text-slate-400">{row.label}</p>
+                  <p className="mt-1 text-sm font-semibold text-slate-950 dark:text-white">{row.value}</p>
+                  {row.note ? <p className="mt-1 text-xs text-slate-500">{row.note}</p> : null}
+                </div>
               ))}
             </div>
           </div>
-        </motion.div>
+        </div>
+
+        <div className="mt-10 grid items-center gap-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-white/10 dark:bg-[#0c1a2c] lg:grid-cols-2">
+          <div>
+            <h4 className="text-lg font-bold text-slate-950 dark:text-white">{footerData.newsletter.title}</h4>
+            <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">{footerData.newsletter.description}</p>
+          </div>
+          <form onSubmit={handleNewsletterSubmit} className="flex flex-col gap-3 sm:flex-row">
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder={footerData.newsletter.placeholder}
+              required
+              className="flex-1 rounded-full border border-slate-200 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-primary dark:border-white/10 dark:bg-white/5 dark:text-white"
+            />
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="rounded-full bg-primary px-6 py-3 text-sm font-semibold text-white hover:bg-primary-dark disabled:opacity-70"
+            >
+              {isSubmitting ? 'در حال ارسال...' : footerData.newsletter.button}
+            </button>
+          </form>
+        </div>
+
+        <div className="mt-8 flex flex-col items-start justify-between gap-4 border-t border-slate-200 pt-6 text-sm text-slate-500 dark:border-white/10 dark:text-slate-400 md:flex-row md:items-center">
+          <p>
+            © {new Date().getFullYear()} {footerData.brand.name}. {footerData.footer.copyright}
+            <span className="mr-3 text-xs">v{appVersion}</span>
+          </p>
+          <div className="flex flex-wrap items-center gap-4">
+            <span className="inline-flex items-center gap-2">
+              {renderIcon(footerData.footer.badge.icon, 'h-3.5 w-3.5')}
+              {footerData.footer.badge.text}
+            </span>
+            {footerData.footer.links.map((link) => (
+              <Link key={link.href} href={link.href} className="hover:text-primary">
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </div>
       </div>
     </footer>
   );

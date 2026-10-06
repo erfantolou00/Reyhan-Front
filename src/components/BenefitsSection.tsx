@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
 import { FiTrendingUp, FiShield, FiZap, FiBarChart2 } from "react-icons/fi";
+import SoftGlow from "@/components/home/SoftGlow";
 
 type Benefit = {
   icon: any;
@@ -39,50 +39,39 @@ const benefits: Benefit[] = [
 
 const BenefitsSection = () => {
   return (
-    <section className="relative overflow-hidden bg-white py-24 sm:py-28">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top,rgba(249,115,22,0.08),transparent_45%)]" />
-
-      <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="mx-auto mb-14 max-w-3xl text-center"
-        >
-          <span className="inline-flex rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary">
+    <section className="relative py-20 sm:py-24">
+      <SoftGlow tone="blue" className="top-8 right-[8%]" delay="-5s" />
+      <SoftGlow className="left-[18%] top-full -mt-48" delay="-12s" />
+      <div className="container relative z-20 mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto mb-12 max-w-3xl text-center">
+          <p className="inline-flex rounded-full border border-primary/30 bg-white px-3 py-1 text-sm font-semibold text-primary dark:border-primary/40 dark:bg-primary/10">
             چرا ریحان؟
-          </span>
-          <h2 className="mt-4 text-3xl font-black text-slate-900 sm:text-4xl">
+          </p>
+          <h2 className="mt-4 text-3xl font-bold text-slate-950 dark:text-white sm:text-4xl">
             ساده‌تر فکر کنید، سریع‌تر تصمیم بگیرید
           </h2>
-          <p className="mt-4 text-lg leading-8 text-slate-600">
+          <p className="mt-4 text-lg leading-8 text-slate-600 dark:text-slate-300">
             ریحان فقط یک نرم‌افزار نیست؛ یک تجربه منظم و مطمئن برای مدیریت حرفه‌ای سازمان شماست.
           </p>
-        </motion.div>
+        </div>
 
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
-          {benefits.map((benefit, index) => {
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {benefits.map((benefit) => {
             const Icon = benefit.icon;
             return (
-              <motion.article
+              <article
                 key={benefit.title}
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{ duration: 0.45, delay: index * 0.08 }}
-                whileHover={{ y: -6, scale: 1.01 }}
-                className="group rounded-[28px] border border-slate-200/80 bg-white/80 p-6 shadow-[0_20px_60px_-25px_rgba(15,23,42,0.25)] backdrop-blur transition"
+                className="rounded-2xl border border-slate-200 bg-white p-6 dark:border-white/10 dark:bg-[#0c1a2c]"
               >
-                <div className="flex items-center justify-between">
-                  <div className="rounded-2xl p-3 shadow-sm" style={{ backgroundColor: `${benefit.color}16`, color: benefit.color }}>
-                    <Icon className="h-7 w-7" />
-                  </div>
-                  <span className="text-sm font-semibold text-slate-400">0{index + 1}</span>
+                <div
+                  className="flex h-11 w-11 items-center justify-center rounded-xl"
+                  style={{ backgroundColor: `${benefit.color}16`, color: benefit.color }}
+                >
+                  <Icon className="h-5 w-5" />
                 </div>
-                <h3 className="mt-6 text-xl font-semibold text-slate-900">{benefit.title}</h3>
-                <p className="mt-3 text-base leading-7 text-slate-600">{benefit.description}</p>
-              </motion.article>
+                <h3 className="mt-5 text-lg font-semibold text-slate-950 dark:text-white">{benefit.title}</h3>
+                <p className="mt-2 text-sm leading-7 text-slate-600 dark:text-slate-300">{benefit.description}</p>
+              </article>
             );
           })}
         </div>

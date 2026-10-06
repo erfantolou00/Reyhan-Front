@@ -17,10 +17,10 @@ export default function VerticalTimeline({ sections }: VerticalTimelineProps) {
         {/* Progress bar */}
         <div className="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gray-200/50 -translate-x-1/2 overflow-hidden">
           <motion.div
-            className="w-full bg-[#F97316]"
-            initial={{ height: 0 }}
-            animate={{ height: `${scrollProgress}%` }}
-            transition={{ type: "spring", stiffness: 100 }}
+            className="h-full w-full origin-top bg-[#F97316]"
+            initial={{ scaleY: 0 }}
+            animate={{ scaleY: scrollProgress / 100 }}
+            transition={{ type: "tween", duration: 0.2 }}
           />
         </div>
         
@@ -36,13 +36,13 @@ export default function VerticalTimeline({ sections }: VerticalTimelineProps) {
                 className="relative flex items-center justify-center"
               >
                 <span
-                  className={`relative block h-4 w-4 rounded-full transition-all duration-300 ${
-                    isActive ? 'bg-primary scale-125 shadow-[0_0_0_10px_rgba(249,115,22,0.18)]' : 'bg-gray-300 hover:bg-gray-400'
+                  className={`relative block h-3.5 w-3.5 rounded-full border-2 transition-colors duration-200 ${
+                    isActive ? 'border-primary bg-primary' : 'border-white bg-slate-300'
                   }`}
                 />
                 <span
-                  className={`pointer-events-none absolute right-10 top-1/2 -translate-y-1/2 whitespace-nowrap text-sm transition-colors duration-200 ${
-                    isActive ? 'text-primary font-semibold' : 'text-gray-500'
+                  className={`pointer-events-none absolute right-10 top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-white/95 px-2 py-0.5 text-sm shadow-sm dark:bg-[#0c1a2c] dark:text-slate-200 ${
+                    isActive ? 'font-semibold text-primary' : 'text-slate-600'
                   }`}
                 >
                   {section.icon} {section.label}

@@ -21,7 +21,7 @@ export default function FeaturedPosts({
 }) {
   return (
     <div className="mb-12">
-      <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-2">
+      <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-slate-950 dark:text-white">
         <span className="w-1 h-6 bg-primary rounded-full" />
         مقاله ویژه
       </h2>
@@ -35,7 +35,7 @@ export default function FeaturedPosts({
             key={post.id}
             className="group block"
           >
-            <div className="relative bg-white rounded-3xl shadow-xl overflow-hidden transition-all duration-500 hover:shadow-2xl hover:-translate-y-2">
+            <div className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[#0c1a2c]">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
                 {/* Image */}
                 <div className="relative h-64 md:h-full min-h-[300px] overflow-hidden">
@@ -68,10 +68,10 @@ export default function FeaturedPosts({
                       {getCategoryName(categories, post.category_id)}
                     </span>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-3 group-hover:text-primary transition-colors">
+                  <h3 className="mb-3 text-2xl font-bold text-slate-950 transition-colors group-hover:text-primary dark:text-white">
                     {post.title}
                   </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-2">
+                  <p className="mb-4 line-clamp-2 text-slate-600 dark:text-slate-300">
                     {post.subtitle}
                   </p>
                   <div className="flex flex-wrap items-center gap-4 text-sm text-gray-500">

@@ -23,7 +23,7 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
       />
 
       <motion.nav
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-xl shadow-xl' : 'bg-transparent'
+        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${isScrolled ? 'bg-white/90 shadow-xl backdrop-blur-xl dark:bg-[#0c1a2c]/95 dark:shadow-none' : 'bg-transparent'
           }`}
         initial={{ y: -120 }}
         animate={{ y: isScrolled ? 0 : -120, opacity: isScrolled ? 1 : 0 }}
@@ -35,8 +35,8 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
             <div className="flex items-center gap-3">
               <img className="h-9 w-9 rounded-2xl shadow-md" src="/logo.webp" loading='lazy' alt="لوگو ریحان" />
               <div>
-                <p className="text-sm font-semibold text-gray-700">ریحان</p>
-                <p className="text-xs text-gray-400">سیستم مدیریت سازمانی</p>
+                <p className="text-sm font-semibold text-slate-700 dark:text-slate-100">ریحان</p>
+                <p className="text-xs text-slate-400">سیستم مدیریت سازمانی</p>
               </div>
             </div>
 
@@ -48,7 +48,7 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
                     key={section.id}
                     type="button"
                     onClick={() => scrollToSection(section.id)}
-                    className={`relative rounded-full px-3 py-2 text-sm font-medium transition ${isActive ? 'text-primary shadow-sm' : 'text-gray-600 hover:text-primary'
+                    className={`relative rounded-full px-3 py-2 text-sm font-medium transition ${isActive ? 'text-primary shadow-sm' : 'text-slate-600 hover:text-primary dark:text-slate-300'
                       }`}
                   >
                     <span className="flex items-center gap-2">
@@ -63,7 +63,7 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
 
             <button
               type="button"
-              className="md:hidden inline-flex items-center justify-center rounded-full border border-gray-200 bg-white p-2 text-gray-600 shadow-sm transition hover:border-primary hover:text-primary"
+              className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white p-2 text-slate-600 shadow-sm transition hover:border-primary hover:text-primary dark:border-white/10 dark:bg-[#0c1a2c] dark:text-slate-200 md:hidden"
               aria-expanded={isMobileOpen}
               aria-label="باز کردن منوی ناوبری"
               onClick={() => setIsMobileOpen((current) => !current)}
@@ -76,7 +76,7 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
         </div>
 
         {isMobileOpen && (
-          <div className="md:hidden border-t border-gray-200 bg-white/95 backdrop-blur-xl shadow-sm">
+          <div className="border-t border-slate-200 bg-white/95 shadow-sm backdrop-blur-xl dark:border-white/10 dark:bg-[#0c1a2c]/95 md:hidden">
             <div className="space-y-2 px-4 py-4">
               {sections.map((section) => {
                 const isActive = activeSection === section.id;
@@ -88,7 +88,7 @@ const FloatingNavbar = ({ sections }: FloatingNavbarProps) => {
                       scrollToSection(section.id);
                       setIsMobileOpen(false);
                     }}
-                    className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-right text-sm font-medium transition ${isActive ? 'bg-primary text-white' : 'text-gray-700 hover:bg-gray-50'
+                    className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-right text-sm font-medium transition ${isActive ? 'bg-primary text-white' : 'text-slate-700 hover:bg-slate-50 dark:text-slate-200 dark:hover:bg-white/5'
                       }`}
                   >
                     <span className="flex items-center gap-2">

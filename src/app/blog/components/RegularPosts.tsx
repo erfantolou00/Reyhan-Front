@@ -22,7 +22,7 @@ export default function RegularPosts({
     return (
       <div className="text-center py-12">
         <div className="text-4xl mb-4">🔍</div>
-        <p className="text-gray-600">هیچ مقاله‌ای با عبارت "{searchTerm}" یافت نشد</p>
+        <p className="text-slate-600 dark:text-slate-300">هیچ مقاله‌ای با عبارت "{searchTerm}" یافت نشد</p>
       </div>
     );
   }
@@ -30,7 +30,7 @@ export default function RegularPosts({
   return (
     <div>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
-        <h2 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+        <h2 className="flex items-center gap-2 text-2xl font-bold text-slate-950 dark:text-white">
           <span className="w-1 h-6 bg-primary rounded-full" />
           جدیدترین مقالات
           <span className="text-sm font-normal text-gray-500">({posts.length})</span>
@@ -43,7 +43,7 @@ export default function RegularPosts({
             placeholder="جستجو در مقالات..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="w-full px-4 py-2 pr-10 border border-gray-200 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all text-sm"
+            className="w-full rounded-xl border border-slate-200 bg-white px-4 py-2 pr-10 text-sm text-slate-900 transition focus:border-transparent focus:ring-2 focus:ring-primary dark:border-white/10 dark:bg-white/5 dark:text-white"
           />
           <FaSearch className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
           {searchTerm && (
@@ -67,7 +67,7 @@ export default function RegularPosts({
               key={post.id}
               className="group h-full"
             >
-              <div className="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-2 flex flex-col h-full">
+              <div className="flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-white/10 dark:bg-[#0c1a2c]">
                 <div className="relative h-56 w-full overflow-hidden">
                   <Image
                     src={`${gatewayURL}/${post.image_url.replace(/^\/+/, '')}` || "/images/blog/defaultBlogImage.avif"}
@@ -95,14 +95,14 @@ export default function RegularPosts({
                 </div>
 
                 <div className="p-6 flex flex-col flex-grow">
-                  <h3 className="text-xl font-bold text-gray-900 mb-2 group-hover:text-primary transition-colors line-clamp-2">
+                  <h3 className="mb-2 line-clamp-2 text-xl font-bold text-slate-950 transition-colors group-hover:text-primary dark:text-white">
                     {post.title}
                   </h3>
-                  <p className="text-gray-600 mb-4 line-clamp-3 text-sm flex-grow">
+                  <p className="mb-4 line-clamp-3 flex-grow text-sm text-slate-600 dark:text-slate-300">
                     {post.subtitle}
                   </p>
 
-                  <div className="flex items-center justify-between text-xs text-gray-400 pt-4 border-t border-gray-100">
+                  <div className="flex items-center justify-between border-t border-slate-100 pt-4 text-xs text-slate-400 dark:border-white/10">
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full overflow-hidden bg-primary/10">
                         {(post.author_avatar && post.author) ? (
@@ -120,7 +120,7 @@ export default function RegularPosts({
                         )}
                       </div>
                       <div className="flex flex-col">
-                        <span className="text-gray-700 font-medium text-xs">
+                        <span className="text-xs font-medium text-slate-700 dark:text-slate-200">
                           {post.author}
                         </span>
                         <span className="text-gray-400 text-[10px]">

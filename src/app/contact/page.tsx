@@ -20,6 +20,7 @@ import {
 import { useGatewayFetcher } from '@/hooks/useGatewayFetcher';
 import { getIcon } from '@/helper/renderIcon';
 import { ContactData, FormData, FormErrors } from '@/types';
+import PageFrame, { PageHero } from '@/components/home/PageFrame';
 
 
 export default function ContactPage() {
@@ -174,10 +175,10 @@ export default function ContactPage() {
 // ===== بخش شرط‌ها =====
 if (loading) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white flex items-center justify-center">
+    <div className="relative min-h-screen flex items-center justify-center">
       <div className="text-center">
         <Loader2 className="w-12 h-12 animate-spin text-primary mx-auto mb-4" />
-        <p className="text-gray-500">در حال بارگذاری صفحه تماس...</p>
+        <p className="text-slate-500 dark:text-slate-400">در حال بارگذاری صفحه تماس...</p>
       </div>
     </div>
   );
@@ -185,11 +186,11 @@ if (loading) {
 
 if (error) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white flex items-center justify-center">
+    <div className="relative min-h-screen flex items-center justify-center">
       <div className="text-center p-8 max-w-md">
         <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">خطا در دریافت اطلاعات</h2>
-        <p className="text-gray-500 mb-6">
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">خطا در دریافت اطلاعات</h2>
+        <p className="text-slate-500 dark:text-slate-400 mb-6">
           {error || 'متأسفانه در دریافت اطلاعات صفحه تماس مشکلی پیش آمده است.'}
         </p>
         <button
@@ -205,11 +206,11 @@ if (error) {
 
 if (!contactData) {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white flex items-center justify-center">
+    <div className="relative min-h-screen flex items-center justify-center">
       <div className="text-center p-8 max-w-md">
         <AlertCircle className="w-16 h-16 text-yellow-500 mx-auto mb-4" />
-        <h2 className="text-2xl font-bold text-gray-800 mb-2">داده‌ای وجود ندارد</h2>
-        <p className="text-gray-500 mb-6">اطلاعات صفحه تماس در دسترس نیست.</p>
+        <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 mb-2">داده‌ای وجود ندارد</h2>
+        <p className="text-slate-500 dark:text-slate-400 mb-6">اطلاعات صفحه تماس در دسترس نیست.</p>
         <button
           onClick={() => refetch()}
           className="px-6 py-3 bg-primary text-white rounded-xl hover:bg-primary/90 transition"
@@ -224,50 +225,12 @@ if (!contactData) {
 
   // حالا مطمئنیم که contactData وجود دارد
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white via-gray-50 to-white">
-      {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-primary/90 via-primary/70 to-secondary/90 pt-32 pb-16 overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/pattern.svg')] opacity-10" />
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-white/10 rounded-full blur-3xl" />
-        
-        <motion.div 
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          className="container mx-auto px-4 relative z-10"
-        >
-          <div className="max-w-3xl mx-auto text-center">
-            <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-              className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-4 py-2 mb-6"
-            >
-              <Send className="w-4 h-4 text-white" />
-              <span className="text-white text-sm font-medium">{contactData?.hero?.badge}</span>
-            </motion.div>
-            
-            <motion.h1 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6"
-            >
-              تماس با <span className="text-yellow-300">ریحان</span>
-            </motion.h1>
-            
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4 }}
-              className="text-xl text-white/90 max-w-2xl mx-auto"
-            >
-              {contactData.hero.subtitle}
-            </motion.p>
-          </div>
-        </motion.div>
-      </section>
+    <PageFrame>
+      <PageHero
+        eyebrow={contactData?.hero?.badge}
+        title={<>تماس با <span className="text-primary">ریحان</span></>}
+        subtitle={contactData.hero.subtitle}
+      />
 
       {/* Contact Section */}
       <section className="py-20" ref={sectionRef}>
@@ -283,8 +246,8 @@ if (!contactData) {
               variants={itemVariants}
               className="lg:col-span-2"
             >
-              <div className="bg-gradient-to-br from-white to-gray-50 p-8 rounded-2xl shadow-xl border border-gray-100 sticky top-24">
-                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+              <div className="sticky top-24 rounded-2xl border border-slate-200 bg-white p-8 dark:border-white/10 dark:bg-[#0c1a2c]">
+                <h2 className="mb-6 flex items-center gap-2 text-2xl font-bold text-slate-950 dark:text-white">
                   <span className="text-primary">📞</span>
                   اطلاعات تماس
                 </h2>
@@ -301,17 +264,17 @@ if (!contactData) {
                       {renderIcon(contactData.contactInfo.address.icon, 'text-primary w-5 h-5')}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 text-sm">
+                      <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-sm">
                         {contactData.contactInfo.address.label}
                       </h3>
                       {Array.isArray(contactData.contactInfo.address.value) ? (
-                        <div className="text-gray-600 text-sm mt-1 flex">
+                        <div className="text-slate-600 dark:text-slate-300 text-sm mt-1 flex">
                           {contactData.contactInfo.address.value.map((line, idx) => (
                             <p key={idx}>{line}</p>
                           ))}
                         </div>
                       ) : (
-                        <p className="text-gray-600 text-sm mt-1">{contactData.contactInfo.address.value}</p>
+                        <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">{contactData.contactInfo.address.value}</p>
                       )}
                     </div>
                   </motion.div>
@@ -327,10 +290,10 @@ if (!contactData) {
                       {renderIcon(contactData.contactInfo.phone.icon, 'text-primary w-5 h-5')}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 text-sm">
+                      <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-sm">
                         {contactData.contactInfo.phone.label}
                       </h3>
-                      <p className="text-gray-600 text-sm mt-1">{contactData.contactInfo.phone.value}</p>
+                      <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">{contactData.contactInfo.phone.value}</p>
                     </div>
                   </motion.div>
 
@@ -345,10 +308,10 @@ if (!contactData) {
                       {renderIcon(contactData.contactInfo.email.icon, 'text-primary w-5 h-5')}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 text-sm">
+                      <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-sm">
                         {contactData.contactInfo.email.label}
                       </h3>
-                      <p className="text-gray-600 text-sm mt-1">{contactData.contactInfo.email.value}</p>
+                      <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">{contactData.contactInfo.email.value}</p>
                     </div>
                   </motion.div>
 
@@ -363,25 +326,25 @@ if (!contactData) {
                       {renderIcon(contactData.contactInfo.workingHours.icon, 'text-primary w-5 h-5')}
                     </div>
                     <div>
-                      <h3 className="font-semibold text-gray-800 text-sm">
+                      <h3 className="font-semibold text-slate-800 dark:text-slate-100 text-sm">
                         {contactData.contactInfo.workingHours.label}
                       </h3>
                       {Array.isArray(contactData.contactInfo.workingHours.value) ? (
-                        <div className="text-gray-600 text-sm mt-1">
+                        <div className="text-slate-600 dark:text-slate-300 text-sm mt-1">
                           {contactData.contactInfo.workingHours.value.map((line, idx) => (
                             <p key={idx}>{line}</p>
                           ))}
                         </div>
                       ) : (
-                        <p className="text-gray-600 text-sm mt-1">{contactData.contactInfo.workingHours.value}</p>
+                        <p className="text-slate-600 dark:text-slate-300 text-sm mt-1">{contactData.contactInfo.workingHours.value}</p>
                       )}
                     </div>
                   </motion.div>
                 </div>
 
                 {/* Social Media */}
-                <div className="mt-6 pt-6 border-t border-gray-200">
-                  <h3 className="font-semibold text-gray-800 mb-4">ما را دنبال کنید</h3>
+                <div className="mt-6 border-t border-slate-200 pt-6 dark:border-white/10">
+                  <h3 className="font-semibold text-slate-800 dark:text-slate-100 mb-4">ما را دنبال کنید</h3>
                   <div className="flex gap-3 flex-wrap">
                     {contactData.socialMedia.map((social, index) => (
                       <motion.a
@@ -391,7 +354,7 @@ if (!contactData) {
                         rel="noopener noreferrer"
                         whileHover={{ y: -4, scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
-                        className={`w-10 h-10 flex items-center justify-center rounded-xl bg-gray-100 border border-gray-200 text-gray-600 hover:text-white transition-all duration-300 ${
+                        className={`flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-100 text-slate-600 transition-all duration-300 hover:text-white dark:border-white/10 dark:bg-white/5 dark:text-slate-200 ${
                           socialColorMap[social.color] || 'hover:bg-primary hover:border-primary'
                         }`}
                         aria-label={social.name}
@@ -419,16 +382,16 @@ if (!contactData) {
               variants={itemVariants}
               className="lg:col-span-3"
             >
-              <div className="bg-white p-8 md:p-10 rounded-2xl shadow-xl border border-gray-100">
+              <div className="rounded-2xl border border-slate-200 bg-white p-8 dark:border-white/10 dark:bg-[#0c1a2c] md:p-10">
                 <div className="mb-8">
-                  <h2 className="text-3xl font-bold mb-2">{contactData.form.title}</h2>
-                  <p className="text-gray-600">{contactData.form.description}</p>
+                  <h2 className="mb-2 text-3xl font-bold text-slate-950 dark:text-white">{contactData.form.title}</h2>
+                  <p className="text-slate-600 dark:text-slate-300">{contactData.form.description}</p>
                 </div>
                 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-700">
+                      <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-200">
                         {contactData.form.fields.full_name.label}
                         <span className="text-red-500 mr-1">*</span>
                       </label>
@@ -442,7 +405,7 @@ if (!contactData) {
                           onBlur={() => handleBlur('full_name')}
                           placeholder={contactData.form.fields.full_name.placeholder}
                           className={`w-full px-4 py-3 pr-10 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
-                            getFieldError('full_name') ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300'
+                            getFieldError('full_name') ? 'border-red-500 ring-2 ring-red-200' : 'border-slate-200 bg-white text-slate-900 dark:border-white/10 dark:bg-white/5 dark:text-white'
                           }`}
                         />
                       </div>
@@ -459,7 +422,7 @@ if (!contactData) {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-700">
+                      <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-200">
                         {contactData.form.fields.email.label}
                         <span className="text-red-500 mr-1">*</span>
                       </label>
@@ -473,7 +436,7 @@ if (!contactData) {
                           onBlur={() => handleBlur('email')}
                           placeholder={contactData.form.fields.email.placeholder}
                           className={`w-full px-4 py-3 pr-10 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
-                            getFieldError('email') ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300'
+                            getFieldError('email') ? 'border-red-500 ring-2 ring-red-200' : 'border-slate-200 bg-white text-slate-900 dark:border-white/10 dark:bg-white/5 dark:text-white'
                           }`}
                         />
                       </div>
@@ -492,7 +455,7 @@ if (!contactData) {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-700">
+                      <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-200">
                         {contactData.form.fields.phone.label}
                         <span className="text-red-500 mr-1">*</span>
                       </label>
@@ -506,7 +469,7 @@ if (!contactData) {
                           onBlur={() => handleBlur('phone')}
                           placeholder={contactData.form.fields.phone.placeholder}
                           className={`w-full px-4 py-3 pr-10 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all ${
-                            getFieldError('phone') ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300'
+                            getFieldError('phone') ? 'border-red-500 ring-2 ring-red-200' : 'border-slate-200 bg-white text-slate-900 dark:border-white/10 dark:bg-white/5 dark:text-white'
                           }`}
                         />
                       </div>
@@ -523,7 +486,7 @@ if (!contactData) {
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2 text-gray-700">
+                      <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-200">
                         {contactData.form.fields.subject.label}
                       </label>
                       <select
@@ -543,7 +506,7 @@ if (!contactData) {
                   </div>
 
                   <div>
-                    <label className="block text-sm font-medium mb-2 text-gray-700">
+                    <label className="block text-sm font-medium mb-2 text-slate-700 dark:text-slate-200">
                       {contactData.form.fields.message.label}
                       <span className="text-red-500 mr-1">*</span>
                     </label>
@@ -557,7 +520,7 @@ if (!contactData) {
                         onBlur={() => handleBlur('message')}
                         placeholder={contactData.form.fields.message.placeholder}
                         className={`w-full px-4 py-3 pr-10 border rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none ${
-                          getFieldError('message') ? 'border-red-500 ring-2 ring-red-200' : 'border-gray-300'
+                          getFieldError('message') ? 'border-red-500 ring-2 ring-red-200' : 'border-slate-200 bg-white text-slate-900 dark:border-white/10 dark:bg-white/5 dark:text-white'
                         }`}
                       />
                     </div>
@@ -598,7 +561,7 @@ if (!contactData) {
                     )}
                   </motion.button>
 
-                  <p className="text-center text-sm text-gray-500">
+                  <p className="text-center text-sm text-slate-500 dark:text-slate-400">
                     با ارسال این فرم، اطلاعات شما برای پاسخگویی ذخیره می‌شود
                   </p>
                 </form>
@@ -607,6 +570,6 @@ if (!contactData) {
           </motion.div>
         </div>
       </section>
-    </div>
+    </PageFrame>
   );
 }

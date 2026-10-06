@@ -9,6 +9,7 @@ import FeaturedPosts from './components/FeaturedPosts';
 import LoadingState from './components/LoadingSstate';
 import ErrorState from './components/ErrorState';
 import RegularPosts from './components/RegularPosts';
+import PageFrame from '@/components/home/PageFrame';
 
 export const revalidate = 3600;
 
@@ -115,19 +116,18 @@ export default function BlogPage() {
 
   if (!processedData) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-primary/5 to-gray-50">
-        <div className="text-center">
-          <div className="text-6xl mb-4">📝</div>
-          <div className="text-lg text-gray-600">هیچ مقاله‌ای یافت نشد</div>
+      <PageFrame>
+        <div className="flex min-h-screen items-center justify-center px-4">
+          <div className="text-center text-lg text-slate-600 dark:text-slate-300">هیچ مقاله‌ای یافت نشد</div>
         </div>
-      </div>
+      </PageFrame>
     );
   }
 
   const { posts, categories, hero, sidebar, featuredPosts, regularPosts } = processedData;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-primary/5 via-white to-gray-50">
+    <PageFrame>
       {/* Hero Section */}
       <BlogHero hero={hero} />
 
@@ -161,7 +161,7 @@ export default function BlogPage() {
           />
         </div>
       </div>
-    </div>
+    </PageFrame>
   );
 }
 
