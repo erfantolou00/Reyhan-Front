@@ -11,8 +11,9 @@ export default function DeferredChatWidget() {
   useEffect(() => {
     const start = () => setReady(true);
 
-    if ('requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(start, { timeout: 2500 });
+    const requestIdle = window.requestIdleCallback;
+    if (typeof requestIdle === 'function') {
+      const id = requestIdle(start, { timeout: 2500 });
       return () => window.cancelIdleCallback(id);
     }
 

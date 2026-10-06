@@ -56,8 +56,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-// برای استفاده در login
-export function getUser(identifier: string) {
-  return usersStore.get(identifier.trim().toLowerCase());
-}

@@ -57,12 +57,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-
-// این تابع رو بعداً در verify-otp استفاده می‌کنیم
-export function getStoredOtp(identifier: string) {
-  return otpStore.get(identifier.trim().toLowerCase());
-}
-
-export function deleteStoredOtp(identifier: string) {
-  otpStore.delete(identifier.trim().toLowerCase());
-}
